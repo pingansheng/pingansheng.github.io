@@ -83,6 +83,162 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/06/05/分布式锁的实现方式与对比/" title="分布式锁的实现方式与对比" itemprop="url">分布式锁的实现方式与对比</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-05T09:38:27.000Z" itemprop="datePublished"> 发表于 2018-06-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>from: <a href="https://www.pomelolee.com/1787.html" target="_blank" rel="noopener">https://www.pomelolee.com/1787.html</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着互联网的发展，各种高并发、海量处理的场景越来越多。为了实现高可用、可扩展的系统，常常使用分布式，这样避免了单点故障和普通计算机cpu、内存等瓶颈。</p>
+<p>但是分布式系统也带来了数据一致性的问题，比如用户抢购秒杀商品多台机器共同执行出现超卖等。有些同学容易将分布式锁与线程安全混淆，线程安全是指的线程间的协同。如果是多个进程间的协同需要用到分布式锁，本文总结了几种常见的分布式锁。</p>
+<h2 id="基于数据库"><a href="#基于数据库" class="headerlink" title="基于数据库"></a>基于数据库</h2><h3 id="悲观锁—事务"><a href="#悲观锁—事务" class="headerlink" title="悲观锁—事务"></a>悲观锁—事务</h3><p>比如用户抢购秒杀商品的场景，多台机器都接收到了抢购的请求，可以将获取库存、判断有货、用户付款、扣减库存等多个数据库操作放到一个事务，这样当一台机器与数据库建立链接请求了抢购商品这个事务，另外的机器只能等这个机器将请求完成才能操作数据库。在实际应用场景中，常常库存与交易是两个独立的系统，这时的事务是一个分布式事务，需要用到两段式、三段式提交。</p>
+<p>优点：是比较安全的一种实现方法。</p>
+<p>缺点：在高并发的场景下开销是不能容忍的。容易出现数据库死锁等情况。</p>
+<h3 id="乐观锁—基于版本号"><a href="#乐观锁—基于版本号" class="headerlink" title="乐观锁—基于版本号"></a>乐观锁—基于版本号</h3><p>乐观锁常常用于分布式系统对数据库某张特定表执行update操作。考虑线上选座的场景，用户A和B同时选择了某场次电影的一个座位，都去将座位的状态设置为已售。</p>
+<p>设想这样的执行序列：<br>1、用户A判断该座位为未售状态；<br>2、用户B判断该座位为未售状态；<br>3、用户A执行update座位为已售；<br>4、用户B执行update座位为已售。</p>
+<p>这样会出现同一个座位售出两次的情况，解决方案是在这张数据库表中增加一个版本号的字段。执行操作前读取当前数据库表中的版本号，在执行update语句时将版本号放在where语句中，如果更新了记录则说明成功，如果没有更新记录，则说明此次update失败。</p>
+<p>加了乐观锁的执行序列：<br>1、用户A查询该座位，得到该座位是未售状态，版本号是5；<br>2、用户B查询该座位，得到该座位是未售状态，版本号是5；<br>3、用户A执行update语句将座位状态更新为已售，版本号更新为6；<br>4、用户B执行update语句时此时这个座位的记录版本号为6，没有版本号为5的这个座位的记录，执行失败。</p>
+<p>优点：乐观锁的性能高于悲观锁，并不容易出现死锁。</p>
+<p>缺点：乐观锁只能对一张表的数据进行加锁，如果是需要对多张表的数据操作加分布式锁，基于版本号的乐观锁是办不到的。</p>
+<h2 id="基于memcached"><a href="#基于memcached" class="headerlink" title="基于memcached"></a>基于memcached</h2><p>memcached可以基于add命令加锁。memcached的add指令是指如果有这个key，add命令则失败，如果没有这个key，则add命令成功。并且memcached支持设置过期时间的add原子操作。并发add同一个key也只有一个会成功。</p>
+<p>基于memcached的add指令加分布式锁的思路为：定义一个key为分布式锁的key，如果add一个带过期时间的key成功则执行相应的业务操作，执行完判断锁是否过期，如果锁过期则不删除锁，如果锁没过期则删除锁。带过期时间是防止出现机器宕机，一直不能释放锁。</p>
+<p>很多人基于memcached实现的分布式锁没有判断锁是否过期，执行完相应的业务操作直接删除锁会出现以下问题。</p>
+<p>设想这样的执行序列：<br>1、机器A成功add一个带过期时间的key；<br>2、机器A在执行业务操作时出现较长时间的停顿，比如出现了较长时间的GC pause；<br>3、机器A还未在较长的停顿中恢复出来，锁已经过期，机器B成功add一个带过期时间的锁；<br>4、此时机器A从较长的停顿中恢复出来，执行完相应业务操作，删除了机器Badd的锁；<br>5、此时机器B的业务操作是在没有锁保护的情况下执行的。</p>
+<p>但是memcached并没有提供一个判断key是否存在的操作，需要依赖于加锁的时候的时钟与执行完业务操作的时钟相减获得执行时间，将执行时间与锁的过期时间进行对比。或者将锁key对应的value设置为当前时间加上过期时间的时钟，执行完相应的业务操作获取锁key的值与当前时钟进行对比。</p>
+<p>注：过期时间一定要长于业务操作的执行时间。</p>
+<p>优点：性能高于基于数据库的实现方式。</p>
+<h2 id="基于redis"><a href="#基于redis" class="headerlink" title="基于redis"></a>基于redis</h2><p>redis提供了setNx原子操作。基于redis的分布式锁也是基于这个操作实现的，setNx是指如果有这个key就set失败，如果没有这个key则set成功，但是setNx不能设置超时时间。</p>
+<p>基于redis组成的分布式锁解决方案为：<br>1、setNx一个锁key，相应的value为当前时间加上过期时间的时钟；<br>2、如果setNx成功，或者当前时钟大于此时key对应的时钟则加锁成功，否则加锁失败退出；<br>3、加锁成功执行相应的业务操作（处理共享数据源）；<br>4、释放锁时判断当前时钟是否小于锁key的value，如果当前时钟小于锁key对应的value则执行删除锁key的操作。</p>
+<p>注：这对于单点的redis能很好地实现分布式锁，如果redis集群，会出现master宕机的情况。如果master宕机，此时锁key还没有同步到slave节点上，会出现机器B从新的master上获取到了一个重复的锁。</p>
+<p>设想以下执行序列：<br>1、机器AsetNx了一个锁key，value为当前时间加上过期时间，master更新了锁key的值；<br>2、此时master宕机，选举出新的master，新的master正同步数据；<br>3、新的master不含锁key，机器BsetNx了一个锁key，value为当前时间加上过期时间；</p>
+<p>这样机器A和机器B都获得了一个相同的锁；解决这个问题的办法可以在第3步进行优化，内存中存储了锁key的value，在执行访问共享数据源前再判断内存存储的锁key的value与此时redis中锁key的value是否相等如果相等则说明获得了锁，如果不相等则说明在之前有其他的机器修改了锁key，加锁失败。同时在第4步不仅仅判断当前时钟是否小于锁key的value，也可以进一步判断存储的value值与此时的value值是否相等，如果相等再进行删除。</p>
+<p>此时的执行序列：<br>1、机器AsetNx了一个锁key，value为当前时间加上过期时间，master更新了锁key的值；<br>2、此时，master宕机，选举出新的master，新的master正同步数据；<br>3、机器BsetNx了一个锁key，value为此时的时间加上过期时间；<br>4、当机器A再次判断内存存储的锁与此时的锁key的值不一样时，机器A加锁失败；<br>5、当机器B再次判断内存存储的锁与此时的锁key的值一样，机器B加锁成功。</p>
+<p>注：如果是为了效率而使用分布式锁，例如：部署多台定时作业的机器，在同一时间只希望一台机器执行一个定时作业，在这种场景下是允许偶尔的失败的，可以使用单点的redis分布式锁；如果是为了正确性而使用分布式锁，最好使用再次检查的redis分布式锁，再次检查的redis分布式锁虽然性能下降了，但是正确率更高。</p>
+<h2 id="基于zookeeper"><a href="#基于zookeeper" class="headerlink" title="基于zookeeper"></a>基于zookeeper</h2><p>基于zookeeper的分布式锁大致思路为：<br>1、客户端尝试创建ephemeral类型的znode节点/lock；<br>2、如果客户端创建成功则加锁成功，可以执行访问共享数据源的操作，如果客户端创建失败，则证明有别的客户端加锁成功，此次加锁失败；<br>3、如果加锁成功当客户端执行完访问共享数据源的操作，则删除znode节点/lock。</p>
+<p>基于zookeeper实现分布式锁不需要设置过期时间，因为ephemeral类型的节点，当客户端与zookeeper创建的session在一定时间（session的过期时间内）没有收到心跳，则认为session过期，会删除客户端创建的所有ephemeral节点。</p>
+<p>但是这样会出现两个机器共同持有锁的情况。设想以下执行序列。<br>1、机器A创建了znode节点/lock；<br>2、机器A执行相应操作，进入了较长时间的GC pause；<br>3、机器A与zookeeper的session过期，相应的/lock节点被删除；<br>4、机器B创建了znode节点/lock；<br>5、机器A从较长的停顿中恢复；<br>6、此时机器A与机器B都认为自己获得了锁。</p>
+<p>与基于redis的分布式锁，基于zookeeper的锁可以增加watch机制，当机器创建节点/lock失败的时候可以进入等待，当/lock节点被删除的时候zookeeper利用watch机制通知机器。但是这种增加watch机制的方式只能针对较小客户端集群，如果较多客户端集群都在等待/lock节点被删除，当/lock节点被删除时，zookeeper要通知较多机器，对zookeeper造成较大的性能影响。这就是所谓的羊群效应。</p>
+<p>优化的大致思路为：<br>1、客户端调用创建名为“lock/number_lock_”类型为EPHEMERAL_SEQUENTIAL的节点；<br>2、客户端获取lock节点下所有的子节点；<br>3、判断自己是否是序号最小的节点的，如果是最小的节点则加锁成功，如果不是序号最小的节点，则在比自己小的并且最接近的节点注册监听；<br>4、当被关注的节点删除后，再次获取lock节点下的所有子节点，判断是否是最小序号，如果是最小序号则加锁成功；</p>
+<p>优化后的思路，虽然能一定程度避免羊群效应，但是也不能避免两个机器共同持有锁的情况。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/分布式设计/">分布式设计</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/分布式锁策略/">分布式锁策略</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/06/05/分布式锁的实现方式与对比/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/06/05/分布式锁的实现方式与对比/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/02/26/python3的100个实例005/" title="python3的100个实例005" itemprop="url">python3的100个实例005</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-02-26T10:04:46.000Z" itemprop="datePublished"> 发表于 2018-02-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="python的100个实例005-与时间有关的一切"><a href="#python的100个实例005-与时间有关的一切" class="headerlink" title="python的100个实例005-与时间有关的一切"></a>python的100个实例005-与时间有关的一切</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python有关时间的操作</span></span><br><span class="line"><span class="comment">#datetime是模块，datetime模块包含一个datetime类，</span></span><br><span class="line"><span class="comment"># 通过from datetime import datetime导入的是datetime这个类。</span></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta, timezone</span><br><span class="line"></span><br><span class="line">print(datetime.now())</span><br><span class="line">mydate = datetime(<span class="number">2018</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">00</span>)</span><br><span class="line">print(mydate)</span><br><span class="line"><span class="comment">#Python的timestamp是一个浮点数。如果有小数位，小数位表示毫秒数。</span></span><br><span class="line">print(mydate.timestamp())</span><br><span class="line"></span><br><span class="line">mytimeStamp = <span class="number">1519637291.0</span></span><br><span class="line">print(datetime.fromtimestamp(mytimeStamp)) <span class="comment">#localtime </span></span><br><span class="line">print(datetime.utcfromtimestamp(mytimeStamp)) <span class="comment">#utctime </span></span><br><span class="line"></span><br><span class="line">cday = datetime.strptime(<span class="string">'2015-6-1 18:19:59'</span>, <span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line"></span><br><span class="line">print(cday)</span><br><span class="line"></span><br><span class="line">print(datetime.now().strftime(<span class="string">'%a, %b %d %H:%M'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 日期相加减 参数只有timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)</span></span><br><span class="line">date = datetime(<span class="number">2018</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">00</span>)</span><br><span class="line">print(date + timedelta(hours=<span class="number">10</span>)) <span class="comment"># +10个小时</span></span><br><span class="line">print(date - timedelta(days=<span class="number">1</span>)) <span class="comment"># 减1天</span></span><br><span class="line">print(date + timedelta(days=<span class="number">1</span>, hours=<span class="number">2</span>)) <span class="comment"># 加1天2小时</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#转换时区</span></span><br><span class="line">tz_utc_8 = timezone(timedelta(hours=<span class="number">8</span>)) <span class="comment"># 创建时区UTC+8:00</span></span><br><span class="line">print(datetime.now().replace(tzinfo=tz_utc_8))</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取一个时间正确的时区，并强制设置为该时区</span></span><br><span class="line">bj_dt = datetime.now().replace(tzinfo=tz_utc_8)</span><br><span class="line">print(<span class="string">"基准时区"</span>, bj_dt)</span><br><span class="line"></span><br><span class="line">bj_dt = bj_dt.astimezone(timezone(timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">print(<span class="string">"北京时区"</span>, bj_dt)</span><br><span class="line"></span><br><span class="line">tokyo_dt = bj_dt.astimezone(timezone(timedelta(hours=<span class="number">9</span>)))</span><br><span class="line">print(<span class="string">"东京时区"</span>, tokyo_dt)</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/python/">python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/python/">python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/02/26/python3的100个实例005/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/02/26/python3的100个实例005/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/02/07/常用的的代码坏味道处理方式/" title="常用的的代码坏味道处理方式" itemprop="url">常用的的代码坏味道处理方式</a>
   </h1>
   <p class="article-author">By
@@ -140,132 +296,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/01/28/python3的100个实例004/" title="python3的100个实例004" itemprop="url">python3的100个实例004</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2018-01-28T10:22:28.000Z" itemprop="datePublished"> 发表于 2018-01-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="python的100个实例004-获取系统信息"><a href="#python的100个实例004-获取系统信息" class="headerlink" title="python的100个实例004-获取系统信息"></a>python的100个实例004-获取系统信息</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> psutil</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">print(<span class="string">"CPU逻辑核心数："</span>, psutil.cpu_count())  <span class="comment"># CPU逻辑数量</span></span><br><span class="line">print(<span class="string">"CPU时间分配："</span>, psutil.cpu_times())  <span class="comment"># CPU用户／系统／空闲时间</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"CPU使用率信息："</span>)</span><br><span class="line"><span class="comment"># 循环2次输出 cpu使用率</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">    print(datetime.now(), <span class="string">"CPU使用率"</span>, psutil.cpu_percent(interval=<span class="number">1</span>, percpu=<span class="keyword">True</span>))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"内存信息："</span>, psutil.virtual_memory())</span><br><span class="line">print(<span class="string">"交换空间信息："</span>, psutil.swap_memory())</span><br><span class="line"></span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"磁盘分区信息"</span>,  psutil.disk_partitions())</span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line"><span class="keyword">for</span> par <span class="keyword">in</span> psutil.disk_partitions():</span><br><span class="line">    print(<span class="string">"分区: %s, 使用情况: %s"</span> %</span><br><span class="line">          (par.mountpoint, psutil.disk_usage(par.mountpoint)))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"磁盘IO情况: "</span>, psutil.disk_io_counters())</span><br><span class="line"></span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"网络IO情况: "</span>, psutil.net_io_counters())</span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"网络接口情况: "</span>, psutil.net_if_addrs())</span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"网络接口状态: "</span>, psutil.net_if_stats())</span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line">print(<span class="string">"网络连接信息: "</span>)</span><br><span class="line"><span class="keyword">for</span> conn <span class="keyword">in</span> psutil.net_connections():</span><br><span class="line">    print(<span class="string">"pid=%d, status: %s, localNetInfo: %s, remoteNetInfo: %s"</span>  % (</span><br><span class="line">        conn.pid, conn.laddr, conn.raddr, conn.status))</span><br><span class="line">print(<span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"所有进程ID:"</span>, psutil.pids())</span><br><span class="line"></span><br><span class="line">p = psutil.Process(<span class="number">17760</span>)</span><br><span class="line">print(<span class="string">"进程名称: "</span>, p.name())</span><br><span class="line">print(<span class="string">"进程exe路径:"</span>, p.exe())</span><br><span class="line">print(<span class="string">"进程工作目录:"</span>, p.cwd())</span><br><span class="line">print(<span class="string">"进程启动的命令行:"</span>, p.cmdline())</span><br><span class="line">print(<span class="string">"父进程ID:"</span>, p.ppid())</span><br><span class="line">print(<span class="string">"父进程:"</span>, p.parent())</span><br><span class="line">print(<span class="string">"子进程列表:"</span>, p.children())</span><br><span class="line">print(<span class="string">"进程状态:"</span>, p.status())</span><br><span class="line">print(<span class="string">"进程用户名:"</span>, p.username())</span><br><span class="line">print(<span class="string">"进程创建时间:"</span>, p.create_time())</span><br><span class="line"><span class="comment"># print("进程终端:", p.terminal())</span></span><br><span class="line">print(<span class="string">"进程使用的CPU时间:"</span>, p.cpu_times())</span><br><span class="line">print(<span class="string">"进程使用的内存:"</span>, p.memory_info())</span><br><span class="line">print(<span class="string">"进程打开的文件:"</span>, p.open_files())</span><br><span class="line">print(<span class="string">"进程相关网络连接:"</span>, p.connections())</span><br><span class="line">print(<span class="string">"进程的线程数量:"</span>, p.num_threads())</span><br><span class="line">print(<span class="string">"所有线程信息:"</span>, p.threads())</span><br><span class="line">print(<span class="string">"进程环境变量:"</span>, p.environ())</span><br><span class="line">print(<span class="string">"结束进程"</span>, p.terminate())</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">CPU逻辑核心数： 4</span><br><span class="line">CPU时间分配： scputimes(user=10930.375, system=7108.0, idle=102377.046875, interrupt=390.5625, dpc=324.125)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CPU使用率信息：</span><br><span class="line">2018-01-28 00:21:45.278782 CPU使用率 [34.8, 18.8, 26.6, 23.4]</span><br><span class="line">2018-01-28 00:21:46.281749 CPU使用率 [36.2, 15.6, 23.4, 29.7]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">内存信息： svmem(total=10251116544, available=4278272000, percent=58.3, used=5972844544, free=4278272000)</span><br><span class="line">交换空间信息： sswap(total=12532817920, used=9507274752, free=3025543168, percent=75.9, sin=0, sout=0)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">磁盘分区信息 [sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed'), sdiskpart(device='D:\\', mountpoint='D:\\', fstype='FAT32', opts='rw,fixed'), sdiskpart(device='E:\\', mountpoint='E:\\', fstype='NTFS', opts='rw,fixed'), sdiskpart(device='F:\\', mountpoint='F:\\', fstype='NTFS', opts='rw,fixed'), sdiskpart(device='G:\\', mountpoint='G:\\', fstype='NTFS', opts='rw,fixed')]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">分区: C:\, 使用情况: sdiskusage(total=126590787584, used=89791541248, free=36799246336, percent=70.9)</span><br><span class="line">分区: D:\, 使用情况: sdiskusage(total=53664022528, used=25191579648, free=28472442880, percent=46.9)</span><br><span class="line">分区: E:\, 使用情况: sdiskusage(total=10735316992, used=5701107712, free=5034209280, percent=53.1)</span><br><span class="line">分区: F:\, 使用情况: sdiskusage(total=107374178304, used=67419734016, free=39954444288, percent=62.8)</span><br><span class="line">分区: G:\, 使用情况: sdiskusage(total=68251807744, used=40469872640, free=27781935104, percent=59.3)</span><br><span class="line">磁盘IO情况:  sdiskio(read_count=345740, write_count=419470, read_bytes=14608027136, write_bytes=9526425600, read_time=485, write_time=612)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">网络IO情况:  snetio(bytes_sent=2280626501, bytes_recv=1131084766, packets_sent=2080406, packets_recv=2057105, errin=0, errout=0, dropin=0, dropout=0)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">网络接口情况:  &#123;'本地连接* 2': [snic(family=&lt;AddressFamily.AF_LINK: -1&gt;, address='xx-xxC2-xx-B6-AE-xx', netmask=None, broadcast=None, ptp=None), snic(family=&lt;AddressFamily.AF_INET: 2&gt;, address='xx.xx.xx.xx', netmask='xx.xx.0.0'...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">网络接口状态:  &#123;'以太网': snicstats(isup=True, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=100, mtu=1500), '蓝牙网络连接': snicstats(isup=False, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=3, mtu=1500), '以太网 2': snicstats(isup=False, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=10, mtu=1400), 'Loopback Pseudo-Interface 1': snicstats(isup=True, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=1073, mtu=1500), 'WLAN': snicstats(isup=False, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=300, mtu=1500), '本地连接* 2': snicstats(isup=False, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=0, mtu=1500), 'Teredo Tunneling Pseudo-Interface': snicstats(isup=True, duplex=&lt;NicDuplex.NIC_DUPLEX_FULL: 2&gt;, speed=0, mtu=1472)&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">网络连接信息: </span><br><span class="line">pid=3972, status: addr(ip='192.xx.1.xx', port=65361), localNetInfo: addr(ip='xx.215.xx.69', port=443), remoteNetInfo: CLOSE_WAIT</span><br><span class="line">pid=900, status: addr(ip='192.xx.1.xx', port=56517), localNetInfo: addr(ip='xx.43.xx.29', port=443), remoteNetInfo: CLOSE_WAIT</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">所有进程ID: [0, 4, 392, 560, 636, 644, 744,....]</span><br><span class="line">进程名称:  EXCEL.EXE</span><br><span class="line">进程exe路径: C:\Program Files (x86)\Microsoft Office\root\Office16\EXCEL.EXE</span><br><span class="line">进程工作目录: C:\Users\xx\Documents</span><br><span class="line">进程启动的命令行: ['C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE']</span><br><span class="line">父进程ID: 5800</span><br><span class="line">父进程: psutil.Process(pid=5800, name='QMStartMenuPanel64.exe', started='19:09:33')</span><br><span class="line">子进程列表: []</span><br><span class="line">进程状态: running</span><br><span class="line">进程用户名: xx\xx</span><br><span class="line">进程创建时间: 1517069903.0</span><br><span class="line">进程使用的CPU时间: pcputimes(user=9.6875, system=5.96875, children_user=0.0, children_system=0.0)</span><br><span class="line">进程使用的内存: pmem(rss=121597952, vms=70000640, num_page_faults=66660, peak_wset=167497728, wset=121597952, peak_paged_pool=1226464, paged_pool=1164456, peak_nonpaged_pool=181312, nonpaged_pool=68256, pagefile=70000640, peak_pagefile=125423616, private=70000640)</span><br><span class="line">进程打开的文件: [popenfile(path='C:\\Windows\\SysWOW64\\zh-CN\\crypt32.dll.mui', fd=-1), ...</span><br><span class="line">进程相关网络连接: []</span><br><span class="line">进程的线程数量: 30</span><br><span class="line">所有线程信息: [pthread(id=17520, user_time=2.765625, system_time=3.703125),...]</span><br><span class="line">进程环境变量: &#123;'ALLUSERSPROFILE': 'C:\\ProgramData', 'APPDATA': ....</span><br><span class="line">结束进程 None</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/python/">python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/python/">python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2018/01/28/python3的100个实例004/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/01/28/python3的100个实例004/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/01/25/python3的100个实例003/" title="python3的100个实例003" itemprop="url">python3的100个实例003</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2018-01-25T08:41:18.000Z" itemprop="datePublished"> 发表于 2018-01-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="python的100个实例003-处理http请求"><a href="#python的100个实例003-处理http请求" class="headerlink" title="python的100个实例003-处理http请求"></a>python的100个实例003-处理http请求</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">print(<span class="string">"*****************一般性Http请求*******************"</span>)</span><br><span class="line"><span class="comment"># http请求</span></span><br><span class="line">r = requests.get(<span class="string">'https://www.baidu.com/'</span>) </span><br><span class="line">print(<span class="string">'HttpStatus:%d'</span> %(r.status_code))</span><br><span class="line">print(<span class="string">'Encoding:%s'</span> %(r.encoding))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 无论响应是文本还是二进制内容，我们都可以用content属性获得bytes对象：</span></span><br><span class="line">print(r.content)</span><br><span class="line">print(<span class="string">"*****************JSON获取*******************"</span>)</span><br><span class="line"><span class="comment"># 对于特定类型的响应，例如JSON，可以直接获取</span></span><br><span class="line">r = requests.get(<span class="string">'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20%3D%202151330&amp;format=json'</span>)</span><br><span class="line">print(r.json())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(<span class="string">"*****************传入特殊请求头*****************"</span>)</span><br><span class="line">r = requests.get(<span class="string">'https://www.douban.com/'</span>, headers=&#123;<span class="string">'User-Agent'</span>: </span><br><span class="line"><span class="string">'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit'</span>&#125;)</span><br><span class="line">print(r.text) <span class="comment"># 输出手机版的网页</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(<span class="string">"*****************发送POST请求*****************"</span>)</span><br><span class="line">r = requests.post(<span class="string">'https://accounts.douban.com/login'</span>, </span><br><span class="line">data=&#123;<span class="string">'form_email'</span>: <span class="string">'abc@example.com'</span>, <span class="string">'form_password'</span>: <span class="string">'123456'</span>&#125;)</span><br><span class="line">print(r.text)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"*****************发送JSON请求*****************"</span>)</span><br><span class="line">params = &#123;<span class="string">'key'</span>: <span class="string">'value'</span>&#125;</span><br><span class="line">cookieStr =  &#123;<span class="string">'JSESSIONID'</span>: <span class="string">'098'</span>&#125;</span><br><span class="line"><span class="comment"># 内部自动序列化为JSON</span></span><br><span class="line">r = requests.post(<span class="string">"url"</span>, json=params, cookies=cookieStr, timeout=<span class="number">5</span>) </span><br><span class="line">print(r.headers)</span><br><span class="line">activityInfo =r.json()</span><br><span class="line"><span class="comment"># 可直接获取对象属性</span></span><br><span class="line">print(activityInfo[<span class="string">'res_data'</span>][<span class="number">-1</span>][<span class="string">'name'</span>])</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/python/">python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/python/">python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2018/01/25/python3的100个实例003/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/01/25/python3的100个实例003/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -291,7 +321,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -319,7 +349,7 @@
 		  
 		
 		  
-			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>1</sup></a></li>
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
 		  
 		
 		  
@@ -400,7 +430,7 @@
 			
 		
 			
-				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
 			
 		
 			
@@ -408,7 +438,7 @@
 			
 		
 			
-				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
 			
 		
 			
@@ -424,6 +454,10 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
 			
 		
@@ -436,11 +470,7 @@
 			
 		
 			
-				<li><a href="/tags/关闭窗口提示/" title="关闭窗口提示">关闭窗口提示<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+				<li><a href="/tags/JS/" title="JS">JS<sup>1</sup></a></li>
 			
 		
 			
@@ -463,7 +493,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
     </div>
   </div>
 
@@ -540,7 +570,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
 		

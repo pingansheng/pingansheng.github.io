@@ -83,6 +83,213 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/01/13/bootstrap表格控制内容超长/" title="bootstrap表格控制内容超长" itemprop="url">bootstrap表格控制内容超长</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-13T04:55:51.000Z" itemprop="datePublished"> 发表于 2017-01-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>CSS，bootstrap表格控制当td内容过长时用省略号表示，以及在不使用bootstrap时过长也用省略号表示<br>首先需要在table中设置<code>table-layout:fixed</code>;<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"table-layout:fixed"</span>&gt;</span><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在表头th中设置每列的宽度<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"table-layout:fixed"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">th</span> <span class="attr">width</span>=<span class="string">"10%"</span>&gt;</span>Title01<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">th</span> <span class="attr">width</span>=<span class="string">"20%"</span>&gt;</span>Title02<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  其他th --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在需要当长度大于一定数值时用省略号表示的td上面添加样式<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"table-layout:fixed"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">th</span> <span class="attr">width</span>=<span class="string">"10%"</span>&gt;</span>Title01<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">th</span> <span class="attr">width</span>=<span class="string">"20%"</span>&gt;</span>Title02<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  其他th --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c:foreach</span> <span class="attr">items</span> = <span class="string">""</span>  <span class="attr">var</span> =<span class="string">""</span> <span class="attr">varStatus</span> = <span class="string">""</span>&gt;</span></span><br><span class="line">&lt;td&gt;&lt;title01&lt;/td&gt;</span><br><span class="line">&lt;td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"&gt;&lt;title02&lt;/td&gt;</span><br><span class="line"><span class="comment">&lt;!--  other td   --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">c:foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>bootstrap在设置表格大小时需要设置到th中，否则可能不会生效，以上在bootstrap中可用</p>
+<p>当不使用bootstrap的时候可以使用如下样式，网上搜索到的，比较好用</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span>   </span><br><span class="line">   <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined">   </span></span><br><span class="line"><span class="undefined">.mytable &#123;   </span></span><br><span class="line"><span class="undefined">   table-layout: fixed;   </span></span><br><span class="line"><span class="undefined">   width: 98% border:0px;   </span></span><br><span class="line"><span class="undefined">   margin: 0px;   </span></span><br><span class="line"><span class="undefined">&#125;   </span></span><br><span class="line"><span class="undefined">  </span></span><br><span class="line"><span class="undefined">.mytable tr td &#123;   </span></span><br><span class="line"><span class="undefined">    text-overflow: ellipsis; /* for IE */  </span></span><br><span class="line"><span class="undefined">    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */  </span></span><br><span class="line"><span class="undefined">    overflow: hidden;   </span></span><br><span class="line"><span class="undefined">    white-space: nowrap;   </span></span><br><span class="line"><span class="undefined">    border: 1px solid;   </span></span><br><span class="line"><span class="undefined">    text-align: left   </span></span><br><span class="line"><span class="undefined">&#125;   </span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">"500px"</span> <span class="attr">class</span>=<span class="string">"mytable"</span>&gt;</span>   </span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span>   </span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">"20%"</span>&gt;</span>再别康桥<span class="tag">&lt;/<span class="name">td</span>&gt;</span>   </span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">width</span>=<span class="string">"80%"</span>&gt;</span></span><br><span class="line">                轻轻我走了，正如我轻轻地来，我挥一挥衣袖，不带走一片云彩</span><br><span class="line">            <span class="tag">&lt;/<span class="name">td</span>&gt;</span>  </span><br><span class="line">             </span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/代码碎片/">代码碎片</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/表格内容超长/">表格内容超长</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/13/bootstrap表格控制内容超长/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/13/bootstrap表格控制内容超长/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/13/One-Line-Code-Collection/" title="One Line Code Collection" itemprop="url">One Line Code Collection</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-13T04:29:10.000Z" itemprop="datePublished"> 发表于 2017-01-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="一行代码汇总"><a href="#一行代码汇总" class="headerlink" title="一行代码汇总"></a>一行代码汇总</h1><h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><h3 id="Maven-手动安装"><a href="#Maven-手动安装" class="headerlink" title="Maven 手动安装"></a>Maven 手动安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -Dfile=/Users/pingansheng/Desktop/maven-assembly-plugin-2.6.jar -DgroupId=org.apache.maven.plugins -DartifactId=maven-assembly-plugin -Dversion=2.6 -Dpackaging=jar</span><br></pre></td></tr></table></figure>
+<h2 id="SHELL"><a href="#SHELL" class="headerlink" title="SHELL"></a>SHELL</h2><h3 id="获取Java-WebService客户端代码"><a href="#获取Java-WebService客户端代码" class="headerlink" title="获取Java WebService客户端代码"></a>获取Java WebService客户端代码</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsdl2java -d D:\\src -client http://api.xxx.cn/xxxAPI/service/auditResBatchQueryService?wsdl</span><br></pre></td></tr></table></figure>
+<h3 id="linux查看文件夹目录大小"><a href="#linux查看文件夹目录大小" class="headerlink" title="linux查看文件夹目录大小"></a>linux查看文件夹目录大小</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h --max-depth=1</span><br></pre></td></tr></table></figure>
+<h3 id="重建图标缓存"><a href="#重建图标缓存" class="headerlink" title="重建图标缓存"></a>重建图标缓存</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">REM bat代码开始</span><br><span class="line">REM 更新：增加清除系统托盘旧图标</span><br><span class="line">REM 关闭Windows外壳程序explorer</span><br><span class="line">taskkill /f /im explorer.exe</span><br><span class="line">REM 清理系统图标缓存数据库</span><br><span class="line">attrib -h -s -r <span class="string">"%userprofile%\AppData\Local\IconCache.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\IconCache.db"</span></span><br><span class="line">attrib /s /d -h -s -r <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\*"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_32.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_96.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_102.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_256.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_1024.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_idx.db"</span></span><br><span class="line">del /f <span class="string">"%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_sr.db"</span></span><br><span class="line">REM 清理 系统托盘记忆的图标</span><br><span class="line">echo y|reg delete <span class="string">"HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify"</span> /v IconStreams</span><br><span class="line">echo y|reg delete <span class="string">"HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify"</span> /v PastIconsStream</span><br><span class="line">REM 重启Windows外壳程序explorer.exe</span><br><span class="line">start explorer</span><br></pre></td></tr></table></figure>
+<h3 id="右键Notepad-打开"><a href="#右键Notepad-打开" class="headerlink" title="右键Notepad++打开"></a>右键Notepad++打开</h3><p>安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\*\shell\NotePad++]</span><br><span class="line">@="用&amp;Notepad++打开"</span><br><span class="line">"Icon"="C:\\Program Files (x86)\\Notepad++\\Notepad++.exe"</span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\*\shell\NotePad++\Command]</span><br><span class="line">@="C:\\Program Files (x86)\\Notepad++\\Notepad++.exe \"%1\""</span><br></pre></td></tr></table></figure></p>
+<p>卸载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[-HKEY_CLASSES_ROOT\*\shell\NotePad++]</span><br></pre></td></tr></table></figure>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="DIV居中"><a href="#DIV居中" class="headerlink" title="DIV居中"></a>DIV居中</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"text-align: center"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--里面的width必须设置才可以生效--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"width:900px;margin:0 auto;text-align: left"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h2><h3 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#正实数,最多两位小数</span></span><br><span class="line">^[<span class="number">0</span>-<span class="number">9</span>]+(.[<span class="number">0</span>-<span class="number">9</span>]&#123;<span class="number">2</span>&#125;)?$</span><br><span class="line"><span class="comment">#字母数字下划线</span></span><br><span class="line">^\w+$</span><br></pre></td></tr></table></figure>
+<h3 id="字符"><a href="#字符" class="headerlink" title="字符"></a>字符</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#只匹配字母、中文、数字、下划线，顺序不限</span></span><br><span class="line">^([ \u4e00-\u9fa5 a-zA-Z0-<span class="number">9</span>_]+)$</span><br></pre></td></tr></table></figure>
+<h2 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h2><h3 id="Java获取磁盘空间"><a href="#Java获取磁盘空间" class="headerlink" title="Java获取磁盘空间"></a>Java获取磁盘空间</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getDiskInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    File diskPartition = <span class="keyword">new</span> File(<span class="string">"J:"</span>) ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> totalCapacity = diskPartition.getTotalSpace();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> freePartitionSpace = diskPartition.getFreeSpace();</span><br><span class="line">    <span class="keyword">long</span> usablePatitionSpace = diskPartition.getUsableSpace();</span><br><span class="line"></span><br><span class="line">    System. out.println(<span class="string">"**** Sizes in Mega Bytes ****\n "</span>);</span><br><span class="line"></span><br><span class="line">    System. out.println(<span class="string">"Total C partition size : "</span> + totalCapacity / (<span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" MB"</span>);</span><br><span class="line">    System. out.println(<span class="string">"Usable Space : "</span> + usablePatitionSpace / (<span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" MB"</span>);</span><br><span class="line">    System. out.println(<span class="string">"Free Space : "</span> + freePartitionSpace / (<span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" MB"</span>);</span><br><span class="line"></span><br><span class="line">    System. out.println(<span class="string">" \n**** Sizes in Giga Bytes ****\n "</span>);</span><br><span class="line"></span><br><span class="line">    System. out.println(</span><br><span class="line">    <span class="string">"Total C partition size : "</span> + totalCapacity / (<span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" GB"</span> );</span><br><span class="line">    System. out.println(<span class="string">"Usable Space : "</span> + usablePatitionSpace / (<span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" GB"</span> );</span><br><span class="line">    System. out.println(<span class="string">"Free Space : "</span> + freePartitionSpace / (<span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>) + <span class="string">" GB"</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="可用性指标"><a href="#可用性指标" class="headerlink" title="可用性指标"></a>可用性指标</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th style="text-align:right">概率可靠性</th>
+<th style="text-align:right">每年允许不可用时间</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一个九</td>
+<td style="text-align:right">90%</td>
+<td style="text-align:right">1.2 个月</td>
+<td>不可用</td>
+</tr>
+<tr>
+<td>二个九</td>
+<td style="text-align:right">99%</td>
+<td style="text-align:right">3.6 天</td>
+<td>普通单点</td>
+</tr>
+<tr>
+<td>三个九</td>
+<td style="text-align:right">99.9%</td>
+<td style="text-align:right">8.6 小时</td>
+<td>普通企业</td>
+</tr>
+<tr>
+<td>四个九</td>
+<td style="text-align:right">99.99%</td>
+<td style="text-align:right">51.6 分钟</td>
+<td>高可用</td>
+</tr>
+<tr>
+<td>五个九</td>
+<td style="text-align:right">99.999%</td>
+<td style="text-align:right">5 分钟</td>
+<td>电信级</td>
+</tr>
+<tr>
+<td>六个九</td>
+<td style="text-align:right">99.9999%</td>
+<td style="text-align:right">31 秒</td>
+<td>极高要求</td>
+</tr>
+<tr>
+<td>七个九</td>
+<td style="text-align:right">99.99999%</td>
+<td style="text-align:right">3 秒</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>八个九</td>
+<td style="text-align:right">99.999999%</td>
+<td style="text-align:right">0.3 秒</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>九个九</td>
+<td style="text-align:right">99.9999999%</td>
+<td style="text-align:right">30 毫秒</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/代码碎片/">代码碎片</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/一行代码/">一行代码</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/13/One-Line-Code-Collection/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/13/One-Line-Code-Collection/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/01/13/获取管理员权限REG命令/" title="获取管理员权限REG命令" itemprop="url">获取管理员权限REG命令</a>
   </h1>
   <p class="article-author">By
@@ -141,131 +348,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/01/13/恢复被病毒隐藏的文件/" title="恢复被病毒隐藏的文件" itemprop="url">恢复被病毒隐藏的文件</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-01-13T02:53:01.000Z" itemprop="datePublished"> 发表于 2017-01-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>恢复的盘符为L:\<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">attrib -s -h L:\*.* -a /s /d</span><br></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/代码碎片/">代码碎片</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/恢复文件/">恢复文件</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/01/13/恢复被病毒隐藏的文件/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/13/恢复被病毒隐藏的文件/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/01/13/CSS实现TAG/" title="CSS实现TAG" itemprop="url">CSS实现TAG</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-01-13T02:42:35.000Z" itemprop="datePublished"> 发表于 2017-01-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>标签<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"pragma"</span> <span class="attr">content</span>=<span class="string">"no-cache"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"cache-control"</span> <span class="attr">content</span>=<span class="string">"no-cache"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"expires"</span> <span class="attr">content</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    /*标签css*/</span></span><br><span class="line"><span class="undefined"> </span></span><br><span class="line"><span class="undefined">    /*标签ul和li的实现*/</span></span><br><span class="line"><span class="undefined">    .tags &#123;</span></span><br><span class="line"><span class="undefined">        list-style-type:none;</span></span><br><span class="line"><span class="undefined">        float:left;</span></span><br><span class="line"><span class="undefined">        margin-left:10px;</span></span><br><span class="line"><span class="undefined">        margin-bottom:3px;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    /*连接a的实现，右侧的圆角实现，hover效果实现*/</span></span><br><span class="line"><span class="undefined">    .tags a&#123;</span></span><br><span class="line"><span class="undefined">        display:block;</span></span><br><span class="line"><span class="undefined">        text-decoration:none;</span></span><br><span class="line"><span class="undefined">        font-size:10px;</span></span><br><span class="line"><span class="undefined">        color:white;</span></span><br><span class="line"><span class="undefined">        background-color:#0089e0;</span></span><br><span class="line"><span class="undefined">        height:19px;</span></span><br><span class="line"><span class="undefined">        line-height:19px;</span></span><br><span class="line"><span class="undefined">        padding:0 10px 0 10px;</span></span><br><span class="line"><span class="undefined">        position:relative;</span></span><br><span class="line"><span class="undefined">        border-radius:0 5px 5px 0;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    .tags a:hover&#123;</span></span><br><span class="line"><span class="undefined">        background-color:#666;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">     </span></span><br><span class="line"><span class="undefined">    /*左侧三角形的实现*/</span></span><br><span class="line"><span class="undefined">    .tags a:before&#123;</span></span><br><span class="line"><span class="undefined">        content:" ";</span></span><br><span class="line"><span class="undefined">        width:0px;</span></span><br><span class="line"><span class="undefined">        height:0px;</span></span><br><span class="line"><span class="undefined">        position:absolute;</span></span><br><span class="line"><span class="undefined">        top:0;</span></span><br><span class="line"><span class="undefined">        left:-19px;</span></span><br><span class="line"><span class="undefined">        border:10px solid transparent;</span></span><br><span class="line"><span class="undefined">        border-right-color:#0089e0;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    .tags  a:hover:before&#123;</span></span><br><span class="line"><span class="undefined">        border-color:transparent #666 transparent transparent;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">     </span></span><br><span class="line"><span class="undefined">    /*小圆点的实现*/</span></span><br><span class="line"><span class="undefined">    .tags a:after&#123;</span></span><br><span class="line"><span class="undefined">        content:" ";</span></span><br><span class="line"><span class="undefined">        width:4px;</span></span><br><span class="line"><span class="undefined">        height:4px;</span></span><br><span class="line"><span class="undefined">        background-color:#fff;</span></span><br><span class="line"><span class="undefined">        border-radius:4px;</span></span><br><span class="line"><span class="undefined">        box-shadow:0px 0px 0px 1px rgba(0,0,0,.3);</span></span><br><span class="line"><span class="undefined">        position:absolute;</span></span><br><span class="line"><span class="undefined">        top:8px;</span></span><br><span class="line"><span class="undefined">        left:3px;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"tags"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> &gt;</span>tag<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/代码碎片/">代码碎片</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/CSS/">CSS</a><a href="/tags/TAG/">TAG</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/01/13/CSS实现TAG/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/13/CSS实现TAG/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
@@ -291,7 +373,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -319,7 +401,7 @@
 		  
 		
 		  
-			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>1</sup></a></li>
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
 		  
 		
 		  
@@ -400,7 +482,7 @@
 			
 		
 			
-				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
 			
 		
 			
@@ -408,7 +490,7 @@
 			
 		
 			
-				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
 			
 		
 			
@@ -424,6 +506,10 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
 			
 		
@@ -436,11 +522,7 @@
 			
 		
 			
-				<li><a href="/tags/关闭窗口提示/" title="关闭窗口提示">关闭窗口提示<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+				<li><a href="/tags/JS/" title="JS">JS<sup>1</sup></a></li>
 			
 		
 			
@@ -463,7 +545,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
     </div>
   </div>
 
@@ -540,7 +622,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
 		

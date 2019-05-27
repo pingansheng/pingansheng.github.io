@@ -83,6 +83,342 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/02/16/Effective-Java-2th-Part-II/" title="Effective Java 2th Part II" itemprop="url">Effective Java 2th Part II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-16T08:10:41.000Z" itemprop="datePublished"> 发表于 2017-02-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Effective-Java-2th-Part-II"><a href="#Effective-Java-2th-Part-II" class="headerlink" title="Effective Java 2th Part II"></a>Effective Java 2th Part II</h1><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>23、请不要在新代码中使用原生态类型</p>
+<ul>
+<li>尽量使用泛型</li>
+</ul>
+<p>24、消除非受检警告</p>
+<p>25、列表优先于数组</p>
+<ul>
+<li>不要混用数据与列表</li>
+<li>数据是具体化的，运行时才知道类型，泛型是擦除式的，运行时会丢弃类型，在编译时强化类型</li>
+</ul>
+<p>26、优先考虑泛型</p>
+<p>27、优先考虑泛型方法</p>
+<ul>
+<li>静态工具尤其适合泛型化</li>
+</ul>
+<p>28、利用有限制通配符来提升API的灵活性</p>
+<ul>
+<li>PECS, 用于生产者使用&lt;? extends T&gt;, 用于消费者使用&lt;? super T&gt;</li>
+<li>所有的comparable和comparator都是消费者</li>
+</ul>
+<p>29、优先考虑类型安全的异构容器</p>
+<ul>
+<li>Map中存储不同类型的对象可以用类型对象Class<t>作为Key,get时候使用Class.cast进行转换</t></li>
+</ul>
+<h2 id="枚举和注解"><a href="#枚举和注解" class="headerlink" title="枚举和注解"></a>枚举和注解</h2><p>30、用enum代替常量int</p>
+<ul>
+<li>枚举是不可变的，每个枚举都有自己的命名空间，不担心重名问题</li>
+<li><p>如果每个枚举对应不同的行为，使用特定于常量的方法实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Oper&#123;</span><br><span class="line"></span><br><span class="line">    PLUS&#123;<span class="function"><span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x+y;&#125;&#125;,</span><br><span class="line">    MINUS&#123;<span class="function"><span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x-y;&#125;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多个枚举常量同时共享相同的行为，则考虑策略枚举（枚举套枚举，里面的枚举提供方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//伪代码 </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> A&#123;</span><br><span class="line">    X1(B.Y1),</span><br><span class="line">    X2(B.Y1),</span><br><span class="line">    X3(B.Y2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">enum</span> B&#123;</span><br><span class="line">        Y1(<span class="function"><span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;&#125;),</span><br><span class="line">        Y2(<span class="function"><span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;&#125;);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>31、用实例域代替序数</p>
+<ul>
+<li>尽量不要使用ordinal方法获取序号</li>
+<li>显示指定一个字段表示值</li>
+</ul>
+<p>32、EnumSet代替位域</p>
+<ul>
+<li>EnumSet.of(X1,X2),表示某几个枚举值的Set</li>
+</ul>
+<p>33、用EnumMap代替序数索引</p>
+<ul>
+<li>当枚举作为Key时，使用EnumMap作为其集合载体，替代枚举数组</li>
+</ul>
+<p>34、用接口模拟可伸缩的枚举</p>
+<ul>
+<li>利用枚举实现某接口可以动态的扩展枚举，调用使用接口调用即可</li>
+<li>调用端的参数两种声明方式<code>&lt;T extends Enum&lt;T&gt; &amp; AInterface&gt;</code>和<code>Collection&lt;? extends AInterface&gt;</code></li>
+</ul>
+<p>35、注解优先于命名模式</p>
+<ul>
+<li>使用注解而不是使用具体名称去判断执行逻辑</li>
+</ul>
+<p>36、坚持使用Override注解</p>
+<ul>
+<li>使得编译器提前得到错误</li>
+</ul>
+<p>37、用标记接口定义类型</p>
+<ul>
+<li>定义某一个类型使用接口</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>38、检查参数的有效性</p>
+<ul>
+<li>断言或条件判断</li>
+<li>对于所有参数如果可以合理完成逻辑，限制越少越好</li>
+</ul>
+<p>39、必要时进行保护性拷贝</p>
+<ul>
+<li>对外提供的服务，要做保护性的设计</li>
+<li>保护性拷贝在检查有效性之前进行</li>
+<li>参数可以被不信任的子类化，勿使用clone拷贝</li>
+<li>自身组件返回考虑做保护性拷贝</li>
+</ul>
+<p>40、谨慎设计方法签名</p>
+<ul>
+<li>名称谨慎</li>
+<li>不过于追求便利方法</li>
+<li>参数列表&lt;=4，过多则拆分方法或创建辅助类作为参数，或者采用builder模式</li>
+<li>参数优先使用接口</li>
+<li>boolean优先使用二值枚举setType(Person.MALE)</li>
+</ul>
+<p>41、慎用重载</p>
+<ul>
+<li>调用重载方法在编译时决定，而覆盖方法在运行时决定</li>
+<li>不要导出两个具有相同参数数目的重载方法</li>
+<li>构造器重载可考虑导出静态工厂</li>
+<li>多个重载方法，一般将具体化的重载方法转发给通用的重载方法以保证结果的一致性</li>
+<li>传递同样的参数时，所有的重载方法必须一致</li>
+</ul>
+<p>42、慎用可变参数</p>
+<ul>
+<li>每次调用均会导致一次数据分配和初始化</li>
+<li>可以创建一系列接收参数数量的方法重载组，最后一个再使用可变参数<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1,<span class="keyword">int</span> a2)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1,<span class="keyword">int</span> a2,<span class="keyword">int</span> ...rest)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>43、返回零长度的数组或者集合，而不是null</p>
+<ul>
+<li>返回类型是数组或者集合的方法返回零长度对象</li>
+</ul>
+<p>44、为所有导出的API元素编写文档注释</p>
+<ul>
+<li><code>&lt;pre&gt; {@code int i=1;}&lt;pre/&gt;</code> 用于导出代码</li>
+<li><code>{@literal Map&lt;String,String&gt;}</code> 用于原样输出内容并且转移html字符</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Effective-Java/">Effective Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/16/Effective-Java-2th-Part-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/16/Effective-Java-2th-Part-II/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/07/Effective-Java-2th-Part-I/" title="Effective Java 2th Part I" itemprop="url">Effective Java 2th Part I</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-07T07:32:04.000Z" itemprop="datePublished"> 发表于 2017-02-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Effective-Java-2th-Part-I"><a href="#Effective-Java-2th-Part-I" class="headerlink" title="Effective Java 2th Part I"></a>Effective Java 2th Part I</h1><h2 id="创建与销毁对象"><a href="#创建与销毁对象" class="headerlink" title="创建与销毁对象"></a>创建与销毁对象</h2><p>1、静态工厂代替构造器<br>优点：</p>
+<ul>
+<li>命名：方法名称表示对象含义</li>
+<li>复用：不需要每次都创建新对象</li>
+<li>返回子类对象：可以返回该类的子类对象</li>
+<li>创建参数化类型对象简洁：new HashMap&lt;String,List<string>&gt;().<br>缺点：</string></li>
+<li>没有默认或保护的构造方法无法子类化</li>
+<li>只是一个静态方法而不像构造函数有明确的语法含义</li>
+</ul>
+<p>2、多个构造参数考虑使用构造器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p1;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p2;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p3;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p4;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p5;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p1=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p2=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p3=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p4=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p5=<span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">(<span class="keyword">int</span> p1,<span class="keyword">int</span> p2)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.p1=p1;</span><br><span class="line">            <span class="keyword">this</span>.p2=p2;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP3</span><span class="params">(<span class="keyword">int</span> p3)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.p3=p3;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP4</span><span class="params">(<span class="keyword">int</span> p4)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.p4=p4;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP5</span><span class="params">(<span class="keyword">int</span> p5)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.p5=p5;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> App <span class="title">build</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> App(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">(Builder builder)</span></span>&#123;</span><br><span class="line">        p1=builder.p1;</span><br><span class="line">        p2=builder.p2;</span><br><span class="line">        p3=builder.p3;</span><br><span class="line">        p4=builder.p4;</span><br><span class="line">        p5=builder.p5;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//client</span></span><br><span class="line">App app=<span class="keyword">new</span> App.Builder(<span class="number">1</span>,<span class="number">2</span>).setP3(<span class="number">3</span>).setP4(<span class="number">4</span>).setP5(<span class="number">5</span>).build();</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ul>
+<li>灵活</li>
+<li>具名</li>
+<li>安全<br>缺点：</li>
+<li>需要创建构造器，性能开销</li>
+</ul>
+<p>3、私有构造器强化单例属性</p>
+<ul>
+<li>见单例模式</li>
+<li>唯一元素的枚举类也是一种单例的最好方法</li>
+</ul>
+<p>4、私有构造函数使得某些类不可实例化（工具类等）</p>
+<p>5、不要创建多余的对象</p>
+<ul>
+<li>避免频繁使用装箱基本类型<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Long s=<span class="number">0L</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">long</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++)&#123;</span><br><span class="line">    s+=i;<span class="comment">//warning!每次都创建一个Long对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>6、消除过期的对象引用</p>
+<ul>
+<li>如果类自己管理内存，注意内存泄漏，比如自己实现的堆栈</li>
+<li>缓存要注意清理问题</li>
+<li>监听器与回调</li>
+</ul>
+<p>7、避免使用终结方法</p>
+<h2 id="对于所有对象都通用的方法"><a href="#对于所有对象都通用的方法" class="headerlink" title="对于所有对象都通用的方法"></a>对于所有对象都通用的方法</h2><p>8、覆盖equals方法注意：</p>
+<ul>
+<li>自反性、对称性、传递性、一致性、非空性（x.equals(null)==false）</li>
+<li>使用instanceof检查参数是否为正确类型</li>
+<li>注意方法的入参类型是Object，否则是重载</li>
+<li>==比较不是float与double的基本类型，引用使用equals，float使用Float.compare(),double使用Double.compare()</li>
+</ul>
+<p>9、覆盖equals时候始终覆盖hashcode</p>
+<ul>
+<li>否则影响hash</li>
+</ul>
+<p>10、始终覆盖toString()</p>
+<p>11、谨慎实现cloneable接口</p>
+<ul>
+<li>一般不要实现，否则需要提供良好的实现，深度拷贝与同步</li>
+</ul>
+<p>12、考虑实现comparable接口</p>
+<ul>
+<li>获得更多的内置集合功能，如排序等</li>
+</ul>
+<h2 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h2><p>13、使类和成员的可访问性最小化</p>
+<ul>
+<li>封装</li>
+</ul>
+<p>14、访问属性使用访问方法而不是直接访问</p>
+<ul>
+<li>私有的嵌套类可以直接访问，危害性较小</li>
+</ul>
+<p>15、尽量使用不可变性</p>
+<ul>
+<li>线程安全，内部信息共享，提供大量构件</li>
+</ul>
+<p>16、使用复合而不是继承</p>
+<ul>
+<li>复合和转发机制（装饰器模式）</li>
+<li>只有在is-a关系时使用继承</li>
+</ul>
+<p>17、要么为继承而设计，要么禁止继承</p>
+<ul>
+<li>需要提供详细的文档说明</li>
+<li>好的API文档描述一个操作做了什么，而不是如何做的</li>
+<li>如果允许继承，构造器不可以调用可覆盖的方法</li>
+</ul>
+<p>18、接口优于抽象类</p>
+<ul>
+<li>接口利于实现混合类型（某个类具有某种特定的功能，如Comparable接口）</li>
+<li>利于实现非层次的类结构，比如歌唱家与作家接口</li>
+<li>一般导出接口的骨架实现抽象类或简单实现（用于直接使用或继承）</li>
+<li>抽象类对比接口更容易演变</li>
+<li>公开接口一旦发布，几乎无法修改，建议同时发布骨架抽象类</li>
+</ul>
+<p>19、接口只用于定义类型</p>
+<ul>
+<li>导出常量使用枚举，而不是包含一堆static final变量</li>
+</ul>
+<p>20、类层次优于标签类</p>
+<ul>
+<li>不要在一个类中完成相似而又不同的多套逻辑（三角形与原形面积计算，一个类中使用switch类的逻辑判断）</li>
+<li>针对相似而不同的逻辑关系，考虑拆成子类父类的类层次关系</li>
+</ul>
+<p>21、用函数对象标识策略</p>
+<ul>
+<li>策略模式</li>
+</ul>
+<p>22、优先考虑静态成员类</p>
+<ul>
+<li>非静态的嵌套类每个实例都会持有一个外围类的引用</li>
+<li>如果嵌套类不需要外围实例的引用，就使用静态，否则使用非静态</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Effective-Java/">Effective Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/07/Effective-Java-2th-Part-I/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/07/Effective-Java-2th-Part-I/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/02/04/chapter11-中级绘图/" title="chapter11 中级绘图" itemprop="url">chapter11 中级绘图</a>
   </h1>
   <p class="article-author">By
@@ -181,181 +517,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/02/03/chapter10-功效分析/" title="chapter10 功效分析" itemprop="url">chapter10 功效分析</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-02-03T06:33:08.000Z" itemprop="datePublished"> 发表于 2017-02-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="功效分析"><a href="#功效分析" class="headerlink" title="功效分析"></a>功效分析</h1><ul>
-<li>在给定置信度的情况下，判断检测到给定效应值时所需的样本量。反过来，它也可以帮助你在给定置信度水平情况下，计算在某样本量内能检测到给定效应值的概率。</li>
-</ul>
-<h2 id="1、假设检验速览"><a href="#1、假设检验速览" class="headerlink" title="1、假设检验速览"></a>1、假设检验速览</h2><ul>
-<li>样本大小: 实验设计中每种条件/组中观测的数目</li>
-<li>显著性水平: I型错误的概率来定义。也可以把它看做是发现效应不发生的概率</li>
-<li>功效: 通过1减去II型错误的概率来定义。可以把它看做是真实效应发生的概率。</li>
-<li>效应值: 指的是在备择或研究假设下效应的量。效应值的表达式依赖于假设检验中使用的统计方法</li>
-</ul>
-<p><strong>功效分析就是给定三个值得情况下，求得另外一个值</strong></p>
-<h2 id="2、用-pwr-包做功效分析"><a href="#2、用-pwr-包做功效分析" class="headerlink" title="2、用 pwr 包做功效分析"></a>2、用 pwr 包做功效分析</h2><h3 id="2-1、t检验"><a href="#2-1、t检验" class="headerlink" title="2.1、t检验"></a>2.1、t检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pwr.t.test(n=,d=,sig.level=,power=,alternative=)</span><br><span class="line"><span class="comment">#n: 样本大小</span></span><br><span class="line"><span class="comment">#d: 效应值,d=(u1-u2)/o, u1与u2为两组均值，o为标准差</span></span><br><span class="line"><span class="comment">#sig.level: 显著水平</span></span><br><span class="line"><span class="comment">#power: 功效水平</span></span><br><span class="line"><span class="comment">#type: 检验类型，双样本t检验（two.sample）、单样本t检验（one.sample）或相依样本t检验（paired）。默认为双样本t检验。</span></span><br><span class="line"><span class="comment">#alternative: 指统计检验是双侧检验（two.sided）还是单侧检验（less或greater）。默认为双侧检验</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">##t检验</span></span><br><span class="line">&gt; <span class="keyword">library</span>(pwr)</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#实例1、手机与驾驶反应时间实验，根据过去经验知道反应时间的标准差为1.25s,当前认为相差1s表示巨大差异，此时可</span></span><br><span class="line">&gt; <span class="comment">#设定d=1/1.25=0.8或更大，如果差异存在，你希望90%把握检测到，由于随机变异性存在，希望95%把握不会误报差异显著</span></span><br><span class="line">&gt; pwr.t.test(d=<span class="number">0.8</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>,type = <span class="string">"two.sample"</span>,alternative = <span class="string">"two.side"</span>)</span><br><span class="line"></span><br><span class="line">     Two-sample t test power calculation </span><br><span class="line"></span><br><span class="line">              n = <span class="number">33.82554</span></span><br><span class="line">              d = <span class="number">0.8</span></span><br><span class="line">      sig.level = <span class="number">0.05</span></span><br><span class="line">          power = <span class="number">0.9</span></span><br><span class="line">    alternative = two.sided</span><br><span class="line"></span><br><span class="line">NOTE: n is number <span class="keyword">in</span> *each* group</span><br><span class="line"></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#结果显示需要每组34个受试者，一共2组68人</span></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#实例2、如果在比较实例1的2种情况时候，想检测到总体均值0.5个标准差的差异，将误报的几率限制在%1，只有40个受试者，</span></span><br><span class="line">&gt; <span class="comment">#那么能检测到这种差异的概率是多大？</span></span><br><span class="line">&gt; pwr.t.test(n=<span class="number">20</span>,d=<span class="number">0.5</span>,sig.level = <span class="number">0.01</span>,type = <span class="string">"two.sample"</span>,alternative = <span class="string">"two.side"</span>)</span><br><span class="line"></span><br><span class="line">     Two-sample t test power calculation </span><br><span class="line"></span><br><span class="line">              n = <span class="number">20</span></span><br><span class="line">              d = <span class="number">0.5</span></span><br><span class="line">      sig.level = <span class="number">0.01</span></span><br><span class="line">          power = <span class="number">0.1439551</span></span><br><span class="line">    alternative = two.sided</span><br><span class="line"></span><br><span class="line">NOTE: n is number <span class="keyword">in</span> *each* group</span><br><span class="line"></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#结果表明只有14%的把握能检测到这种差异，即差值为0.5*1.25=0.625s,86%的可能性会错过，此时考虑是否应该进行该测试</span></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#如果两组的样本大小不同，使用：</span></span><br><span class="line">&gt; pwr.t2n.test(n1=<span class="number">20</span>,n2=<span class="number">30</span>,d=<span class="number">0.5</span>,sig.level = <span class="number">0.01</span>,alternative = <span class="string">"two.side"</span>)</span><br><span class="line"></span><br><span class="line">     t test power calculation </span><br><span class="line"></span><br><span class="line">             n1 = <span class="number">20</span></span><br><span class="line">             n2 = <span class="number">30</span></span><br><span class="line">              d = <span class="number">0.5</span></span><br><span class="line">      sig.level = <span class="number">0.01</span></span><br><span class="line">          power = <span class="number">0.183246</span></span><br><span class="line">    alternative = two.sided</span><br></pre></td></tr></table></figure>
-<h3 id="2-2、方差分析"><a href="#2-2、方差分析" class="headerlink" title="2.2、方差分析"></a>2.2、方差分析</h3><p>效应值f计算公式：<br><img src="/2017/02/03/chapter10-功效分析/img1.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">##方差分析</span></span><br><span class="line">&gt; <span class="comment">#pwr.anova.test(k=组数,n=各组样本大小,f=效应值,sig.level=显著水平,power=功效)</span></span><br><span class="line">&gt; pwr.anova.test(k=<span class="number">5</span>,f=<span class="number">0.25</span>,sig.level=<span class="number">0.05</span>,power=<span class="number">0.8</span>)</span><br><span class="line"></span><br><span class="line">     Balanced one-way analysis of variance power calculation </span><br><span class="line"></span><br><span class="line">              k = <span class="number">5</span></span><br><span class="line">              n = <span class="number">39.1534</span></span><br><span class="line">              f = <span class="number">0.25</span></span><br><span class="line">      sig.level = <span class="number">0.05</span></span><br><span class="line">          power = <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">NOTE: n is number <span class="keyword">in</span> each group</span><br><span class="line"></span><br><span class="line">&gt; <span class="comment">#此方法需要估计同方差时5个组的均值</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="2-3、相关性"><a href="#2-3、相关性" class="headerlink" title="2.3、相关性"></a>2.3、相关性</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">##相关性</span></span><br><span class="line">&gt; <span class="comment">#pwr.r.test(n=观测数,r=效应值（线性相关系数）,sig.level = 显著水平,power = 功效,alternative =c("two.sided", "less","greater"))</span></span><br><span class="line">&gt; <span class="comment">#抑郁与孤独的关系，设定相关系数为0.25,大于0.25表示有关系拒绝零假设，显著水平为0.05,90%的信心拒绝零假设，</span></span><br><span class="line">&gt; pwr.r.test(r=<span class="number">0.25</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>,alternative =<span class="string">"greater"</span>)</span><br><span class="line"></span><br><span class="line">     approximate correlation power calculation (arctangh transformation) </span><br><span class="line"></span><br><span class="line">              n = <span class="number">133.2803</span></span><br><span class="line">              r = <span class="number">0.25</span></span><br><span class="line">      sig.level = <span class="number">0.05</span></span><br><span class="line">          power = <span class="number">0.9</span></span><br><span class="line">    alternative = greater</span><br><span class="line"></span><br><span class="line">&gt; <span class="comment">#需要134个受试者</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-4、线性模型"><a href="#2-4、线性模型" class="headerlink" title="2.4、线性模型"></a>2.4、线性模型</h3><p>效应值f2计算公式：<br><img src="/2017/02/03/chapter10-功效分析/img2.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">##线性模型</span></span><br><span class="line">&gt; <span class="comment">#pwr.f2.test(u=分子自由度,v=分母自由度,f2=效应值,sig.level = ,power = )</span></span><br><span class="line">&gt; <span class="comment">#当要评价一组预测变量对结果的影响程度时，适宜用第一个公式来计算f2；当要评价一组预</span></span><br><span class="line">&gt; <span class="comment">#测变量对结果的影响超过第二组变量（协变量）多少时，适宜用第二个公式。</span></span><br><span class="line"></span><br><span class="line">&gt; <span class="comment">#现假设你想研究老板的领导风格对员工满意度的影响，是否超过薪水和工作小费对员工满意度的影响。</span></span><br><span class="line">&gt; <span class="comment">#领导风格可用四个变量来评估，薪水和小费与三个变量有关。过去的经验表明，薪水</span></span><br><span class="line">&gt; <span class="comment">#和小费能够解释约30%的员工满意度的方差。而从现实出发，领导风格至少能解释35%的方差。</span></span><br><span class="line">&gt; <span class="comment">#假定显著性水平为0.05，那么在90%的置信度情况下，你需要多少受试者才能得到这样的方差贡</span></span><br><span class="line">&gt; <span class="comment">#献率呢？</span></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#此时u=3(总预测变量-集合B预测变量)，f2=(0.35-0.3)/(1-0.35)=0.0769</span></span><br><span class="line">&gt; pwr.f2.test(u=<span class="number">3</span>,f2=<span class="number">0.0769</span>,sig.level =<span class="number">0.05</span> ,power = <span class="number">0.9</span>)</span><br><span class="line"></span><br><span class="line">     Multiple regression power calculation </span><br><span class="line"></span><br><span class="line">              u = <span class="number">3</span></span><br><span class="line">              v = <span class="number">184.2426</span></span><br><span class="line">             f2 = <span class="number">0.0769</span></span><br><span class="line">      sig.level = <span class="number">0.05</span></span><br><span class="line">          power = <span class="number">0.9</span></span><br><span class="line"></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#多元回归中，分母的自由度等于N- k- 1， N是总观测数， k是预测变量数。本例中， N-7-1= 185，即需要样本大小N = 185 + 7 + 1 = 193</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="2-5、比例检验"><a href="#2-5、比例检验" class="headerlink" title="2.5、比例检验"></a>2.5、比例检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">##比例检验</span></span><br><span class="line">&gt; <span class="comment">#pwr.2p.test(h=效应值,n=各组相同的样本量,sig.level = ,power = )</span></span><br><span class="line">&gt; <span class="comment">#当n不同时候，使用</span></span><br><span class="line">&gt; <span class="comment">#pwr.2p.test(h=效应值,n1=,n2=,sig.level = ,power = )</span></span><br><span class="line">&gt; <span class="comment">#h使用ES.h(p1,p2)计算</span></span><br><span class="line">&gt; <span class="comment">#假定你对某流行药物能缓解60%使用者的症状感到怀疑。而一种更贵的新药如果能缓解65%</span></span><br><span class="line">&gt; <span class="comment">#使用者的症状，就会被投放到市场中。此时，在研究中你需要多少受试者才能够检测到两种药物</span></span><br><span class="line">&gt; <span class="comment">#存在这一特定的差异？</span></span><br><span class="line">&gt; pwr.2p.test(h=ES.h(<span class="number">0.65</span>,<span class="number">0.6</span>),sig.level = <span class="number">0.05</span>,power=<span class="number">0.9</span>,alternative = <span class="string">"greater"</span>)</span><br><span class="line"></span><br><span class="line">     Difference of proportion power calculation <span class="keyword">for</span> binomial distribution (arcsine transformation) </span><br><span class="line"></span><br><span class="line">              h = <span class="number">0.1033347</span></span><br><span class="line">              n = <span class="number">1604.007</span></span><br><span class="line">      sig.level = <span class="number">0.05</span></span><br><span class="line">          power = <span class="number">0.9</span></span><br><span class="line">    alternative = greater</span><br><span class="line"></span><br><span class="line">NOTE: same sample sizes</span><br><span class="line"></span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#每组1605个人</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-6、卡方检验"><a href="#2-6、卡方检验" class="headerlink" title="2.6、卡方检验"></a>2.6、卡方检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##卡方检验</span></span><br><span class="line"><span class="comment">#常常用来评价两个类别型变量的关系。典型的零假设是变量之间独立，备择假设是不独立。 </span></span><br><span class="line">pwr.chisq.test(w=效应值,N=总样本大小,df=自由度,sig.level = ,power = )</span><br><span class="line"><span class="comment">#ES.w2(P)可以用来计算双因素列联表备择假设的效应值，P为一个假设的双因素概率表</span></span><br><span class="line"><span class="comment">#假设你想研究人种与工作晋升的关系。你预期样本中70%是白种人， 10%是美国黑人， 20%西班牙裔人。而且，你认为相比30%的美国黑人和50%的西班牙裔人， 60%的</span></span><br><span class="line"><span class="comment">#白种人更容易晋升。晋升概率如表所示。</span></span><br><span class="line"><span class="comment">#|人种|晋升比例|未晋升|</span></span><br><span class="line"><span class="comment">#|白  |0.42    |  0.28|</span></span><br><span class="line"><span class="comment">#|黑  |0.03    |  0.07|</span></span><br><span class="line"><span class="comment">#|西裔|0.10    |  0.10|</span></span><br><span class="line"></span><br><span class="line">prob&lt;-matrix(c(<span class="number">0.42</span>,<span class="number">0.28</span>,<span class="number">0.03</span>,<span class="number">0.07</span>,<span class="number">0.10</span>,<span class="number">0.10</span>),byrow = <span class="literal">TRUE</span>,nrow = <span class="number">3</span>)</span><br><span class="line">ES.w2(prob)</span><br><span class="line">pwr.chisq.test(w=ES.w2(prob),df=<span class="number">2</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#需要369个测试者</span></span><br></pre></td></tr></table></figure>
-<h2 id="3、绘制功效图形"><a href="#3、绘制功效图形" class="headerlink" title="3、绘制功效图形"></a>3、绘制功效图形</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##绘制功效分析图形</span></span><br><span class="line"><span class="keyword">library</span>(pwr)</span><br><span class="line"><span class="comment">#生成一系列相关系数和功效值</span></span><br><span class="line">r&lt;-seq(<span class="number">0.1</span>,<span class="number">0.5</span>,<span class="number">0.01</span>)</span><br><span class="line">nr&lt;-length(r)</span><br><span class="line">p&lt;-seq(<span class="number">0.4</span>,<span class="number">0.9</span>,<span class="number">0.1</span>)</span><br><span class="line">np&lt;-length(p)</span><br><span class="line"></span><br><span class="line"><span class="comment">#构建一个空数组存储结果</span></span><br><span class="line">samsize&lt;-array(numeric(nr*np),dim=c(nr,np))</span><br><span class="line"><span class="comment">#每种相关系数和功效的值对产生需要的样本数</span></span><br><span class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:np)&#123;</span><br><span class="line">  <span class="keyword">for</span>(j <span class="keyword">in</span> <span class="number">1</span>:nr)&#123;</span><br><span class="line">    result &lt;- pwr.r.test(n=<span class="literal">NULL</span>,r=r[j],sig.level = <span class="number">0.05</span>,power=p[i],alternative = <span class="string">"two.side"</span>)</span><br><span class="line">    samsize[j,i]&lt;-ceiling(result$n)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#返回最小值与最大值</span></span><br><span class="line">xrange&lt;-range(r)</span><br><span class="line"><span class="comment">#返回最小值与最大值，向上取整</span></span><br><span class="line">yrange&lt;-round(range(samsize))</span><br><span class="line"></span><br><span class="line"><span class="comment">#产生一组彩虹色</span></span><br><span class="line">colors&lt;-rainbow(length(p))</span><br><span class="line"><span class="comment">#绘制坐标系</span></span><br><span class="line">plot(xrange,yrange,type=<span class="string">"n"</span>,xlab=<span class="string">"相关系数"</span>,ylab=<span class="string">"样本大小"</span>)</span><br><span class="line"><span class="comment">#每一种功效绘制曲线</span></span><br><span class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:np)&#123;</span><br><span class="line">   lines(r,samsize[,i],type=<span class="string">"l"</span>,lwd=<span class="number">2</span>,col=colors[i])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">abline(v=<span class="number">0</span>,h=seq(<span class="number">0</span>,yrange[<span class="number">2</span>],<span class="number">50</span>),lty=<span class="number">2</span>,col=<span class="string">"grey89"</span>)</span><br><span class="line"></span><br><span class="line">abline(h=<span class="number">0</span>,v=seq(xrange[<span class="number">1</span>],xrange[<span class="number">2</span>],<span class="number">0.02</span>),lty=<span class="number">2</span>,col=<span class="string">"grey89"</span>)</span><br><span class="line"></span><br><span class="line">title(<span class="string">"相关性分析的样本大小估计，显著水平0.05，双尾"</span>)</span><br><span class="line">legend(<span class="string">"topright"</span>,title=<span class="string">"功效"</span>,as.character(p),fill = colors)</span><br></pre></td></tr></table></figure>
-<p><img src="/2017/02/03/chapter10-功效分析/img3.png" alt=""></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/R语言/">R语言</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/功效分析/">功效分析</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/02/03/chapter10-功效分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/03/chapter10-功效分析/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/01/23/InnoDB引擎对于SQL语句的加锁策略/" title="InnoDB引擎对于SQL语句的加锁策略" itemprop="url">InnoDB引擎对于SQL语句的加锁策略</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-01-23T07:26:20.000Z" itemprop="datePublished"> 发表于 2017-01-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="InnoDB引擎对于SQL语句的加锁策略"><a href="#InnoDB引擎对于SQL语句的加锁策略" class="headerlink" title="InnoDB引擎对于SQL语句的加锁策略"></a>InnoDB引擎对于SQL语句的加锁策略</h1><ul>
-<li><p>加锁状态的读、更新或删除操作一般会将其扫描到的每一个索引的记录进行加锁，它并不关心where条件是否会包含这些行，InnoDB不记得具体的where条件，仅仅知道扫描了哪些索引区间，这种锁就是通常的next-key锁，其同时封锁了在此记录之前的区间插入（gap锁）。gap锁可以被禁用，这将导致next-key锁不再使用，事务的隔离级别也会影响加锁。</p>
-</li>
-<li><p>如果一个二级索引用在一个查询上，并且索引记录加了排它锁，InnoDB同时也睡将相应的聚簇索引记录加锁</p>
-</li>
-<li><p>如果没有合适的索引用于你的语句，MySQL必须扫描全表，则每一行都会被加锁，这样锁住了其他所有用户的插入，创建合适的索引非常重要。</p>
-</li>
-<li><p>对于<code>SELECT ... FOR UPDATE</code>或者<code>SELECT ... LOCK IN SHARE MODE</code>来说，其将锁加在扫描到的行上，并且在这些扫描到的行中那些不匹配结果的行（不符合where条件）会去释放锁，但是在一些情况下，这些行不会立即释放锁，因为最后的结果行和之前的原始行之间的联系在查询过程中丢失了，比如，在<code>UNION</code>中，扫描到的行插入了临时表进而再判断是否符合要求，这种情况下，原始的行在查询完成后锁才会释放。</p>
-</li>
-<li><p>InnoDB的加锁方式</p>
-<ul>
-<li><code>SELECT ... FROM</code>: 快照读，不加锁，除非事务的隔离级别设置为<code>SERIALIZABLE</code>,这种情况下查询在其查询到的记录索引上加next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
-<li><code>SELECT ... FROM ... LOCK IN SHARE MODE</code>: 对所有查询到的记录加共享的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
-<li><code>SELECT ... FROM ... FOR UPDATE</code>: 对查询到的每一条记录设置排他的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。对于查询到的记录，其还会在其他会话进行确定事务隔离级别的<code>SELECT ... FROM ... LOCK IN SHARE MODE</code></li>
-<li><code>UPDATE ... WHERE ...</code>: 记录添加排他的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
-<li>当`UPDATE修改聚簇索引记录时，其会对影响到的二级索引加共享锁，当其对二级索引的插入进行重复性检查时或者二级索引进行插入时。</li>
-<li><code>DELETE FROM ... WHERE ...</code>: 所有扫描到的记录加排他next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
-<li><code>INSERT</code>对插入的行加排他锁，是记录锁而不是next-key锁，不锁区间</li>
-<li>在插入行之前，会设置插入意向区间锁，此锁表示这种插入的动作在多个会话同时对同一索引区间进行插入是只要不是插入同样的位置并不需要相互等待，例如在4,7之间插入5,6，两个会话在对插入的记录加排它锁之前都会在4,7之间加插入意向区间锁，这是并不会相互等待因为行无冲突。</li>
-<li><p>如果在<code>INSERT</code>过程中，重复索引错误发生（<code>duplicate-key error</code>），则对这个重复的索引记录添加共享锁，此时可能发生死锁当多个会话试图插入同一行而另一个会话已经拥有一个排它锁时，这在删除该行时会发生。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1 (i <span class="built_in">INT</span>, PRIMARY <span class="keyword">KEY</span> (i)) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--session1</span></span><br><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</span><br><span class="line"><span class="comment">--session2</span></span><br><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</span><br><span class="line"><span class="comment">--session3</span></span><br><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--session1</span></span><br><span class="line"><span class="keyword">ROLLBACK</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--死锁发生，1有排它锁，2,3重复错误，尝试获取共享锁，1回滚，排它锁释放，2,3都获得了共享锁，但是2,3均获取不到排它锁，发生死锁（及时发生了重复错误，insert的执行依然要最后尝试去获得排它锁）</span></span><br><span class="line"><span class="comment">--session换成DELETE FROM t1 WHERE i = 1;commit;效果一样</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>INSERT ... ON DUPLICATE KEY UPDATE</code>: 与insert的区别是在发生duplicate-key错误时，加的是排他的next-key锁</p>
-</li>
-<li><code>REPLACE</code>: 类似没有唯一索引冲突的INSERT，另外当更新成功时候，行上加排他next-key锁。</li>
-<li><code>INSERT INTO T SELECT ... FROM S WHERE ...</code>: 对插入到T中的每一行加排他记录锁，如果事务的隔离级别是RC,或者innodb_locks_unsafe_for_binlog启用并且隔离级别不是序列化，Innodb将S上的查询当作一个快照读，此时没有锁，否则，S上查询到的每一行加共享的next-key锁。</li>
-<li><code>CREATE TABLE ... SELECT ...</code>: 类似上一个，只处理select部分的锁。</li>
-<li>当select执行类似<code>REPLACE INTO t SELECT ... FROM s WHERE ...</code>或<code>UPDATE t ... WHERE col IN (SELECT ... FROM s ...)</code>:InnoDB对s上的记录加共享的next-key锁。</li>
-<li>当表上有自增列时，InnoDB对自增列涉及的索引最后一个加排它锁，访问自增计数器时，InnoDB用一种特殊的AUTO-INC表锁模式，此锁仅保持到当前的SQL查询的结束部分，而不是整个事务的结束部分，AUTO-INC被持有时，其他会话无法插入。</li>
-</ul>
-</li>
-</ul>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/DB/">DB</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/InnoDB加锁/">InnoDB加锁</a><a href="/tags/DB/">DB</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/01/23/InnoDB引擎对于SQL语句的加锁策略/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/23/InnoDB引擎对于SQL语句的加锁策略/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -381,7 +542,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -409,7 +570,7 @@
 		  
 		
 		  
-			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>1</sup></a></li>
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
 		  
 		
 		  
@@ -490,7 +651,7 @@
 			
 		
 			
-				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
 			
 		
 			
@@ -498,7 +659,7 @@
 			
 		
 			
-				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
 			
 		
 			
@@ -514,6 +675,10 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
 			
 		
@@ -526,11 +691,7 @@
 			
 		
 			
-				<li><a href="/tags/关闭窗口提示/" title="关闭窗口提示">关闭窗口提示<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+				<li><a href="/tags/JS/" title="JS">JS<sup>1</sup></a></li>
 			
 		
 			
@@ -553,7 +714,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
     </div>
   </div>
 
@@ -630,7 +791,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
 		

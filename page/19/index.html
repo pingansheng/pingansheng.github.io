@@ -83,6 +83,141 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/12/16/Spring-Tips/" title="Spring Tips" itemprop="url">Spring Tips</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-16T01:37:57.000Z" itemprop="datePublished"> 发表于 2016-12-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Resource-Rules"><a href="#Resource-Rules" class="headerlink" title="Resource Rules"></a>Resource Rules</h2><h3 id="Resource应用在字段上-则注入规则是"><a href="#Resource应用在字段上-则注入规则是" class="headerlink" title="@Resource应用在字段上,则注入规则是:"></a>@Resource应用在字段上,则注入规则是:</h3><ul>
+<li>a.先使用字段名字匹配bean,查找到bean则注入,如果类型不匹配则此时有异常,注入失败</li>
+<li>b.如果字段名字没有匹配到Bean则spring会尝试采用字段类型匹配,如果找打bean则注入,如果字段类型是接口则有可能会匹配到多个类型,则会抛出匹配到多个bean的异常.注入失败.</li>
+</ul>
+<h3 id="Resource应用在setter上-应用到属性-则注入规则是"><a href="#Resource应用在setter上-应用到属性-则注入规则是" class="headerlink" title="@Resource应用在setter上(应用到属性),则注入规则是:"></a>@Resource应用在setter上(应用到属性),则注入规则是:</h3><ul>
+<li>a.先使用属性名字匹配bean,查找到bean则注入,如果类型不匹配则此时有异常,注入失败</li>
+<li>b.如果属性名字没有匹配到Bean则spring会尝试采用属性参数类型匹配,如果找打bean则注入,如果属性参数类型是接口则有可能会匹配到多个类型,则会抛出匹配到多个bean的异常.注入失败.</li>
+<li>注意是属性的<font style="color:red">参数类型</font>,并不是属性的类型,注意区别 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3></li>
+<li>a.名称——&gt;b.类型或参数类型(属性时).</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dailyShot/">dailyShot</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Spring/">Spring</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/16/Spring-Tips/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/16/Spring-Tips/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/15/maven打包过程中导致的Excel文件损坏/" title="maven打包过程中导致的Excel文件损坏" itemprop="url">maven打包过程中导致的Excel文件损坏</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-15T03:02:34.000Z" itemprop="datePublished"> 发表于 2016-12-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>一次打包的时候，代码异常，excel模板文件损坏，后来发现由于pom文件中开启了过滤resources的配置，<br>此配置开启则打包过程中maven将pom中的定义的变量名称原文替换resources中的变量占位符${var},其实意义不大，还容易造成错误<br>此功能隐蔽性强，错误不易察觉，不建议使用此配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">resource</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--过滤器开启会导致excel文件损坏！且此命令没有实际的工程意义！--&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--&lt;filtering&gt;true&lt;/filtering&gt;--&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dailyShot/">dailyShot</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/maven/">maven</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/15/maven打包过程中导致的Excel文件损坏/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/15/maven打包过程中导致的Excel文件损坏/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/12/09/State-状态模式/" title="State(状态模式)" itemprop="url">State(状态模式)</a>
   </h1>
   <p class="article-author">By
@@ -142,136 +277,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/12/08/Observer-观察者/" title="Observer(观察者)" itemprop="url">Observer(观察者)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-12-08T08:34:12.000Z" itemprop="datePublished"> 发表于 2016-12-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1><ul>
-<li>定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。<br><img src="/2016/12/08/Observer-观察者/Observer.png" alt="Observer" title="Observer"></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Observer&gt; observers;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Subject</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        observers = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        observers.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detach</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        observers.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">notify_</span><span class="params">(Object args)</span> </span>&#123;</span><br><span class="line">        observers.forEach(observer -&gt; observer.update(args));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolumeSubject</span> <span class="keyword">extends</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer vol;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">changeVol</span><span class="params">(Integer vol)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vol=vol;</span><br><span class="line">        notify_(vol);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(Object message)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpeakerObserver</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SpeakerObserver</span><span class="params">(Subject subject)</span></span>&#123;</span><br><span class="line">        subject.attach(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Object vol)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"扬声器音量调整"</span>+vol);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolumeBarObserver</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VolumeBarObserver</span><span class="params">(Subject subject)</span></span>&#123;</span><br><span class="line">        subject.attach(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Object vol)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"音量条显示器调整"</span>+vol);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        VolumeSubject subject=<span class="keyword">new</span> VolumeSubject();</span><br><span class="line">        Observer speaker=<span class="keyword">new</span> SpeakerObserver(subject);</span><br><span class="line">        Observer volumeBar=<span class="keyword">new</span> VolumeBarObserver(subject);</span><br><span class="line"></span><br><span class="line">        subject.changeVol(<span class="number">4</span>);</span><br><span class="line">        subject.changeVol(<span class="number">5</span>);</span><br><span class="line">        subject.changeVol(<span class="number">6</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>►<a class="article-category-link" href="/categories/设计模式/行为模式/">行为模式</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/设计模式/">设计模式</a><a href="/tags/行为模式/">行为模式</a><a href="/tags/观察者模式/">观察者模式</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/12/08/Observer-观察者/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/08/Observer-观察者/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/12/07/Memento-备忘录/" title="Memento(备忘录)" itemprop="url">Memento(备忘录)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2016-12-07T08:33:11.000Z" itemprop="datePublished"> 发表于 2016-12-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h1><ul>
-<li>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可以将该对象恢复到原先保存的状态。<br><img src="/2016/12/07/Memento-备忘录/Memento.png" alt="Memento" title="Memento"></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IterOriginator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> Node cursor = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">private</span> Boolean isDone = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Stack&lt;Node&gt; stack;</span><br><span class="line">    <span class="keyword">private</span> Memento&lt;Node&gt; memento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IterOriginator</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.root = root;</span><br><span class="line">        stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        cursor = root;</span><br><span class="line">        stack.push(cursor);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        memento = createMemento();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</span><br><span class="line">            isDone = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node top = stack.pop();</span><br><span class="line">        cursor = top.right;</span><br><span class="line">        <span class="keyword">if</span> (cursor != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(cursor);</span><br><span class="line">        &#125;</span><br><span class="line">        cursor = top.left;</span><br><span class="line">        <span class="keyword">if</span> (cursor != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(cursor);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> top;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        setMemento(memento);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento&lt;Node&gt; <span class="title">createMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Memento&lt;Node&gt; memento = <span class="keyword">new</span> Memento&lt;&gt;();</span><br><span class="line">        Stack newStack=(Stack)stack.clone();</span><br><span class="line">        memento.status = newStack;</span><br><span class="line">        <span class="keyword">return</span> memento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMemento</span><span class="params">(Memento&lt;Node&gt; memento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stack = memento.status;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Memento</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Stack&lt;T&gt; status;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Node left;</span><br><span class="line">    <span class="keyword">public</span> Node right;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Node left, Node right, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.left = left;</span><br><span class="line">        <span class="keyword">this</span>.right = right;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IterOriginator <span class="title">createFrontIndexIterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> IterOriginator(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Node one = <span class="keyword">new</span> Node(</span><br><span class="line">                <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"8"</span>),<span class="keyword">null</span>,<span class="string">"3"</span>), <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"6"</span>), <span class="keyword">new</span> Node(<span class="string">"7"</span>), <span class="string">"4"</span>), <span class="string">"2"</span>),</span><br><span class="line">                <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"9"</span>),<span class="keyword">null</span>,<span class="string">"5"</span>), <span class="string">"1"</span>);</span><br><span class="line">        IterOriginator iterOriginator=one.createFrontIndexIterator();</span><br><span class="line"></span><br><span class="line">        Memento first=iterOriginator.createMemento();</span><br><span class="line">        System.out.println(iterOriginator.next().name);</span><br><span class="line">        System.out.println(iterOriginator.next().name);</span><br><span class="line">        iterOriginator.setMemento(first);</span><br><span class="line">        System.out.println(iterOriginator.next().name);</span><br><span class="line">        System.out.println(iterOriginator.next().name);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>►<a class="article-category-link" href="/categories/设计模式/行为模式/">行为模式</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/设计模式/">设计模式</a><a href="/tags/行为模式/">行为模式</a><a href="/tags/备忘录模式/">备忘录模式</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/12/07/Memento-备忘录/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/07/Memento-备忘录/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/18/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/20/">Next<span></span></a>
@@ -297,7 +302,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -325,7 +330,7 @@
 		  
 		
 		  
-			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>1</sup></a></li>
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
 		  
 		
 		  
@@ -406,7 +411,7 @@
 			
 		
 			
-				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
 			
 		
 			
@@ -414,7 +419,7 @@
 			
 		
 			
-				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
 			
 		
 			
@@ -430,6 +435,10 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
 			
 		
@@ -442,11 +451,7 @@
 			
 		
 			
-				<li><a href="/tags/关闭窗口提示/" title="关闭窗口提示">关闭窗口提示<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+				<li><a href="/tags/JS/" title="JS">JS<sup>1</sup></a></li>
 			
 		
 			
@@ -469,7 +474,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
     </div>
   </div>
 
@@ -546,7 +551,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
 		

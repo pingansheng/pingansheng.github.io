@@ -83,6 +83,492 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/06/22/Understand-JVM-Part-II/" title="Understand JVM Part II" itemprop="url">Understand JVM Part II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-22T05:24:36.000Z" itemprop="datePublished"> 发表于 2017-06-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="虚拟机执行系统"><a href="#虚拟机执行系统" class="headerlink" title="虚拟机执行系统"></a>虚拟机执行系统</h1><h2 id="Class文件结构与字节码"><a href="#Class文件结构与字节码" class="headerlink" title="Class文件结构与字节码"></a>Class文件结构与字节码</h2><h3 id="Class文件结构（详细结构规则请Google）"><a href="#Class文件结构（详细结构规则请Google）" class="headerlink" title="Class文件结构（详细结构规则请Google）"></a>Class文件结构（详细结构规则请Google）</h3><ul>
+<li>魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE</li>
+<li>常量池</li>
+<li>访问标志</li>
+<li>类索引、父类索引与接口索引集合</li>
+<li>字段表集合</li>
+<li>方法表集合</li>
+<li>属性表集合<h3 id="字节码（列表请Google）"><a href="#字节码（列表请Google）" class="headerlink" title="字节码（列表请Google）"></a>字节码（列表请Google）</h3></li>
+<li>大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑</li>
+<li>大多数对于boolean、short、byte、char等类型的操作，实际使用int类型作为运算类型</li>
+<li>运算指令中，只有除0操作抛出ArithmeticException，其他操作不会出现异常</li>
+<li>窄化类型转换指令直接丢弃最低N个字节以外的东西，不会有异常</li>
+<li>指令类型主要有（加载存储、运算、类型转换、对象创建与访问、操作数栈、控制转移、方法调用与返回、异常处理、同步（管程））</li>
+</ul>
+<h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h3 id="时机"><a href="#时机" class="headerlink" title="时机"></a>时机</h3><ol>
+<li>遇到new getstatic putstatic invokestatic这4条指令，如果类没有初始化，则进行初始化</li>
+<li>使用reflect包对类方法反射调用，如果没有初始化则初始化</li>
+<li>初始化某类，若父类未初始化，则初始化父类</li>
+<li>jvm启动时，用户需要指定一个主类（main方法），jvm首先初始化这个类</li>
+<li>使用JDM1.7的动态语言支持，MethodHandler实例的相关使用时，方法句柄对应类未初始化时</li>
+</ol>
+<ul>
+<li>以上5中情况称为对类的主动引用，被动引用时不触发初始化类（创建数组，引用别的类的静态常量，通过子类引用父类的静态变量）</li>
+<li>接口的初始化中，不要求父接口初始化，只有需要使用时才进行初始化父接口</li>
+</ul>
+<h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><ul>
+<li>类的生命周期：加载-&gt;验证-&gt;准备-&gt;解析-&gt;初始化-&gt;使用-&gt;卸载</li>
+<li>加载：类的二进制字节流保存在方法区中，并生成一个Class对象作为方法区这个类数据的入口，对于HotSpot虚拟机来说Class对象存放在方法区中而不是堆中（如果是数组类型，则递归加载去掉一个维度的组件类型，如果组件类型为引用类型，则数组在加载这个组件的类加载器的类空间名称上被标识）</li>
+<li>验证：文件格式、元数据、字节码、符号引用</li>
+<li>准备：设置类变量（非实例变量）初始值，方法区中进行，如果不是final static, 则首先按照类型赋值0值，初始化用户指定值包装在类构造器<code>&lt;clinit&gt;</code>方法中，在初始化阶段执行，final static则直接赋值为用户指定值</li>
+<li>解析：常量池中的符号引用替换为直接引用（类或接口、字段、类方法、接口方法）</li>
+<li>初始化：执行类构造器<code>&lt;clinit&gt;()</code>方法,<ul>
+<li><code>&lt;clinit&gt;()</code>由类变量的赋值动作和static语句块合并产生，static语句块不可以赋值定义在其后的变量</li>
+<li>jvm保证父类的<code>&lt;clinit&gt;()</code>方法先执行，static语句块也是父类的先执行</li>
+<li><code>&lt;clinit&gt;()</code>方法不是必须的，如果既没有类变量的赋值也没有static语句块</li>
+<li>接口也会有该方法，但执行时不需要先执行父接口（使用时才执行）中的该方法，接口的实现类初始化不会执行接口的该方法</li>
+<li>jvm保证执行该方法多线程安全，如果耗时，则造成阻塞</li>
+</ul>
+</li>
+</ul>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><ul>
+<li>类加载器用于获取某个类的二进制字节流</li>
+<li>每一个类加载器，都有一个类名称空间，判断两个类是否相等，需要在两个类都为同一个类加载器加载的情况下才有意义，否则必定不等  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUserClassLoder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ClassLoader MyClassLoader = <span class="keyword">new</span> ClassLoader() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String fileName = name.substring(name.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>) + <span class="string">".class"</span>;</span><br><span class="line">                    InputStream is = getClass().getResourceAsStream(fileName);</span><br><span class="line">                    <span class="keyword">if</span> (is == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(name);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[is.available()];</span><br><span class="line">                    is.read(b);</span><br><span class="line">                    <span class="keyword">return</span> defineClass(name, b, <span class="number">0</span>, b.length);</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        Object a = MyClassLoader.loadClass(<span class="string">"jvm.classloader.TestUserClassLoder"</span>).newInstance();</span><br><span class="line">        Object b = <span class="keyword">new</span> TestUserClassLoder();</span><br><span class="line">        System.out.println(a <span class="keyword">instanceof</span> TestUserClassLoder);<span class="comment">//false 不是同一个类加载器实例加载 必然不相等 包括instance</span></span><br><span class="line">        System.out.println(b <span class="keyword">instanceof</span> TestUserClassLoder);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h3><ul>
+<li><p>对于JVM来说，只存在两种不同的类加载器：一种是启动类加载器（jvm一部分，c++实现，用户获取不到），另一种由Java实现，独立于JVM</p>
+</li>
+<li><p>从开发角度，主要有三种类加载器：</p>
+<ol>
+<li>启动类加载器：加载JAVA_HOME/lib目录下面的复合条件的类（jar包）</li>
+<li>扩展类加载器：加载JAVA_HOME/lib/ext目录下面的所有类库</li>
+<li>应用程序类加载器：用于加载用户类路径上的类库，程序中默认的类加载器</li>
+</ol>
+</li>
+<li><p>类加载器之间通过双亲委派规则进行配合，如图</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/双亲委派.png" alt=""></p>
+</li>
+<li><p>双亲委派模型中：</p>
+<ol>
+<li>除了顶层启动类加载器，其他类加载器都应当有自己的父类加载器(一般通过组合实现)</li>
+<li>类加载器接收到类加载请求，首先将请求委派给父类加载器完成，只有父类加载器反馈无法加载才尝试自己加载</li>
+<li>Java类随着类加载器具备了优先级的层次关系（Object类存在于rt.jar中，用户定义的Object即使全类名一致也不会加载，因为启动类加载器已经加载了该类，所有任何环境中Object类都是同一个）</li>
+</ol>
+</li>
+<li><p>双亲委派模型的破坏，JVM团队为了解决某些问题引入了线程上下文加载器，破坏了双亲委派请求链路，直接使用下层类加载器加载目标类（如Spring框架可以放在共享的jar目录中，则Spring类的加载由共享类加载器加载，而此时Spring需要管理用户的类，加载Spring类的共享类加载器无法加载用户的类，此时Spring则使用线程上下文加载器，即谁调用Spring去管理Bean，谁就要提供给Spring类加载器）</p>
+</li>
+</ul>
+<h3 id="案例：Tomcat类加载结构"><a href="#案例：Tomcat类加载结构" class="headerlink" title="案例：Tomcat类加载结构"></a>案例：Tomcat类加载结构</h3><ul>
+<li><p>要解决的问题</p>
+<ol>
+<li>部署在同一个服务器上的多个应用Java类库实现相互隔离</li>
+<li>部署在同一个服务器上的应用间Java类库可以共享（例如公共的类库）</li>
+<li>服务器需要保证自身的安全不受应用影响，服务器所使用的类库与应用使用的类库应该隔离</li>
+<li>JSP服务器需要支持HotSwap(JSP文件修改，JSP对应的生成类需要热替换) </li>
+</ol>
+</li>
+<li><p>Tomcat的类文件目录结构</p>
+<ul>
+<li><code>/common/*</code>：放在这个下面的类库，可以被Tomcat和多有的Web应用程序共同使用。</li>
+<li><code>/server/*</code>：类库可以被Tomcat使用，对所有的Web应用程序都不可见。</li>
+<li><code>/shared/*</code>：类库可被所有web应用程序共同使用，但对Tomcat自己不可见</li>
+<li><code>/WEB-INF/*</code>：类库仅仅可以被此Web应用程序使用，对Tomcat和其他web程序都不可见。</li>
+</ul>
+</li>
+<li><p>Tomcat设计的类加载器结构，不同的类加载器加载不同的部分，实现了隔离</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/Tomcat类加载器.png" alt=""></p>
+</li>
+<li><p>JasperLoader的加载范围仅仅是这个 JSP 文件所编译出来的那一个 Class， 它出现的目的就是为了被丢弃：当服务器检测到 JSP 文件被修改时，会替换掉目前的 JasperLoader 的实例，并通过再建立一个新的 Jsp 类加载器来实现 JSP 文件的 HotSwap 功能。</p>
+</li>
+<li><p>对于 Tomcat 的 6.x 版本，只有指定了 tomcat/conf/catalina.properties配置文件的 server.loader 和 share.loader 项后才会真正建立 CatalinaClassLoader 和 SharedClassLoader 的实例，否则会用到这两个类加载器的地方都会用 CommonClassLoader 的实例代替，而默认没有设置，所以 Tomcat 6.x 顺理成章地把/common、/server 和/shared 三个目录默认合并到一起变成一个/lib 目录。这个目录里的类库相当于以前/common目录中类库的作用。这是Tomcat设计团队为了简化部署所做的一项改进。</p>
+</li>
+</ul>
+<h2 id="字节码执行引擎"><a href="#字节码执行引擎" class="headerlink" title="字节码执行引擎"></a>字节码执行引擎</h2><h3 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h3><ul>
+<li>栈帧存储了方法的局部变量表、操作数栈、动态连接和方法返回地址等信息。</li>
+<li>每一个方法从调用开始至执行完成的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</li>
+<li>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</li>
+<li>对于执行引擎来说，在活动线程中，只有位于栈顶的栈帧才是有效的，称为当前栈帧。</li>
+</ul>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><ul>
+<li>存放方法参数和方法内部的局部变量</li>
+<li>局部变量表容量以变量槽为最小单位（Slot），每个Slot可以存放32位以内的数据，64存放在两个Slot中（long double）</li>
+<li>编译程序时，需要使用多少局部变量表已经确定，不受代码运行期间影响</li>
+<li>方法执行时，使用局部变量表完成传参，如果是实例方法，第0位Slot存放对象的实例引用（this指针），其他参数从1开始传入，之后是内部的局部变量</li>
+<li><p>Slot会复用，会对垃圾回收产生影响，但编译成JIT代码后枚举GC Roots行为会与解释执行有不同，不会有问题</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] bytes=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//此处不一定回收内存，回收bytes本质是要看Slot中是否存在对bytes数据对象的引用，GC Roots包含局部变量表</span></span><br><span class="line">        <span class="comment">//此时占用的Slot没有被其他变量使用，栈帧中的存放bytes的Slot中仍然存在对数据的引用</span></span><br><span class="line">        <span class="comment">// int i=0; 此处加本行则会回收，i会复用bytes的Slot</span></span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>局部变量初始化才可以使用，不存在准备阶段（赋初值，参考类变量）</p>
+</li>
+</ul>
+<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><ul>
+<li>编译程序时，需要使用深的操作数栈已经确定，不受代码运行期间影响</li>
+<li>操作数栈的数据类型必须与字节码指令序列严格匹配，编译器保证</li>
+<li>Java虚拟机的解释执行引擎称为基于栈的执行引擎，栈即指操作数栈</li>
+<li>一般的虚拟机会对操作数栈进行优化，让下面栈帧的部分操作数栈与上面栈帧的部分局部变量表重叠，省去了额外的参数复制</li>
+</ul>
+<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><ul>
+<li>指向运行时常量池中该栈帧方法的引用，用户支持调用过程中的动态连接（Dynamic Linking）</li>
+</ul>
+<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><ul>
+<li>保存方法被调用的位置</li>
+<li>方法可以正常返回或异常返回，异常返回没有返回值</li>
+<li>方法退出操作大致：恢复上层方法的局部变量表和操作数栈 -&gt; 返回值压入调用者操作数栈 -&gt; PC计数器指向下一条地址</li>
+</ul>
+<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><ul>
+<li>确定被调用方法的版本过程而不是执行过程</li>
+<li>类加载阶段的解析阶段，将一部分方法转换为直接引用，这些方法在执行前可确定版本，且运行期不可变（见下）</li>
+<li><p>Java关于方法调用的字节码：</p>
+<ol>
+<li>invokestatic:调用静态方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokespecial:调用实例构造器方法，私有方法和父类方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokevirtual:调用虚方法 <strong>（final方法也是该字节码调，但是其不是虚方法）</strong></li>
+<li>invokeinterface:调用接口方法，会在运行时再确定一个实现此接口的对象。</li>
+<li>invokedynamic:先在运行时动态解析出调用点限定符所引用的方法，然后再执行该方法，在此之前的4条调用指令，分派逻辑是固化在Java虚拟机内部的，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。</li>
+</ol>
+</li>
+<li><p>方法版本的确定-分派：</p>
+<ul>
+<li>静态分派：根据依赖静态类型选择方法版本（方法重载）</li>
+<li>动态分派：运行期根据实际类型确定方法执行版本</li>
+</ul>
+</li>
+<li>Java: 静态多分派（根据静态类型与参数列表选择方法，编译期确定），动态单分派（此时只需要确定具体对象类型的方法版本，不同参数列表导致的方法版本确定已经在编译期完成）</li>
+<li><p>动态分派实现方式：虚方法表，保存各个方法的实际入口，没有重写父类方法就指向父类实现入口（还有其他方法，如内联缓存Inline Cache、基于继承关系分析CHA的守护内联Guard Inlining等非稳定手段）</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/vtable.png" alt=""></p>
+</li>
+<li><p>Java7之后提供了MethodHandle机制实现动态方法调用</p>
+</li>
+</ul>
+<h3 id="基于栈的字节码执行引擎"><a href="#基于栈的字节码执行引擎" class="headerlink" title="基于栈的字节码执行引擎"></a>基于栈的字节码执行引擎</h3><ul>
+<li>Java 编译器输出的指令流，基本上是一种基于栈的指令集架构，大部分都是零地址指令。</li>
+<li>基于栈的指令集主要的优点就是可移植，寄存器由硬件直接提供，程序直接依赖这些硬件寄存器则不可避免地要受到硬件的约束。</li>
+<li>栈架构指令集的主要缺点是执行速度相对来说会稍慢一些。</li>
+</ul>
+<h3 id="案例：远程调用"><a href="#案例：远程调用" class="headerlink" title="案例：远程调用"></a>案例：远程调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassExecutor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(MyClassLoader.class.getClassLoader());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Class <span class="title">loadBytes</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> defineClass(<span class="keyword">null</span>, bytes, <span class="number">0</span>, bytes.length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行外部传过来的代表一个Java类的Byte数组&lt;br&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> classByte</span></span><br><span class="line"><span class="comment">     *         代表一个Java类的Byte数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> methodName</span></span><br><span class="line"><span class="comment">     *          方法名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 执行结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">execute</span><span class="params">(<span class="keyword">byte</span>[] classByte, String methodName)</span> </span>&#123;</span><br><span class="line">        Class clazz = <span class="keyword">new</span> MyClassLoader().loadBytes(classByte);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">           Object obj=clazz.newInstance();</span><br><span class="line">            Method method = clazz.getMethod(methodName);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(obj);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Err"</span> + e.getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/22/Understand-JVM-Part-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/06/22/Understand-JVM-Part-II/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/14/Understand-JVM-Part-I/" title="Understand JVM Part I" itemprop="url">Understand JVM Part I</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-14T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h1><h2 id="Java的内存区域"><a href="#Java的内存区域" class="headerlink" title="Java的内存区域"></a>Java的内存区域</h2><p><img src="/2017/06/14/Understand-JVM-Part-I/运行时数据区.png" alt=""></p>
+<h4 id="1、程序计数（寄存）器"><a href="#1、程序计数（寄存）器" class="headerlink" title="1、程序计数（寄存）器"></a>1、程序计数（寄存）器</h4><ul>
+<li>可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态</li>
+<li>此内存区域是唯一一个不定义OutOfMemoryError的区域</li>
+<li>如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空</li>
+</ul>
+<h4 id="2、Java虚拟机栈"><a href="#2、Java虚拟机栈" class="headerlink" title="2、Java虚拟机栈"></a>2、Java虚拟机栈</h4><ul>
+<li>线程私有，生命周期与线程相同</li>
+<li>此区域描述的是Java方法执行的内存模型 - 每个方法执行同时在栈中创建一个新的栈元素，即栈帧(Stack Frame), 用于存储局部变量表、操作数栈、动态链接、方法出口等信息（递归调用如果没有终止条件或次数过多，每次递归调用都会创建栈帧，栈就会无法容纳足够的栈帧而溢出）</li>
+<li>局部变量表在编译期间完成分配，进入方法时，这个方法在栈帧中的局部变量表分配空间完全确定，运行期间不会改变</li>
+<li>当线程请求的栈深度超过允许抛出StackOverflowError</li>
+<li>若是虚拟机允许动态扩展此区域（大多数都可以），那么扩展时申请不到足够的内存，抛出OOM</li>
+</ul>
+<h4 id="3、本地方法栈"><a href="#3、本地方法栈" class="headerlink" title="3、本地方法栈"></a>3、本地方法栈</h4><ul>
+<li>类似于虚拟机栈，为Native方法服务</li>
+<li>也会抛出两种异常SOE、OOM</li>
+</ul>
+<h4 id="4、Java堆"><a href="#4、Java堆" class="headerlink" title="4、Java堆"></a>4、Java堆</h4><ul>
+<li>JVM管理的最大一块内存，所有线程共享</li>
+<li>分配所有的对象实例与数组</li>
+<li>JVM的优化技术如逃逸分析、栈上分配、标量替换会导致上条规则不绝对</li>
+<li>进一步可分为新生代与老年代或Eden、FromSurvivor、ToSurvivor空间</li>
+<li>内存分配时也可能会分出线程私有的分配缓冲区（Thread Local Allocation Buffer, TLAB）</li>
+<li>Java堆划分的目的都是为了更好更快的回收与分配内存</li>
+<li>堆分配可抛出OOM</li>
+<li>多线程创建过程中，如果每个线程分配的内存过大，更容易OOM，此时需要减少最大堆与栈容量来换取更多线程（每个进程OS分配的内存是有上限的）</li>
+</ul>
+<h4 id="5、方法区"><a href="#5、方法区" class="headerlink" title="5、方法区"></a>5、方法区</h4><ul>
+<li>线程共享，存储被虚拟机加载的类信息、常量、静态变量、即时编译器(JIT)编译后的代码</li>
+<li>HotSpot虚拟机使用永久代来实现方法区，这样可以使得GC一起管理这部分内存</li>
+<li>未来逐步将采用Native Memory来实现，避免内存溢出，Java8已经使用元空间来实现这一部分</li>
+<li>分配可抛出OOM</li>
+</ul>
+<h4 id="6、运行时常量池"><a href="#6、运行时常量池" class="headerlink" title="6、运行时常量池"></a>6、运行时常量池</h4><ul>
+<li>方法区的一部分</li>
+<li>存放Class文件中的各种字面量和符号引用，以及翻译出来的直接引用</li>
+<li>具备动态性，运行期间也可以将新的常量放入</li>
+<li>可抛出OOM</li>
+</ul>
+<h4 id="7、直接内存"><a href="#7、直接内存" class="headerlink" title="7、直接内存"></a>7、直接内存</h4><ul>
+<li>不属于运行时数据区，不是Java虚拟机规范中定义的内存区域</li>
+<li>此部分内存也频繁的使用且会抛出OOM</li>
+<li>NIO类可以使用Native函数直接分配堆外内存，通过存储在Java堆中的DirectByteBuffer对象作为内存的引用进行操作，这样可以避免在Native堆与Java堆复制数据</li>
+<li>此区域内存不受Java堆限制，当各个区域内存总和大于物理内存时，动态扩展时出现OOM</li>
+</ul>
+<h2 id="Java对象"><a href="#Java对象" class="headerlink" title="Java对象"></a>Java对象</h2><h4 id="1、对象的创建"><a href="#1、对象的创建" class="headerlink" title="1、对象的创建"></a>1、对象的创建</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/对象创建过程.png" alt=""></p>
+<h4 id="2、对象的内存布局"><a href="#2、对象的内存布局" class="headerlink" title="2、对象的内存布局"></a>2、对象的内存布局</h4><ul>
+<li>对象结构包含对象头（Header）、示例数据（Instance Data）、对齐填空（Padding）</li>
+<li>32位机器上，非数组对象，对象头一共4 + 4 = 8字节，64为机器为8 + 8 = 16字节，数组长度始终为4字节<br><img src="/2017/06/14/Understand-JVM-Part-I/对象头结构.png" alt=""></li>
+<li><p>其中MarkWord结构如下<br><img src="/2017/06/14/Understand-JVM-Part-I/MarkWord结构.jpg" alt=""></p>
+</li>
+<li><p>由于HotSpot要求对象的起始地址为8字节的整数倍，所有需要Padding来补全</p>
+</li>
+</ul>
+<h4 id="3、对象的访问"><a href="#3、对象的访问" class="headerlink" title="3、对象的访问"></a>3、对象的访问</h4><ul>
+<li>直接指针访问<blockquote>
+<p>本地变量表中存储Java堆中的对象引用，堆中对象存储指向方法区类型数据</p>
+</blockquote>
+</li>
+<li>句柄访问<blockquote>
+<p>本地变量表中存储指向句柄池中的对象句柄地址，句柄中包含实例数据地址与类型数据地址，对象移动时，只改变句柄池中的指针，本地变量表指向的是稳定的句柄地址</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="垃圾收集器与内存分配"><a href="#垃圾收集器与内存分配" class="headerlink" title="垃圾收集器与内存分配"></a>垃圾收集器与内存分配</h2><h4 id="1、需要收集的内存"><a href="#1、需要收集的内存" class="headerlink" title="1、需要收集的内存"></a>1、需要收集的内存</h4><ul>
+<li>程序计数器、虚拟机栈、本地方法栈随线程消亡而消亡（栈帧入栈与出栈）</li>
+<li>堆（包括方法区）需要垃圾回收器参与</li>
+</ul>
+<h4 id="2、寻找可回收的对象"><a href="#2、寻找可回收的对象" class="headerlink" title="2、寻找可回收的对象"></a>2、寻找可回收的对象</h4><ul>
+<li>引用计数：难以解决循环引用问题</li>
+<li>可达性分析：Java、C#使用, 通过GC Roots系列对象进行可达性分析，不可用的对象就可以回收，GC Root对象主要包括：栈中的引用（本地变量表）、方法区类静态属性引用、方法区常量引用、本地方法栈中JNI(Native方法)的引用</li>
+<li>引用的加强：JVM对引用进行了进一步划分<ol>
+<li>强引用：一般情况下的引用，<code>Object o = new Object()</code></li>
+<li>软引用：系统发送OOM之前将这些引用再次回收，如果还不够才OOM, 参见类<code>SoftReference</code></li>
+<li>弱引用：存活至下一次垃圾回收，参见类<code>WeakReference</code></li>
+<li>虚引用：无法通过虚引用来获取一个对象，为一个对象设置虚引用关联唯一目的是在其回收时收到一个通知，参见类<code>PhantomReference</code></li>
+</ol>
+</li>
+</ul>
+<h4 id="3、最后一次挣扎"><a href="#3、最后一次挣扎" class="headerlink" title="3、最后一次挣扎"></a>3、最后一次挣扎</h4><ul>
+<li>对象判定不可达之后不会马上回收，会进行判定需要不需要执行<code>finalize()</code>方法，如果需要执行，进入F-Queue，Finalizer线程会进行处理，如果<code>finalize()</code>方法中对象成功“自救”则不会回收（重新与引用链挂钩，例如将自己挂在某个类的静态变量下）</li>
+<li>强制！！finalize方法不允许使用！</li>
+</ul>
+<h4 id="4、关于方法区"><a href="#4、关于方法区" class="headerlink" title="4、关于方法区"></a>4、关于方法区</h4><ul>
+<li>存在垃圾回收，主要有废弃常量与无用类</li>
+<li>废弃常量判断条件：如果没有地方引用某个常量，则垃圾回收时可以回收</li>
+<li>废弃类判断条件按：该类所有实例被回收、该类的ClassLoder被回收、该类对应的Class对象没有被引用，无法在任何地方通过反射该类的方法</li>
+<li>JVM创建的3个默认的类加载器（BootStrap Classloader、ExtClassLoader、AppClassLoader）加载的系统类（如String）或应用类都不能再运行时释放，无法满足上面的条件</li>
+</ul>
+<h4 id="5、垃圾回收算法"><a href="#5、垃圾回收算法" class="headerlink" title="5、垃圾回收算法"></a>5、垃圾回收算法</h4><pre><code>1. 标记清扫（Mark-Sweep）
+    * 效率低、碎片化
+    * 分配大对象找不到连续内存引发二次清扫
+
+2. 复制（Copying）
+    * 现代商业虚拟机都采用这种方式
+    * 将内存分成两块，把存活的对象复制到另一块，整体清理前一块内存
+    * IBM研究表明大部分对象“朝生夕死”，将内寸分为一大（Eden）二小（Survivor），清理时
+      将Eden和S1存活的对象复制到S2中，清理掉Eden和S1，HotSpot默认的比例是8:1
+    * 上条提到的S2不足时，需要老年代进行分配担保，即将无法存放的对象放置老年代
+    * 两个Survivor区域的操作逻辑目的是为了始终保留一个S区域是空的
+
+3. 标记整理（Mark-Compact）
+    * 标记后，让存活的对象都向一端移动，直接清理端边界以外的内存
+
+4. 分代回收
+    * 当前商业虚拟机均采用
+    * 将内存分代，不同代内存采用不同方式，新生代有大量对象死亡，采用复制算法，而老年代
+      对象存活率高，没有额外的空间做分配担保，使用“标记清理”或“标记整理”方式
+</code></pre><h4 id="6、HotSpot算法实现"><a href="#6、HotSpot算法实现" class="headerlink" title="6、HotSpot算法实现"></a>6、HotSpot算法实现</h4><pre><code>1. 枚举根节点
+    * 在枚举根节点时，需要停顿所有Java执行线程以保证结果的准确性（Stop The World）
+    * 使用OopMap数据结构快速直接得知那些地方存在对象引用，类加载完成的时候，HotSpot把对象什么偏移量是什么类型计算出来，
+      JIT编译过程也会记录栈与寄存器哪些位置是引用，GC扫描时直接获取该信息
+2. 安全点（Safepoint）
+    * 对于具备长时间执行特征的程序，程序执行在到达安全点时才暂停，依靠指令序列重复判定（方法调用、循环跳转、异常跳转）
+    * 采用主动式中断，在执行指令中加入test执行使得线程自陷，进而中断
+3. 安全区域（Saferegion）
+    * 对于无法进入安全点的程序，如Sleep、Block中的线程，通过判定当前是否进入安全区并标识自身，此时GC时将跳过这些线程
+    * 线程离开安全区时，检查系统是否完成根节点枚举或GC过程，完成则继续执行，否则等待完成的信号
+</code></pre><h4 id="7、垃圾收集器"><a href="#7、垃圾收集器" class="headerlink" title="7、垃圾收集器"></a>7、垃圾收集器</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/GCs.png" alt=""></p>
+<ul>
+<li>垃圾收集器是搭配使用的</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>收集器</th>
+<th style="text-align:left">算法</th>
+<th style="text-align:left">用于分代</th>
+<th style="text-align:left">多线程</th>
+<th style="text-align:left">配对收集器</th>
+<th style="text-align:left">暂停所有用户线程</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>ParNew</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Parallel Scavenge</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; Parallel Old</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Serial Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial; ParNew; Parallel Scavenge;</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">( CMS 在Server模式下的备用预案)</td>
+</tr>
+<tr>
+<td>Parallel Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Parallel Scavenge</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>CMS(Concurrent Mark Sweep)</td>
+<td style="text-align:left">标记清扫</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial; ParNew</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记与重新标记停所有用户线程</td>
+</tr>
+<tr>
+<td>G1</td>
+<td style="text-align:left">标记整理（整体）<br>复制（局部）</td>
+<td style="text-align:left">新生代; 老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记、最终标记、筛选回收暂停所有用户线程</td>
+</tr>
+</tbody>
+</table>
+<h4 id="8、内存分配与回收策略"><a href="#8、内存分配与回收策略" class="headerlink" title="8、内存分配与回收策略"></a>8、内存分配与回收策略</h4><ul>
+<li>对象首先在Eden上分配，空间不足时，JVM发起Minor GC(新生代GC 对应的老年代GC称为 Major/Full GC)</li>
+<li>大对象直接进入老年代（例如大的字符串或数组）</li>
+<li>长期存活的对象将进入老年代（每个对象定义了一个Age计数器，每次Minor GC存活Age+1，超过阀值进入老年代）</li>
+<li>Survivor中相同年龄所有对象大小总和超过一半的，年龄大于该数的进入老年代，不需要阀值条件</li>
+<li>JDK 1.6U24之后，分配对象时若老年代连续空间大于新生代对象总大小或每次晋升的平均值就会发生Minor GC，否则进行Full GC, 之前版本依赖HandlePromotionFailure参数进行判断</li>
+<li>Perm区域的回收由Full GC触发</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/14/Understand-JVM-Part-I/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/06/14/Understand-JVM-Part-I/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/05/11/Skip-List/" title="Skip List" itemprop="url">Skip List</a>
   </h1>
   <p class="article-author">By
@@ -172,218 +658,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/05/05/Red-black-tree/" title="Red–black tree" itemprop="url">Red–black tree</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-05T09:09:00.000Z" itemprop="datePublished"> 发表于 2017-05-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><h2 id="1-overview"><a href="#1-overview" class="headerlink" title="1. overview"></a>1. overview</h2><ul>
-<li>红黑树是一种二叉搜索树 <a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9" title="二叉搜索树" target="_blank" rel="noopener">点击查看</a></li>
-<li>红黑树实现了一种自平衡，可叫做一种平衡二叉查找树，但其并非完全平衡</li>
-<li>在O(log n)时间内做查找，插入和删除</li>
-<li>新插入的节点默认都是红色，之后进行插入修复</li>
-<li>红黑树的平衡实现靠插入与删除节点后根据颜色规则进行的重新修复</li>
-<li><p>红黑树的红黑规则，按照此规则调整数结构即可保持相对平衡</p>
-<p>  1）每个结点要么是红的，要么是黑的。<br>  2）根结点是黑的。<br>  3）每个叶结点（叶结点即指树尾端NIL指针或NULL结点）是黑的。<br>  4）如果一个结点是红的，那么它的俩个儿子都是黑的。<br>  5）对于任一结点而言，其到叶结点树尾端NIL指针的每一条路径都包含相同数目的黑结点。  </p>
-</li>
-<li><p>红黑树的基本操作要点：（查询与插入节点、删除节点与二叉搜索树一致）</p>
-<ul>
-<li>左旋转</li>
-<li>右旋转</li>
-<li>插入后修复</li>
-<li>删除后修复</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-旋转"><a href="#2-旋转" class="headerlink" title="2. 旋转"></a>2. 旋转</h2><ul>
-<li>旋转是红黑树动态调整保持相对平衡的实现方式<h3 id="2-1-左旋转"><a href="#2-1-左旋转" class="headerlink" title="2.1 左旋转"></a>2.1 左旋转</h3><img src="/2017/05/05/Red-black-tree/左旋.png" alt=""></li>
-<li>如果以<code>X</code>为旋转点，则左旋的含义就是以<code>XY</code>之间连线为轴将重心左移，类似跷跷板，同时保证二叉搜索树的基本性质，所以<code>b</code>节点重新挂在<code>X</code>右下</li>
-</ul>
-<p><img src="/2017/05/05/Red-black-tree/左旋分解.png" alt=""></p>
-<ul>
-<li>详细分解图解析算法步骤，图中线段序号为操作方式顺序，虚线为断开<br>  1）将Y的左孩子b连接到旋转节点X右孩子，线1<br>  2）设置Y左的父亲为X，线2,3<br>  3）Y的父亲设置为X的父亲 线4,5<br>  4）如果X是其父左，将Y设置为其父左，否则设置为右 线4,5<br>  5）设置Y的左为X，X的父为Y x线6<br>  6）结束</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 左旋转</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param</span> p</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="function"><span class="keyword">static</span> TreeNode <span class="title">rotateLeft</span><span class="params">(TreeNode root, TreeNode p)</span> </span>&#123;</span><br><span class="line">     TreeNode pRight, pRightLeft, pParent;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (p != <span class="keyword">null</span> &amp;&amp; (pRight = p.right) != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="comment">//右边节点左孩子至旋转点右侧</span></span><br><span class="line">         pRightLeft = p.right = pRight.left;</span><br><span class="line">         <span class="keyword">if</span> (pRightLeft != <span class="keyword">null</span>) &#123;</span><br><span class="line">             pRightLeft.parent = p;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//将旋转节点的父节点赋予旋转节点右边节点父节点</span></span><br><span class="line">         pParent = pRight.parent = p.parent;</span><br><span class="line">         <span class="keyword">if</span> (pParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="comment">//如果旋转节点父为空，表示其为root，直接赋给root变黑</span></span><br><span class="line">             root = pRight;</span><br><span class="line">             root.red = <span class="keyword">false</span>;<span class="comment">//root必须为黑节点</span></span><br><span class="line">         &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pParent.left == p) &#123;</span><br><span class="line">             <span class="comment">//父节点存在且旋转节点为左节点，则将其右接在父左</span></span><br><span class="line">             pParent.left = pRight;</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">             <span class="comment">//否则就是右边</span></span><br><span class="line">             pParent.right = pRight;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//旋转节点链接至旋转节点的右孩子</span></span><br><span class="line">         pRight.left = p;</span><br><span class="line">         p.parent = pRight;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> root;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-2-右旋转"><a href="#2-2-右旋转" class="headerlink" title="2.2 右旋转"></a>2.2 右旋转</h3><p>参照左旋转分解同理可写出右旋的代码：<br><img src="/2017/05/05/Red-black-tree/右旋.png" alt=""></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 右旋转</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> p</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> TreeNode <span class="title">rotateRight</span><span class="params">(TreeNode root, TreeNode p)</span> </span>&#123;</span><br><span class="line">    TreeNode pLeft, pLeftRight, pParent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p != <span class="keyword">null</span> &amp;&amp; (pLeft = p.left) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//左边节点右孩子至旋转点左侧</span></span><br><span class="line">        pLeftRight = p.left = pLeft.right;</span><br><span class="line">        <span class="keyword">if</span> (pLeftRight != <span class="keyword">null</span>) &#123;</span><br><span class="line">            pLeftRight.parent = p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//将旋转节点的父节点赋予旋转节点左边节点父节点</span></span><br><span class="line">        pParent = pLeft.parent = p.parent;</span><br><span class="line">        <span class="keyword">if</span> (pParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//如果旋转节点父为空，表示其为root，直接赋给root变黑</span></span><br><span class="line">            root = pLeft;</span><br><span class="line">            root.red = <span class="keyword">false</span>;<span class="comment">//root必须为黑节点</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pParent.right == p) &#123;</span><br><span class="line">            <span class="comment">//父节点存在且旋转节点为右节点，则将其右接在父右</span></span><br><span class="line">            pParent.right = pLeft;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//否则就是左边</span></span><br><span class="line">            pParent.left = pLeft;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//旋转节点链接至旋转节点左孩子</span></span><br><span class="line">        pLeft.right = p;</span><br><span class="line">        p.parent = pLeft;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-插入"><a href="#3-插入" class="headerlink" title="3. 插入"></a>3. 插入</h2><h3 id="3-1-节点插入"><a href="#3-1-节点插入" class="headerlink" title="3.1 节点插入"></a>3.1 节点插入</h3><p>红黑树的节点插入与二叉搜索树一致，找到位置接入即可，注意其接入的节点都是叶子节点</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 插入</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> node</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">static</span> TreeNode <span class="title">insert</span><span class="params">(TreeNode root, TreeNode node)</span> </span>&#123;</span><br><span class="line">       TreeNode checkPoint = root, insertPoint = checkPoint;</span><br><span class="line">       <span class="keyword">int</span> value = node.value;</span><br><span class="line">       <span class="keyword">while</span> (checkPoint != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="comment">//最后检查点指向最后的一个叶子节点，新节点在其左或右</span></span><br><span class="line">           insertPoint = checkPoint;</span><br><span class="line">           <span class="keyword">if</span> (checkPoint.value &gt; value) &#123;</span><br><span class="line">               checkPoint = checkPoint.left;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               checkPoint = checkPoint.right;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       node.parent = insertPoint;</span><br><span class="line">       <span class="keyword">if</span> (insertPoint == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="comment">//空树</span></span><br><span class="line">           root = node;</span><br><span class="line">       &#125; <span class="keyword">else</span> <span class="keyword">if</span> (insertPoint.value &gt; value) &#123;</span><br><span class="line">           insertPoint.left = node;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           insertPoint.right = node;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       node.left = node.right = <span class="keyword">null</span>;</span><br><span class="line">       node.red = <span class="keyword">true</span>;</span><br><span class="line">       <span class="keyword">return</span> root;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-2-插入后的修复"><a href="#3-2-插入后的修复" class="headerlink" title="3.2 插入后的修复"></a>3.2 插入后的修复</h3><ul>
-<li>二叉搜索树在节点的插入之后，树的平衡性会遭到破坏，导致查找时间不确定，平均查找时间变坏，红黑树利用节点的颜色规则通过旋转保持了树的相对平衡</li>
-</ul>
-<p>插入修复的示意图如下：</p>
-<p><img src="/2017/05/05/Red-black-tree/插入修复.png" alt=""></p>
-<p>在节点插入时，总共有如下几种情况：</p>
-<ol>
-<li><strong>树空</strong></li>
-<li><strong>父黑</strong></li>
-<li><strong>父红，叔红，自己左</strong></li>
-<li><strong>父红，叔红，自己右</strong></li>
-<li><strong>父红，叔黑，自己为右</strong></li>
-<li><strong>父红，叔黑，自己为左</strong></li>
-</ol>
-<p>插入的修复算法只要针对以上情况进行处理即可：处理规则如下,设p为新增节点指针：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">    <span class="number">1</span>. 树空 -&gt; p节点变黑，root=p,返回root</span><br><span class="line">    <span class="number">2</span>. 父黑 -&gt; 不违反红黑树规则，返回root</span><br><span class="line">    <span class="number">3</span>. 父红，叔红，自己左 -&gt; 祖父变红，父叔变黑，将当前处理节点指针p指向祖父</span><br><span class="line">    <span class="number">4</span>. 父红，叔红，自己右 -&gt; 同<span class="number">3</span></span><br><span class="line">    <span class="number">5</span>. 父红，叔黑，自己为右 -&gt; 以父为处理节点p，以父左旋</span><br><span class="line">    <span class="number">6</span>. 父红，叔黑，自己为左 -&gt; 父变黑，祖父变红，以祖父右旋</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以看出，插入调整的大原则就是，哪边的节点多，就往另一边转一下，但并非每次都转（如规则2）,确保平衡的同时减少树的调整次数</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 需要修复的4种情况</span></span><br><span class="line"><span class="comment"> * 1、新插入的是根</span></span><br><span class="line"><span class="comment"> * 2、新插入的node父是红，叔叔红</span></span><br><span class="line"><span class="comment"> * 3、新插入的node父是红，叔叔黑，node是左子</span></span><br><span class="line"><span class="comment"> * 4、新插入的node父是红，叔叔黑，node是右子</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> TreeNode <span class="title">repairColor</span><span class="params">(TreeNode root, TreeNode node)</span> </span>&#123;</span><br><span class="line">    TreeNode me = node, parent, grand, uncle;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//自己的父亲是红持续循环</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        parent = me.parent;</span><br><span class="line">        <span class="keyword">if</span> (parent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            me.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">return</span> me;</span><br><span class="line">        &#125;</span><br><span class="line">        grand = parent.parent;</span><br><span class="line">        <span class="keyword">if</span> (!parent.red || grand == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//grand为空父亲节点为root，其一定黑不需要处理</span></span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (parent == grand.left) &#123;</span><br><span class="line">            <span class="comment">//父亲是爷爷左</span></span><br><span class="line">            uncle = grand.right;</span><br><span class="line">            <span class="keyword">if</span> (uncle != <span class="keyword">null</span> &amp;&amp; uncle.red) &#123;</span><br><span class="line">                <span class="comment">//叔叔节点是红色</span></span><br><span class="line">                parent.red = <span class="keyword">false</span>;</span><br><span class="line">                uncle.red = <span class="keyword">false</span>;</span><br><span class="line">                grand.red = <span class="keyword">true</span>;</span><br><span class="line">                me = grand;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (me == parent.right) &#123;</span><br><span class="line">                <span class="comment">//叔叔黑且自己是右边</span></span><br><span class="line">                me = me.parent;</span><br><span class="line">                root = rotateLeft(root, me);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//叔叔黑自己在左边</span></span><br><span class="line">                parent = me.parent;</span><br><span class="line">                <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    grand = parent.parent;</span><br><span class="line">                    parent.red = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">if</span> (grand != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        grand.red = <span class="keyword">true</span>;</span><br><span class="line">                        root = rotateRight(root, grand);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            uncle = grand.left;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (uncle != <span class="keyword">null</span> &amp;&amp; uncle.red) &#123;</span><br><span class="line">                <span class="comment">//叔叔节点是红色</span></span><br><span class="line">                parent.red = <span class="keyword">false</span>;</span><br><span class="line">                uncle.red = <span class="keyword">false</span>;</span><br><span class="line">                grand.red = <span class="keyword">true</span>;</span><br><span class="line">                me = grand;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (me == parent.left) &#123;</span><br><span class="line">                <span class="comment">//叔叔黑且自己是左边</span></span><br><span class="line">                me = me.parent;</span><br><span class="line">                rotateRight(root, me);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//叔叔黑且自己是右边</span></span><br><span class="line">                parent = me.parent;</span><br><span class="line">                <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    grand = parent.parent;</span><br><span class="line">                    parent.red = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">if</span> (grand != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        grand.red = <span class="keyword">true</span>;</span><br><span class="line">                        root = rotateLeft(root, grand);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3-3-方便调试的代码"><a href="#3-3-方便调试的代码" class="headerlink" title="3.3 方便调试的代码"></a>3.3 方便调试的代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 打印树状图方便调试</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *               ROOT-B_3</span></span><br><span class="line"><span class="comment"> *               +-------R-B_5</span></span><br><span class="line"><span class="comment"> *               |         +-------R-R_7</span></span><br><span class="line"><span class="comment"> *               |         |        +-------R-B_8</span></span><br><span class="line"><span class="comment"> *               |         |        |        +-------R-R_9</span></span><br><span class="line"><span class="comment"> *               |         |        +-------L-B_6</span></span><br><span class="line"><span class="comment"> *               |         +-------L-B_4</span></span><br><span class="line"><span class="comment"> *               +-------L-B_1</span></span><br><span class="line"><span class="comment"> *               +-------R-B_2</span></span><br><span class="line"><span class="comment"> *               +-------L-B_0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">showTree</span><span class="params">(TreeNode root, <span class="keyword">int</span> level, String leftRight, <span class="keyword">boolean</span> isRight)</span> </span>&#123;</span><br><span class="line">    TreeNode p = root;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//右子树节点输出首个竖线</span></span><br><span class="line">        <span class="keyword">if</span> (isRight) &#123;</span><br><span class="line">            System.out.print(<span class="string">"|"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (level &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (level - <span class="number">1</span>) * <span class="number">9</span>; i++) &#123;</span><br><span class="line">                <span class="comment">//第一次不输入竖线，第三层开始输出，每隔8个空格输出一个竖线</span></span><br><span class="line">                <span class="keyword">if</span> (level &gt; <span class="number">2</span> &amp;&amp; i &gt; <span class="number">0</span> &amp;&amp; i % <span class="number">9</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="comment">//最后一个恰好无法满足取余，所以叶子节点不会输出竖线</span></span><br><span class="line">                    System.out.print(<span class="string">"|"</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    System.out.print(<span class="string">" "</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.print(<span class="string">"+"</span>);</span><br><span class="line">            <span class="comment">//输出节点树枝</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++) &#123;</span><br><span class="line">                System.out.print(<span class="string">"-"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//标识左右与黑白</span></span><br><span class="line">        System.out.print(leftRight + (p.red ? <span class="string">"-R_"</span> : <span class="string">"-B_"</span>) + p.value);</span><br><span class="line">        System.out.println();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//只有根节点右边的子树输出竖线，此处判断节点时候是右侧子树</span></span><br><span class="line">        TreeNode check = p;</span><br><span class="line">        <span class="keyword">boolean</span> right = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (check.parent != <span class="keyword">null</span> &amp;&amp; check.parent.parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">            check = check.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (check.parent != <span class="keyword">null</span> &amp;&amp; check == check.parent.right) &#123;</span><br><span class="line">            right = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        showTree(p.right, level + <span class="number">1</span>, <span class="string">"R"</span>, right);</span><br><span class="line">        showTree(p.left, level + <span class="number">1</span>, <span class="string">"L"</span>, right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="4-删除"><a href="#4-删除" class="headerlink" title="4. 删除"></a>4. 删除</h2><ul>
-<li>删除较为复杂，核心思想点就是，如果删除的是黑色节点，那么删除节点替补节点及其子树少了一个黑节点，想办法补充一个（增加一个，或兄弟节点子树减少一个）</li>
-</ul>
-<p>二叉搜索树删除节点p的方法：</p>
-<ol>
-<li><strong>如果p是叶子只有一个儿子节点，直接将其儿子或nil链接给父</strong></li>
-<li><strong>p有双儿子，从左子树找到最大值节点y，将y.value赋给p.value, y的左子树链接至y.parent,此时y被删除</strong></li>
-</ol>
-<p>红黑树节点删除：</p>
-<ol>
-<li><strong>节点的删除与普通二叉搜索树相同</strong></li>
-<li><strong>如果删除的是黑节点，可能破坏了规则5，那么需要调整修复颜色</strong></li>
-</ol>
-<p>红黑树节点删除调整颜色的CASE如下,x表示删除节点的替换节点，即其左子树或右子树：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">    <span class="number">1</span>. x为根或为NULL -&gt; 变黑返回</span><br><span class="line">    <span class="number">2</span>. x红 -&gt; 变黑返回</span><br><span class="line">    <span class="number">3</span>. x黑，兄红-&gt; 兄变黑，父变红，以父左旋，更新兄弟节点</span><br><span class="line">    <span class="number">4</span>. x黑，兄黑，兄二子黑 -&gt; 兄变红，更新x=x.parent</span><br><span class="line">    <span class="number">5</span>. x黑，兄黑，兄右子红 -&gt; 兄为父色，兄右子黑，父黑，父左旋</span><br><span class="line">    <span class="number">6</span>. x黑，兄黑，兄左子红，右子黑 -&gt; 兄红，兄左子黑，以兄右旋，更新兄弟节点</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>请观察图，其本质都是平衡删除节点左右的黑节点数量</strong><br><img src="/2017/05/05/Red-black-tree/删除.png" alt=""></p>
-<h3 id="4-1-删除节点"><a href="#4-1-删除节点" class="headerlink" title="4.1 删除节点"></a>4.1 删除节点</h3><p>两个版本的删除节点方法，第一个更易读一些：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除节点</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> t</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> TreeNode <span class="title">delete</span><span class="params">(TreeNode root, TreeNode t)</span> </span>&#123;</span><br><span class="line">    TreeNode y = t;</span><br><span class="line">    TreeNode next;</span><br><span class="line">    <span class="keyword">if</span> (y.left == <span class="keyword">null</span> || y.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//叶子节点或只有一个儿子节点</span></span><br><span class="line">        next = y.left == <span class="keyword">null</span> ? y.right : y.left;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (y.parent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//y是root更新root</span></span><br><span class="line">            root = next;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//将next链接在父亲的左右</span></span><br><span class="line">            <span class="keyword">if</span> (y.parent.left == t) &#123;</span><br><span class="line">                y.parent.left = next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                y.parent.right = next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//链接next父</span></span><br><span class="line">        <span class="keyword">if</span> (next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            next.parent = y.parent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//删除的节点黑，修复颜色</span></span><br><span class="line">        <span class="keyword">if</span>(!y.red)&#123;</span><br><span class="line">            root=repairDelete(root,next);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//双儿子不为空</span></span><br><span class="line">    TreeNode searchPoint;</span><br><span class="line">    next = y.left;<span class="comment">//next初始化为左节点</span></span><br><span class="line">    <span class="comment">//找到左子树的最大值作为新的t值</span></span><br><span class="line">    <span class="keyword">while</span> ((searchPoint = next.right) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        next = searchPoint;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//此处只有可能next的左子树不为空，上循环已经循环了右子树</span></span><br><span class="line">    TreeNode x = next.left;</span><br><span class="line">    <span class="comment">//将next的左链接在next的父左或右</span></span><br><span class="line">    <span class="keyword">if</span> (next.parent.left == next) &#123;</span><br><span class="line">        next.parent.left = x;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        next.parent.right = x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//链接x的父</span></span><br><span class="line">    <span class="keyword">if</span> (x != <span class="keyword">null</span>) &#123;</span><br><span class="line">        x.parent = next.parent;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//交换值</span></span><br><span class="line">    t.value = next.value;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除的节点黑，修复颜色</span></span><br><span class="line">    <span class="keyword">if</span>(!next.red)&#123;</span><br><span class="line">        root=repairDelete(root,x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 简化版本的删除节点方法，不易读</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> t</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> TreeNode <span class="title">deleteSimple</span><span class="params">(TreeNode root, TreeNode t)</span> </span>&#123;</span><br><span class="line">    TreeNode y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (t.left == <span class="keyword">null</span> || t.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">        y = t;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//双儿子不为空，寻找替换点，左子树最大值</span></span><br><span class="line">        y = t.left;<span class="comment">//y初始化为左节点</span></span><br><span class="line">        TreeNode searchPoint;</span><br><span class="line">        <span class="comment">//找到左子树的最大值作为新的t值</span></span><br><span class="line">        <span class="keyword">while</span> ((searchPoint = y.right) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            y = searchPoint;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    TreeNode x;<span class="comment">//x标识y的左子树或者右子树，当y为t时，x就是需要t的直接子树，否则，x是左子树最大值点的左子树</span></span><br><span class="line">    <span class="keyword">if</span> (y.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">        x = y.left;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        x = y.right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (x != <span class="keyword">null</span>) &#123;</span><br><span class="line">        x.parent = y.parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//此种方法共享了y作为两种情况的操作指针，即最多一个子树的t本身与有双子树的左子树最大值节点</span></span><br><span class="line">    <span class="keyword">if</span> (y.parent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//y的父为空，其为Root,直接将x赋予root，此时若x为空，标识左右子树都是空，此时只有一个y节点</span></span><br><span class="line">        root = x;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (y.parent.left == y) &#123;</span><br><span class="line">            y.parent.left = x;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            y.parent.right = x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//y!=t表示此时y指向了左子树最大值节点而不是t本身</span></span><br><span class="line">    <span class="keyword">if</span> (y != t) &#123;</span><br><span class="line">        t.value = y.value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!y.red) &#123;</span><br><span class="line">        <span class="comment">//删除的是黑节点才需要修复，修复节点是y的左子树或右子树，违反规则只会在x及其子树上</span></span><br><span class="line">        <span class="comment">//这里考虑的是影响性质5</span></span><br><span class="line">        root = repairDelete(root, x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="4-2-删除节点后的修复"><a href="#4-2-删除节点后的修复" class="headerlink" title="4.2 删除节点后的修复"></a>4.2 删除节点后的修复</h3><p>修复详细代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 修复删除后问题</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> root</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> x</span></span><br><span class="line"><span class="comment">    *         删除时候的替换节点</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">static</span> TreeNode <span class="title">repairDelete</span><span class="params">(TreeNode root, TreeNode x)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       TreeNode xParent, brother;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (x == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">return</span> root;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (x.red || x == root) &#123;</span><br><span class="line">               <span class="comment">//x节点是红色，或者x就是根，直接变黑</span></span><br><span class="line">               <span class="comment">//删除x的父之后，表示这一个分叉少了一个黑节点</span></span><br><span class="line">               <span class="comment">//如果此时x是红色，则直接将其变黑，相当于补充了一个黑节点</span></span><br><span class="line">               x.red = <span class="keyword">false</span>;</span><br><span class="line">               <span class="keyword">return</span> root;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> ((xParent = x.parent).left == x) &#123;</span><br><span class="line">               <span class="comment">//x自己是左边</span></span><br><span class="line">               brother = xParent.right;</span><br><span class="line">               <span class="keyword">if</span> (brother != <span class="keyword">null</span> &amp;&amp; brother.red) &#123;</span><br><span class="line">                   <span class="comment">//兄弟红,此时父亲一定黑</span></span><br><span class="line">                   <span class="comment">//兄弟变黑，父变红，以父左旋</span></span><br><span class="line">                   <span class="comment">//相当于去掉右侧子树的一个黑节点，同时左侧不加黑节点</span></span><br><span class="line">                   <span class="comment">// （父原本在右子树的路径上，但是变了红成为了左子树，兄弟变黑但是变成了父）</span></span><br><span class="line">                   brother.red = <span class="keyword">false</span>;</span><br><span class="line">                   xParent.red = <span class="keyword">true</span>;</span><br><span class="line">                   root = rotateLeft(root, xParent);</span><br><span class="line"></span><br><span class="line">                   <span class="comment">//此时x的兄弟为旋转之前的兄弟节点左子，更新为当前父右子</span></span><br><span class="line">                   brother = (xParent = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xParent.right;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">if</span> (brother == <span class="keyword">null</span>) &#123;</span><br><span class="line">                   <span class="comment">//兄弟节点为空,将调整的节点</span></span><br><span class="line">                   x = xParent;</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   <span class="comment">//兄弟不为空且黑</span></span><br><span class="line">                   TreeNode broLeft = brother.left, broRight = brother.right;</span><br><span class="line">                   <span class="keyword">if</span> ((broLeft == <span class="keyword">null</span> || !broLeft.red) &amp;&amp; (broRight == <span class="keyword">null</span> || !broRight.red)) &#123;</span><br><span class="line">                       <span class="comment">//二黑侄，bro直接变红</span></span><br><span class="line">                       <span class="comment">//同样的原理，右边减少一个黑节点</span></span><br><span class="line">                       brother.red = <span class="keyword">true</span>;</span><br><span class="line">                       <span class="comment">//如果xParent为红，下一轮直接黑，如果为黑，继续循环</span></span><br><span class="line">                       x = xParent;</span><br><span class="line">                   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                       <span class="keyword">if</span> (broRight == <span class="keyword">null</span> || !broRight.red) &#123;</span><br><span class="line">                           <span class="comment">//右子为空或者黑色，左子定为红，则左子变黑，兄弟标红，以兄右旋</span></span><br><span class="line">                           brother.red = <span class="keyword">true</span>;</span><br><span class="line">                           broLeft.red = <span class="keyword">false</span>;</span><br><span class="line">                           root = rotateRight(root, brother);</span><br><span class="line">                           <span class="comment">//更新兄弟</span></span><br><span class="line">                           brother = (xParent = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xParent.right;</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">if</span> (brother != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           <span class="comment">// 此时右子为红色，否则进不来此处，</span></span><br><span class="line">                           <span class="comment">// 同时兼容上一个循环右旋之后的新兄弟节点，其右为红，处理方式一样</span></span><br><span class="line">                           <span class="comment">// 兄弟右子为红，兄弟继承父亲颜色，父亲变黑，右儿子变黑，以父左旋</span></span><br><span class="line">                           brother.red = xParent.red;</span><br><span class="line">                           <span class="keyword">if</span>((broRight=brother.right)!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                               broRight.red= <span class="keyword">false</span>;</span><br><span class="line">                           &#125;</span><br><span class="line">                           xParent.red = <span class="keyword">false</span>;</span><br><span class="line">                           root = rotateLeft(root, xParent);</span><br><span class="line">                           x = root;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="comment">//上边if的方向翻转</span></span><br><span class="line">               <span class="comment">//x自己是右边</span></span><br><span class="line">               brother = xParent.left;</span><br><span class="line">               <span class="keyword">if</span> (brother != <span class="keyword">null</span> &amp;&amp; brother.red) &#123;</span><br><span class="line">                   <span class="comment">//兄弟红,此时父亲一定黑</span></span><br><span class="line">                   brother.red = <span class="keyword">false</span>;</span><br><span class="line">                   xParent.red = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">                   root = rotateRight(root, xParent);</span><br><span class="line"></span><br><span class="line">                   <span class="comment">//此时x的兄弟为旋转之前的兄弟节点右子，更新为当前父左子</span></span><br><span class="line"></span><br><span class="line">                   brother = (xParent = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xParent.left;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">if</span> (brother == <span class="keyword">null</span>) &#123;</span><br><span class="line">                   <span class="comment">//兄弟节点为空</span></span><br><span class="line">                   x = xParent;</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   TreeNode broLeft = brother.left, broRight = brother.right;</span><br><span class="line">                   <span class="keyword">if</span> ((broLeft == <span class="keyword">null</span> || !broLeft.red) &amp;&amp; (broRight == <span class="keyword">null</span> || !broRight.red)) &#123;</span><br><span class="line">                       <span class="comment">//二黑侄，bro直接变红，此时x与bro父有可能为红，所以x为x父，进行继续调整</span></span><br><span class="line">                       brother.red = <span class="keyword">true</span>;</span><br><span class="line">                       x = xParent;</span><br><span class="line">                   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                       <span class="keyword">if</span> (broLeft == <span class="keyword">null</span> || !broLeft.red) &#123;</span><br><span class="line">                           <span class="comment">//左子为空或者黑色，则右子变黑，兄弟标红，以兄左旋</span></span><br><span class="line">                           brother.red = <span class="keyword">true</span>;</span><br><span class="line">                           broRight.red = <span class="keyword">false</span>;</span><br><span class="line">                           root = rotateLeft(root, brother);</span><br><span class="line">                           <span class="comment">//更新兄弟</span></span><br><span class="line">                           brother = (xParent = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xParent.left;</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">if</span> (brother != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           <span class="comment">//兄弟左子为红，兄弟继承父亲颜色，父亲变黑，左儿子变黑，以父右旋</span></span><br><span class="line">                           brother.red = xParent.red;</span><br><span class="line">                           brother.left.red = <span class="keyword">false</span>;</span><br><span class="line">                           xParent.red = <span class="keyword">false</span>;</span><br><span class="line">                           root = rotateRight(root, xParent);</span><br><span class="line">                           x = root;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/红黑树/">红黑树</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/05/05/Red-black-tree/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/05/05/Red-black-tree/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/26/统计学习方法-概论/" title="统计学习方法-概论" itemprop="url">统计学习方法-概论</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-26T01:10:34.000Z" itemprop="datePublished"> 发表于 2017-04-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="统计学习方法概论"><a href="#统计学习方法概论" class="headerlink" title="统计学习方法概论"></a>统计学习方法概论</h1><h2 id="1、机器学习-lt-gt-统计机器学习"><a href="#1、机器学习-lt-gt-统计机器学习" class="headerlink" title="1、机器学习&lt;=&gt;统计机器学习"></a>1、机器学习&lt;=&gt;统计机器学习</h2><h2 id="2、统计学习的基本假设：同类数据具有一定的统计规律性"><a href="#2、统计学习的基本假设：同类数据具有一定的统计规律性" class="headerlink" title="2、统计学习的基本假设：同类数据具有一定的统计规律性"></a>2、统计学习的基本假设：同类数据具有一定的统计规律性</h2><h2 id="3、统计学习的目的：预测与分析"><a href="#3、统计学习的目的：预测与分析" class="headerlink" title="3、统计学习的目的：预测与分析"></a>3、统计学习的目的：预测与分析</h2><h2 id="4、统计学习方法：监督学习，非监督学习，半监督学习，强化学习"><a href="#4、统计学习方法：监督学习，非监督学习，半监督学习，强化学习" class="headerlink" title="4、统计学习方法：监督学习，非监督学习，半监督学习，强化学习"></a>4、统计学习方法：监督学习，非监督学习，半监督学习，强化学习</h2><h2 id="5、评估模型，损失函数"><a href="#5、评估模型，损失函数" class="headerlink" title="5、评估模型，损失函数"></a>5、评估模型，损失函数</h2><p>(1) 0-1损失函数：<br><span>$$L(Y,f(X))=\begin{cases}1&amp; \text{Y$\neq$f(X)} \\0&amp; \text{Y=f(X)}\end{cases}$$</span><!-- Has MathJax --><br>(2) 平方损失函数：<br><span>$$L(Y,f(X))=(Y-f(X))^{2}$$</span><!-- Has MathJax --><br>(3) 绝对损失函数：<br><span>$$L(Y,f(X))=|Y-f(X)|$$</span><!-- Has MathJax --><br>(2) 对数损失函数：<br><span>$$L(Y,P(Y|X))=-\log P(Y|X)$$</span><!-- Has MathJax --></p>
-<h2 id="6、经验风险，数据量很小时，经验风险最小化效果差，会产生过拟合"><a href="#6、经验风险，数据量很小时，经验风险最小化效果差，会产生过拟合" class="headerlink" title="6、经验风险，数据量很小时，经验风险最小化效果差，会产生过拟合"></a>6、经验风险，数据量很小时，经验风险最小化效果差，会产生过拟合</h2><span>$$R_{emp}(f)=\frac{1}{N}\sum_{i=1}^NL(y_i,f(x_i))$$</span><!-- Has MathJax -->
-<h2 id="7、结构风险"><a href="#7、结构风险" class="headerlink" title="7、结构风险"></a>7、结构风险</h2><span>$$R_{emp}(f)=\frac{1}{N}\sum_{i=1}^NL(y_i,f(x_i))+\lambda J(f)$$</span><!-- Has MathJax -->
-<blockquote>
-<p>λ为罚项，权衡经验风险与模型复杂度<br>J(f)为模型复杂度，模型越复杂越大</p>
-</blockquote>
-<h2 id="8、模型选择，模型复杂度提升，测试误差会先降低后上升，最终目的使得测试误差最小"><a href="#8、模型选择，模型复杂度提升，测试误差会先降低后上升，最终目的使得测试误差最小" class="headerlink" title="8、模型选择，模型复杂度提升，测试误差会先降低后上升，最终目的使得测试误差最小"></a>8、模型选择，模型复杂度提升，测试误差会先降低后上升，最终目的使得测试误差最小</h2><p><img src="/2017/04/26/统计学习方法-概论/复杂度与误差.jpg" alt="模型复杂度与测试误差关系"></p>
-<blockquote>
-<p>正则化（奥卡姆剃刀原理）<br>交叉验证（简单交叉，S折交叉，留一交叉）</p>
-</blockquote>
-<h2 id="9、泛化误差-训练误差-关于N的单调递减函数"><a href="#9、泛化误差-训练误差-关于N的单调递减函数" class="headerlink" title="9、泛化误差=训练误差+关于N的单调递减函数"></a>9、泛化误差=训练误差+关于N的单调递减函数</h2><span>$$R(f)\leq+\varepsilon(d,N,\delta)$$</span><!-- Has MathJax -->
-<span>$$\varepsilon(d,N,\delta)=\sqrt{\frac{1}{2N}(\log d+\log \frac{1}{\delta})}$$</span><!-- Has MathJax -->
-<h2 id="10、分类问题几个基本概念"><a href="#10、分类问题几个基本概念" class="headerlink" title="10、分类问题几个基本概念"></a>10、分类问题几个基本概念</h2><ul>
-<li>TP-正预测为正</li>
-<li>FN-正预测为负</li>
-<li>FP-负预测为正</li>
-<li>TN-负预测为负<br>精确率：<span>$$P=\frac{TP}{TP+FP}$$</span><!-- Has MathJax -->
-召回率：<span>$$P=\frac{TP}{TP+FN}$$</span><!-- Has MathJax --></li>
-</ul>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/机器学习/">机器学习</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/04/26/统计学习方法-概论/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/04/26/统计学习方法-概论/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
@@ -409,7 +683,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -437,7 +711,7 @@
 		  
 		
 		  
-			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>1</sup></a></li>
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
 		  
 		
 		  
@@ -518,7 +792,7 @@
 			
 		
 			
-				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
 			
 		
 			
@@ -526,7 +800,7 @@
 			
 		
 			
-				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
 			
 		
 			
@@ -542,6 +816,10 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
 			
 		
@@ -554,11 +832,7 @@
 			
 		
 			
-				<li><a href="/tags/关闭窗口提示/" title="关闭窗口提示">关闭窗口提示<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+				<li><a href="/tags/JS/" title="JS">JS<sup>1</sup></a></li>
 			
 		
 			
@@ -581,7 +855,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
     </div>
   </div>
 
@@ -658,7 +932,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
 		
