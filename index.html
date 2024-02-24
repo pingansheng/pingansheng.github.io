@@ -116,11 +116,12 @@
 <li><strong>实现 MVCC（多版本并发控制）关键因素之一。</strong> MVCC 是通过 ReadView + undo log 实现的。undo log 为每条记录保存多份历史数据，MySQL 在执行快照读（普通 select 语句）的时候，会根据事务的 Read View 里的信息，顺着 undo log 的版本链找到满足其可见性的记录。</li>
 </ul>
 </blockquote>
+<p><br><br></p>
 <h3 id="RedoLog与BufferPool"><a href="#RedoLog与BufferPool" class="headerlink" title="RedoLog与BufferPool"></a>RedoLog与BufferPool</h3><h4 id="BufferPool"><a href="#BufferPool" class="headerlink" title="BufferPool"></a>BufferPool</h4><p>MySQL 的数据都是存在磁盘中的，那么我们要更新一条记录的时候，得先要从磁盘读取该记录，然后在内存中修改这条记录。那修改完这条记录是选择直接写回到磁盘，还是选择缓存起来呢？</p>
 <p>当然是缓存起来好，这样下次有查询语句命中了这条记录，直接读取缓存中的记录，就不需要从磁盘获取数据了。</p>
 <p>为此，Innodb 存储引擎设计了一个缓冲池（Buffer Pool），来提高数据库的读写性能。 层级关系是：</p>
 <pre><code>Mysql（Server Innodb(BufferPool)） -&gt; 操作系统 -&gt; 磁盘（数据页（数据行））
-</code></pre><p>有了 Buffer Poo 后：</p>
+</code></pre><p>有了 Buffer Pool 后：</p>
 <ul>
 <li><p>当读取数据时，如果数据存在于 Buffer Pool 中，客户端就会直接读取 Buffer Pool 中的数据，否则再去磁盘中读取。</p>
 </li>
@@ -139,6 +140,7 @@
 </blockquote>
 <p>不是的。</p>
 <p>当我们查询一条记录时，InnoDB 是会把整个页的数据加载到 Buffer Pool 中，将页加载到 Buffer Pool 后，再通过页里的「页目录」去定位到某条具体的记录。</p>
+<p><br></p>
 <h4 id="RedoLog"><a href="#RedoLog" class="headerlink" title="RedoLog"></a>RedoLog</h4><ul>
 <li>是 Innodb 存储引擎层生成的日志，实现了事务中的持久性，主要用于掉电等故障恢复；</li>
 </ul>
@@ -196,6 +198,7 @@
 </ul>
 <p>每次刷盘 redo log 记录到日志文件组中，<code>write pos</code> 位置就会后移更新。每次 MySQL 加载日志文件组恢复数据时，会清空加载过的 redo log 记录，并把 <code>checkpoint</code> 后移更新。<code>write pos</code> 和 <code>checkpoint</code> 之间的还空着的部分可以用来写入新的 redo log 记录。</p>
 <p>如果 <code>write pos</code> 追上 <code>checkpoint</code> ，表示日志文件组满了，这时候不能再写入新的 redo log 记录，MySQL 得停下来，清空一些记录，把 <code>checkpoint</code> 推进一下。</p>
+<p><br></p>
 <h3 id="BinLog"><a href="#BinLog" class="headerlink" title="BinLog"></a>BinLog</h3><ul>
 <li>是 Server 层生成的日志，主要用于数据备份和主从复制；</li>
 <li>MySQL 在完成一条更新操作后，Server 层还会生成一条 binlog，等之后事务提交的时候，会将该事物执行过程中产生的所有 binlog 统一写 入 binlog 文件。</li>
@@ -287,6 +290,7 @@
 <li>在一条更新语句执行完成后，然后开始记录该语句对应的 binlog，此时记录的 binlog 会被保存到 binlog cache，并没有刷新到硬盘上的 binlog 文件，在事务提交时才会统一将该事务运行过程中的所有 binlog 刷新到硬盘。</li>
 <li>事务提交</li>
 </ul>
+<p><br></p>
 <h4 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h4><p>如果在将 redo log 刷入到磁盘之后， MySQL 突然宕机了，而 binlog 还没有来得及写入。在主从架构中，binlog 会被复制到从库，由于 binlog 丢失了这条更新语句，从库的这一行 name 字段是旧值 jay，与主库的值不一致性；<br>如果在将 binlog 刷入到磁盘之后， MySQL 突然宕机了，而 redo log 还没有来得及写入。由于 redo log 还没写，崩溃恢复以后这个事务无效，在主从架构中，binlog 会被复制到从库，从库执行了这条更新语句，那么这一行 name 字段是新值 xiaolin，与主库的值不一致性；</p>
 <p>MySQL 为了避免出现两份日志之间的逻辑不一致的问题，使用了「两阶段提交」来解决，两阶段提交把单个事务的提交拆分成了 2 个阶段，分别是「准备（Prepare）阶段」和「提交（Commit）阶段」。</p>
 <p>事务的提交过程有两个阶段，就是将 redo log 的写入拆成了两个步骤：prepare 和 commit，中间再穿插写入binlog，具体如下：</p>
@@ -304,6 +308,7 @@
 </ul>
 <p>可以看到，<strong>对于处于 prepare 阶段的 redo log，即可以提交事务，也可以回滚事务，这取决于是否能在 binlog 中查找到与 redo log 相同的 XID</strong>，如果有就提交事务，如果没有就回滚事务。这样就可以保证 redo log 和 binlog 这两份日志的一致性了。</p>
 <p>所以说，<strong>两阶段提交是以 binlog 写成功为事务提交成功的标识</strong>，因为 binlog 写成功了，就意味着能在 binlog 中查找到与 redo log 相同的 XID。</p>
+<p><br></p>
 <h4 id="两阶段提交有什么问题？"><a href="#两阶段提交有什么问题？" class="headerlink" title="两阶段提交有什么问题？"></a>两阶段提交有什么问题？</h4><ul>
 <li>磁盘 I/O 次数高：对于“双1”配置，每个事务提交都会进行两次 fsync（刷盘），一次是 redo log 刷盘，另一次是 binlog 刷盘。</li>
 <li>锁竞争激烈：两阶段提交虽然能够保证「单事务」两个日志的内容一致，但在「多事务」的情况下，却不能保证两者的提交顺序一致，因此，在两阶段提交的流程基础上，还需要加一个锁来保证提交的原子性，从而保证多事务的情况下，两个日志的提交顺序一致。</li>
@@ -809,11 +814,11 @@
 			
 		
 			
-				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
 			
 		
 			
