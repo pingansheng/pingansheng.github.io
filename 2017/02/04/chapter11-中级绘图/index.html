@@ -1,0 +1,773 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter11 中级绘图 | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="中级绘图1、散点图1234567#散点图attach(mtcars)plot(wt,mpg,main=&quot;基本散点图：英里数与车重&quot;,xlab = &quot;车重（lbs/1000）&quot;,ylab=&quot;一加仑的公里数&quot;,pch=19)#添加一条拟合的直线abline(lm(mpg~wt),col=&quot;red&quot;,lwd=2,lty=1)#添加一条拟合的平滑曲线lines(lowess(wt,mpg),col=&quot;bl">
+<meta name="keywords" content="R语言,中级绘图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter11 中级绘图">
+<meta property="og:url" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="中级绘图1、散点图1234567#散点图attach(mtcars)plot(wt,mpg,main=&quot;基本散点图：英里数与车重&quot;,xlab = &quot;车重（lbs/1000）&quot;,ylab=&quot;一加仑的公里数&quot;,pch=19)#添加一条拟合的直线abline(lm(mpg~wt),col=&quot;red&quot;,lwd=2,lty=1)#添加一条拟合的平滑曲线lines(lowess(wt,mpg),col=&quot;bl">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img2.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img3.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img4.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img5.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img6.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img7.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img8.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img9.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img10.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img11.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img12.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img13.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img14.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img15.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img16.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img17.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img18.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img19.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img20.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img21.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img22.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:08.035Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter11 中级绘图">
+<meta name="twitter:description" content="中级绘图1、散点图1234567#散点图attach(mtcars)plot(wt,mpg,main=&quot;基本散点图：英里数与车重&quot;,xlab = &quot;车重（lbs/1000）&quot;,ylab=&quot;一加仑的公里数&quot;,pch=19)#添加一条拟合的直线abline(lm(mpg~wt),col=&quot;red&quot;,lwd=2,lty=1)#添加一条拟合的平滑曲线lines(lowess(wt,mpg),col=&quot;bl">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/img1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/04/chapter11-中级绘图/" title="chapter11 中级绘图" itemprop="url">chapter11 中级绘图</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-04T02:45:45.000Z" itemprop="datePublished"> 发表于 2017-02-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中级绘图"><span class="toc-text">中级绘图</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、散点图"><span class="toc-text">1、散点图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1、散点矩阵图"><span class="toc-text">1.1、散点矩阵图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2、高密度散点图"><span class="toc-text">1.2、高密度散点图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3、三维散点图"><span class="toc-text">1.3、三维散点图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4、气泡图"><span class="toc-text">1.4、气泡图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、折线图"><span class="toc-text">2、折线图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、相关图"><span class="toc-text">3、相关图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、马赛克图"><span class="toc-text">4、马赛克图</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="中级绘图"><a href="#中级绘图" class="headerlink" title="中级绘图"></a>中级绘图</h1><h2 id="1、散点图"><a href="#1、散点图" class="headerlink" title="1、散点图"></a>1、散点图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#散点图</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">plot(wt,mpg,main=<span class="string">"基本散点图：英里数与车重"</span>,xlab = <span class="string">"车重（lbs/1000）"</span>,ylab=<span class="string">"一加仑的公里数"</span>,pch=<span class="number">19</span>)</div><div class="line"><span class="comment">#添加一条拟合的直线</span></div><div class="line">abline(lm(mpg~wt),col=<span class="string">"red"</span>,lwd=<span class="number">2</span>,lty=<span class="number">1</span>)</div><div class="line"><span class="comment">#添加一条拟合的平滑曲线</span></div><div class="line">lines(lowess(wt,mpg),col=<span class="string">"blue"</span>,lwd=<span class="number">2</span>,lty=<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img1.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(car)</div><div class="line">scatterplot(mpg~wt|cyl,data=mtcars,lwd=<span class="number">2</span>,main=<span class="string">"不同气缸英里数与车重"</span>,xlab=<span class="string">"车重（lbs/1000）"</span>,ylab=<span class="string">"每加仑距离"</span>,legend.plot=<span class="literal">TRUE</span>,id.method=<span class="string">"identify"</span>,labels=row.names(mtcars),boxplots=<span class="string">"xy"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img2.png" alt=""></p>
+<h3 id="1-1、散点矩阵图"><a href="#1-1、散点矩阵图" class="headerlink" title="1.1、散点矩阵图"></a>1.1、散点矩阵图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#散点图矩阵</span></div><div class="line">plot(~mpg+disp+drat+wt,data=mtcars)</div><div class="line"><span class="comment">#upper.panel = NULL只展现下三角，图形是对称的</span></div><div class="line">pairs(~mpg+disp+drat+wt,data=mtcars,upper.panel = <span class="literal">NULL</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img3.png" alt=""><br><img src="/2017/02/04/chapter11-中级绘图/img4.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#car包中的函数</span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line"><span class="comment">#主对角线添加了核密度曲线和轴须图</span></div><div class="line">scatterplotMatrix(~mpg+disp+drat+wt,data=mtcars,spread=<span class="literal">FALSE</span>,lty.smooth=<span class="number">2</span>,main=<span class="string">"散点矩阵图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img5.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#根据某变量进行分组展现by.groups = TRUE根据各个子集生成拟合图</span></div><div class="line">scatterplotMatrix(~mpg+disp+drat+wt|cyl,data=mtcars,by.groups = <span class="literal">TRUE</span>,diagonal=<span class="string">"histogram"</span>,main=<span class="string">"散点矩阵图"</span>)</div></pre></td></tr></table></figure></p>
+<p><img src="/2017/02/04/chapter11-中级绘图/img6.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(gclus)</div><div class="line">mydata&lt;-mtcars[c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>)]</div><div class="line"><span class="comment">#获取相关系数的绝对值矩阵</span></div><div class="line">mydata.corr&lt;-abs(cor(mydata))</div><div class="line"><span class="comment">#根据相关系数获取颜色矩阵</span></div><div class="line">mycolors&lt;-dmat.color(mydata.corr)</div><div class="line"><span class="comment">#根据相关系数重排变量</span></div><div class="line">myorder&lt;-order.single(mydata.corr)</div><div class="line"></div><div class="line">cpairs(mydata,myorder,panel.colors = mycolors,gap=<span class="number">.5</span>,main=<span class="string">"根据相关性排序与着色图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img7.png" alt=""></p>
+<h3 id="1-2、高密度散点图"><a href="#1-2、高密度散点图" class="headerlink" title="1.2、高密度散点图"></a>1.2、高密度散点图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">n&lt;-<span class="number">10000</span></div><div class="line">c1&lt;-matrix(rnorm(n,mean = <span class="number">0</span>,sd=<span class="number">0.5</span>),ncol=<span class="number">2</span>)</div><div class="line">c2&lt;-matrix(rnorm(n,mean = <span class="number">3</span>,sd=<span class="number">2</span>),ncol=<span class="number">2</span>)</div><div class="line"></div><div class="line">mydata&lt;-rbind(c1,c2)</div><div class="line">mydata&lt;-as.data.frame(mydata)</div><div class="line">names(mydata)&lt;-c(<span class="string">"x"</span>,<span class="string">"y"</span>)</div><div class="line">with(mydata,plot(x,y,pch=<span class="number">19</span>,main=<span class="string">"Scatter Plot with 10000 points"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img8.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">with(mydata,smoothScatter(x,y,main=<span class="string">"Scatter Plot with 10000 points"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img9.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(hexbin)</div><div class="line">with(mydata,&#123;</div><div class="line">  bin&lt;-hexbin(x,y,xbins=<span class="number">50</span>)</div><div class="line">  plot(bin,main=<span class="string">"六边形散点图"</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img10.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(IDPmisc)</div><div class="line">with(mydata,iplot(x,y,main=<span class="string">"颜色散点图"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img11.png" alt=""></p>
+<h3 id="1-3、三维散点图"><a href="#1-3、三维散点图" class="headerlink" title="1.3、三维散点图"></a>1.3、三维散点图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(scatterplot3d)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">scatterplot3d(wt,disp,mpg,main=<span class="string">"三维散点图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img12.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#增加垂线</span></div><div class="line">scatterplot3d(wt,disp,mpg,pch=<span class="number">16</span>,highlight.3d=<span class="literal">TRUE</span>,type=<span class="string">"h"</span>,main=<span class="string">"三维散点图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img13.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#增加回归面</span></div><div class="line">s3d&lt;-scatterplot3d(wt,disp,mpg,pch=<span class="number">16</span>,highlight.3d=<span class="literal">TRUE</span>,type=<span class="string">"h"</span>,main=<span class="string">"三维散点图与回归面"</span>)</div><div class="line">fit&lt;-lm(mpg~wt+disp)</div><div class="line">s3d$plane3d(fit)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img14.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#交互式可旋转三维图形</span></div><div class="line"><span class="keyword">library</span>(rgl)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">plot3d(wt,disp,mpg,col=<span class="string">"red"</span>,size=<span class="number">5</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img15.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#另一种交互图，更好</span></div><div class="line"><span class="keyword">library</span>(Rcmdr)</div><div class="line">scatter3d(wt,disp,mpg)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img16.png" alt=""></p>
+<h3 id="1-4、气泡图"><a href="#1-4、气泡图" class="headerlink" title="1.4、气泡图"></a>1.4、气泡图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##气泡图</span></div><div class="line">r&lt;-sqrt(disp/pi)</div><div class="line">symbols(wt,mpg,circle=r,inches = <span class="number">0.30</span>,fg=<span class="string">"white"</span>,bg=<span class="string">"lightblue"</span>,main=<span class="string">"气泡图，比例为排量"</span>,</div><div class="line">        ylab=<span class="string">"每加仑公里数"</span>,xlab=<span class="string">"自重（lbs/1000）"</span>)</div><div class="line">text(wt,mpg,rownames(mtcars),cex=<span class="number">0.6</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img17.png" alt=""></p>
+<h2 id="2、折线图"><a href="#2、折线图" class="headerlink" title="2、折线图"></a>2、折线图</h2><ul>
+<li>大多数内容第三章已经说明</li>
+</ul>
+<p><img src="/2017/02/04/chapter11-中级绘图/img18.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#转换为数值型</span></div><div class="line">Orange$Tree&lt;-as.numeric(Orange$Tree)</div><div class="line">ntrees&lt;-max(Orange$Tree)</div><div class="line"></div><div class="line">xrange&lt;-range(Orange$age)</div><div class="line">yrange&lt;-range(Orange$circumference)</div><div class="line"></div><div class="line">plot(xrange,yrange,type=<span class="string">"n"</span>,</div><div class="line">     xlab=<span class="string">"树龄/天"</span>,ylab=<span class="string">"直径/mm"</span>)</div><div class="line"></div><div class="line">colors&lt;-rainbow(ntrees)</div><div class="line">linetype&lt;-c(<span class="number">1</span>:ntrees)</div><div class="line">plotchar&lt;-seq(<span class="number">18</span>,<span class="number">18</span>+ntrees,<span class="number">1</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:ntrees)&#123;</div><div class="line">  tree&lt;-subset(Orange,Tree==i)</div><div class="line">  lines(tree$age,tree$circumference,</div><div class="line">        type=<span class="string">"b"</span>,lwd=<span class="number">2</span>,</div><div class="line">        lty=linetype[i],</div><div class="line">        col=colors[i],</div><div class="line">        pch=plotchar[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line">title(<span class="string">"树图"</span>,<span class="string">"折线示例"</span>)</div><div class="line"></div><div class="line">legend(xrange[<span class="number">1</span>],yrange[<span class="number">2</span>],</div><div class="line">       <span class="number">1</span>:ntrees,cex=<span class="number">0.8</span>,col=colors,pch=plotchar,lty=linetype,title=<span class="string">"Tree"</span>)</div></pre></td></tr></table></figure></p>
+<p><img src="/2017/02/04/chapter11-中级绘图/img19.png" alt=""></p>
+<h2 id="3、相关图"><a href="#3、相关图" class="headerlink" title="3、相关图"></a>3、相关图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##相关图</span></div><div class="line"><span class="keyword">library</span>(corrgram)</div><div class="line"><span class="comment">#order = TRUE矩阵行列均使用主成分分析进行了重新排序</span></div><div class="line"><span class="comment">#lower.panel与upper.panel设置下与上对角线元素类型</span></div><div class="line"><span class="comment">#panel.pie 用饼图的填充比例来表示相关性大小</span></div><div class="line"><span class="comment">#panel.shade 用阴影的深度来表示相关性</span></div><div class="line"><span class="comment">#panel.ellipse 绘制置信椭圆和平滑拟合曲线</span></div><div class="line"><span class="comment">#panel.pts 绘制散点图</span></div><div class="line"></div><div class="line"><span class="comment">#text.panel与diag.panel控制主对角线元素类型</span></div><div class="line"><span class="comment">#panel.minmax 输出变量的最大最小值</span></div><div class="line"><span class="comment">#panel.txt 输出的变量名字</span></div><div class="line">corrgram(mtcars,order=<span class="literal">TRUE</span>,lower.panel = panel.shade,upper.panel = panel.pie,text.panel = panel.txt,</div><div class="line">         main=<span class="string">"相关系数图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img20.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">corrgram(mtcars,order=<span class="literal">TRUE</span>,</div><div class="line">         lower.panel = panel.ellipse,</div><div class="line">         upper.panel = panel.pts,</div><div class="line">         text.panel = panel.txt,</div><div class="line">         diag.panel = panel.minmax,</div><div class="line">         main=<span class="string">"相关系数图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img21.png" alt=""></p>
+<h2 id="4、马赛克图"><a href="#4、马赛克图" class="headerlink" title="4、马赛克图"></a>4、马赛克图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#马赛克图</span></div><div class="line"><span class="keyword">library</span>(vcd)</div><div class="line">ftable(Titanic)</div><div class="line"><span class="comment">#马赛克图隐含着大量的数据信息。例如： </span></div><div class="line"><span class="comment">#(1)从船员到头等舱，存活率陡然提高；</span></div><div class="line"><span class="comment">#(2)大部分孩子都处在三等舱和二等舱中；</span></div><div class="line"><span class="comment">#(3)在头等舱中的大部分女性都存活了下来，而三等舱中仅有一半女性存活；</span></div><div class="line"><span class="comment">#(4)船员中女性很少，导致该组的Survived标签重叠（图底部的No和Yes）。</span></div><div class="line">mosaic(Titanic,shade = <span class="literal">TRUE</span>,legend=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img22.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/中级绘图/">中级绘图</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/" data-title="chapter11 中级绘图 | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/02/07/Effective-Java-2th-Part-I/" title="Effective Java 2th Part I">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Effective Java 2th Part I</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/02/03/chapter10-功效分析/"  title="chapter10 功效分析">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter10 功效分析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/02/04/chapter11-中级绘图/" data-title="chapter11 中级绘图" data-url="https://pingansheng.github.io/2017/02/04/chapter11-中级绘图/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中级绘图"><span class="toc-text">中级绘图</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、散点图"><span class="toc-text">1、散点图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1、散点矩阵图"><span class="toc-text">1.1、散点矩阵图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2、高密度散点图"><span class="toc-text">1.2、高密度散点图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3、三维散点图"><span class="toc-text">1.3、三维散点图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4、气泡图"><span class="toc-text">1.4、气泡图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、折线图"><span class="toc-text">2、折线图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、相关图"><span class="toc-text">3、相关图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、马赛克图"><span class="toc-text">4、马赛克图</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

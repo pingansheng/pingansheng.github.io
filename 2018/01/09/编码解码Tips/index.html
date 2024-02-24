@@ -1,0 +1,802 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>编码解码Tips | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="编码与解码 关于编码与解码的一些基础要点  编码与解码 计算机中存储和传输的是二进制的序列流，最小的抽象单元是字节，即8个二进制位（1 byte = 8 bits）, 转换为10进制，就是一个0~255的数字 计算机中所有的文件数据都可以表示为0~255数字的一个数组，即字节数组 人类眼睛直观观察的是字符（char），而不是字节数组（愚蠢的人类），所以需要在需要的时候进行转换，比如网页浏览 转换的">
+<meta name="keywords" content="编码解码,乱码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码解码Tips">
+<meta property="og:url" content="https://pingansheng.github.io/2018/01/09/编码解码Tips/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="编码与解码 关于编码与解码的一些基础要点  编码与解码 计算机中存储和传输的是二进制的序列流，最小的抽象单元是字节，即8个二进制位（1 byte = 8 bits）, 转换为10进制，就是一个0~255的数字 计算机中所有的文件数据都可以表示为0~255数字的一个数组，即字节数组 人类眼睛直观观察的是字符（char），而不是字节数组（愚蠢的人类），所以需要在需要的时候进行转换，比如网页浏览 转换的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2024-02-24T02:35:11.270Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编码解码Tips">
+<meta name="twitter:description" content="编码与解码 关于编码与解码的一些基础要点  编码与解码 计算机中存储和传输的是二进制的序列流，最小的抽象单元是字节，即8个二进制位（1 byte = 8 bits）, 转换为10进制，就是一个0~255的数字 计算机中所有的文件数据都可以表示为0~255数字的一个数组，即字节数组 人类眼睛直观观察的是字符（char），而不是字节数组（愚蠢的人类），所以需要在需要的时候进行转换，比如网页浏览 转换的">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/01/09/编码解码Tips/" title="编码解码Tips" itemprop="url">编码解码Tips</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-01-09T09:21:18.000Z" itemprop="datePublished"> 发表于 2018-01-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#编码与解码"><span class="toc-text">编码与解码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码与解码-1"><span class="toc-text">编码与解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-Web中的编解码"><span class="toc-text">Java Web中的编解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个常见的问题"><span class="toc-text">几个常见的问题</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="编码与解码"><a href="#编码与解码" class="headerlink" title="编码与解码"></a>编码与解码</h1><ul>
+<li>关于编码与解码的一些基础要点</li>
+</ul>
+<h2 id="编码与解码-1"><a href="#编码与解码-1" class="headerlink" title="编码与解码"></a>编码与解码</h2><ul>
+<li>计算机中存储和传输的是二进制的序列流，最小的抽象单元是字节，即8个二进制位（1 byte = 8 bits）, 转换为10进制，就是一个0~255的数字</li>
+<li>计算机中所有的文件数据都可以表示为0~255数字的一个数组，即字节数组</li>
+<li>人类眼睛直观观察的是字符（char），而不是字节数组（愚蠢的人类），所以需要在需要的时候进行转换，比如网页浏览</li>
+<li>转换的过程就是一个翻译映射的过程，对于计算机来说，这个过程就是字节数组映射到字符的过程，这个过程，就叫做<strong>编码</strong></li>
+<li>翻译是需要一本字典的，不然如何知道新的语言（如何表示老的语言呢），所以就出现了各种编码的格式，每一种编码就是一种将字节数组转换成字符的规则函数<code>f(x)</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>编码</th>
+<th>包含字符数</th>
+<th>每个字符需要的字节数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASCII</td>
+<td>128</td>
+<td>1</td>
+<td>—–</td>
+</tr>
+<tr>
+<td>ISO-8859-1</td>
+<td>256</td>
+<td>1</td>
+<td>扩展了ASCII, 兼容ASCII</td>
+</tr>
+<tr>
+<td>GB2312</td>
+<td>682个符号 6763个汉字</td>
+<td>2</td>
+<td>中文编码字节表</td>
+</tr>
+<tr>
+<td>GBK</td>
+<td>23940个码位 21003个汉字</td>
+<td>2</td>
+<td>汉字内码扩展规范，兼容了GB2312</td>
+</tr>
+<tr>
+<td>UTF-16</td>
+<td>23940个码位 21003个汉字</td>
+<td>定长2字节</td>
+<td>ISO指定的统一码，Java内存使用此编码表示Char</td>
+</tr>
+<tr>
+<td>UTF-8</td>
+<td>23940个码位 21003个汉字</td>
+<td>变长1-6字节</td>
+<td>ISO指定的统一码，Java内存使用此编码表示Char</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Java-Web中的编解码"><a href="#Java-Web中的编解码" class="headerlink" title="Java Web中的编解码"></a>Java Web中的编解码</h2><ul>
+<li>发送request请求需要编码，url、表单、header等信息均需要编码传送socket</li>
+</ul>
+<ol>
+<li>URL的编解码</li>
+</ol>
+<ul>
+<li>URL中的pathinfo与参数（?后面的内容）采用的编码方式不一样，Tomcat接收到这样的请求后，需要对URL进行解码，此时需要获取字符集，配置于Tomcat的Connector配置中，若没有则使用默认字符集进行解码</li>
+<li>要避免在URL中使用非ASCII码字符</li>
+</ul>
+<ol>
+<li>Header中的编解码</li>
+</ol>
+<ul>
+<li>header中的字符解码Tomcat默认使用的iso-8859-1编码方式，在添加header时需要使用URLEncoder进行编码</li>
+<li>不要再header中添加使用非ASCII码字符</li>
+</ul>
+<ol>
+<li>Post表单请求的编解码</li>
+</ol>
+<ul>
+<li>浏览器使用Content-Type中的字符集进行编码后发送请求</li>
+<li>上传的文件，即multipart/form-data类型的数据，同样也是用Content-Type中的字符集进行编码，上传文件是以字节流的方式存储文件至临时目录，所以不存在编码问题，Spring MVC可以直接获取文件的流，推荐使用这种方式，省去了编解码的识别问题</li>
+</ul>
+<ol>
+<li>http的response Body编解码</li>
+</ol>
+<ul>
+<li>服务端可以设置response.setCharacterEncoding()来设置Content-Type，浏览器将以header中的Content-Type开解码数据，</li>
+<li>如果没有设置，则浏览器以HTML中的Meta信息中的字符集进行解码，否则就是使用默认的字符集进行解码</li>
+</ul>
+<h2 id="几个常见的问题"><a href="#几个常见的问题" class="headerlink" title="几个常见的问题"></a>几个常见的问题</h2><ol>
+<li>中文变成了看不懂的符号：使用了不一致的编解码字符集，如gbk编码-&gt;8859解码</li>
+<li>汉字变成了问号：使用了不支持中文的字符集编码，如使用8859编码中文</li>
+<li>一个汉字变2个问号：中文经过了多次编解码，如 gbk编码-&gt;8859解码-&gt;gbk编码-&gt;gbk解码</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/公用基础/">公用基础</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/编码解码/">编码解码</a><a href="/tags/乱码/">乱码</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2018/01/09/编码解码Tips/" data-title="编码解码Tips | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/01/24/python3的100个实例001/" title="python3的100个实例001">
+  <strong>上一篇：</strong><br/>
+  <span>
+  python3的100个实例001</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/12/02/chapter16-高级图形/"  title="chapter16-高级图形">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter16-高级图形
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2018/01/09/编码解码Tips/" data-title="编码解码Tips" data-url="https://pingansheng.github.io/2018/01/09/编码解码Tips/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#编码与解码"><span class="toc-text">编码与解码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码与解码-1"><span class="toc-text">编码与解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-Web中的编解码"><span class="toc-text">Java Web中的编解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个常见的问题"><span class="toc-text">几个常见的问题</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,796 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter08 回归（一） | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="回归1、回归的多面性 简单线性：用一个量化的解释变量预测一个量化的响应变量 多项式：用一个量化的解释变量预测一个量化的响应变量，模型的关系是n阶多项式 多元线性：用两个或多个量化的解释变量预测一个量化的响应变量 多变量：用一个或多个解释变量预测多个响应变量 Logistic：用一个或多个解释变量预测一个类别型响应变量 泊松：用一个或多个解释变量预测一个代表频数的响应变量 Cox比例风险：用一个或多">
+<meta name="keywords" content="R语言,回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter08 回归（一）">
+<meta property="og:url" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="回归1、回归的多面性 简单线性：用一个量化的解释变量预测一个量化的响应变量 多项式：用一个量化的解释变量预测一个量化的响应变量，模型的关系是n阶多项式 多元线性：用两个或多个量化的解释变量预测一个量化的响应变量 多变量：用一个或多个解释变量预测多个响应变量 Logistic：用一个或多个解释变量预测一个类别型响应变量 泊松：用一个或多个解释变量预测一个代表频数的响应变量 Cox比例风险：用一个或多">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/OLS公式.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/lm函数的参数解释.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/lm辅助函数.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/简单线性拟合对比图.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/二次项对比图.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/二次项对比图2.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/谋杀率的二元关系.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/交互项对比.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/基本回归诊断.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/基本诊断二次拟合.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/qqPlot.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/residplot.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/成分残差图.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/残差分布图.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:04.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter08 回归（一）">
+<meta name="twitter:description" content="回归1、回归的多面性 简单线性：用一个量化的解释变量预测一个量化的响应变量 多项式：用一个量化的解释变量预测一个量化的响应变量，模型的关系是n阶多项式 多元线性：用两个或多个量化的解释变量预测一个量化的响应变量 多变量：用一个或多个解释变量预测多个响应变量 Logistic：用一个或多个解释变量预测一个类别型响应变量 泊松：用一个或多个解释变量预测一个代表频数的响应变量 Cox比例风险：用一个或多">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/OLS公式.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/03/chapter08-回归（一）/" title="chapter08 回归（一）" itemprop="url">chapter08 回归（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-03T04:25:14.000Z" itemprop="datePublished"> 发表于 2017-01-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#回归"><span class="toc-text">回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、回归的多面性"><span class="toc-text">1、回归的多面性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、最小二乘回归"><span class="toc-text">2、最小二乘回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-使用lm-拟合回归模型"><span class="toc-text">2.1 使用lm()拟合回归模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-简单线性回归"><span class="toc-text">2.2 简单线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-多项式回归"><span class="toc-text">2.3 多项式回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-多元线性回归"><span class="toc-text">2.4 多元线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-有交互项的多元线性回归"><span class="toc-text">2.5 有交互项的多元线性回归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、回归诊断"><span class="toc-text">3、回归诊断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-标准方法"><span class="toc-text">3.1 标准方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-改进的方法"><span class="toc-text">3.2 改进的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-线性模型假设的综合验证"><span class="toc-text">3.3 线性模型假设的综合验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-多重共线性"><span class="toc-text">3.4 多重共线性</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><h2 id="1、回归的多面性"><a href="#1、回归的多面性" class="headerlink" title="1、回归的多面性"></a>1、回归的多面性</h2><ul>
+<li>简单线性：用一个量化的解释变量预测一个量化的响应变量</li>
+<li>多项式：用一个量化的解释变量预测一个量化的响应变量，模型的关系是n阶多项式</li>
+<li>多元线性：用两个或多个量化的解释变量预测一个量化的响应变量</li>
+<li>多变量：用一个或多个解释变量预测多个响应变量</li>
+<li>Logistic：用一个或多个解释变量预测一个类别型响应变量</li>
+<li>泊松：用一个或多个解释变量预测一个代表频数的响应变量</li>
+<li>Cox比例风险：用一个或多个解释变量预测一个事件（死亡、失败或旧病复发）发生的时间</li>
+<li>时间序列：对误差项相关的时间序列数据建模</li>
+<li>非线性：用一个或多个量化的解释变量预测一个量化的响应变量，不过模型是非线性的</li>
+<li>非参数：用一个或多个量化的解释变量预测一个量化的响应变量，模型的形式源自数据形式，不事先设定</li>
+<li>稳健：用一个或多个量化的解释变量预测一个量化的响应变量，能抵御强影响点的干扰<h2 id="2、最小二乘回归"><a href="#2、最小二乘回归" class="headerlink" title="2、最小二乘回归"></a>2、最小二乘回归</h2><img src="/2017/01/03/chapter08-回归（一）/OLS公式.png" alt=""><br>为了能够恰当地解释OLS模型的系数，数据必须满足以下统计假设。</li>
+<li>正态性: 对于固定的自变量值，因变量值成正态分布。</li>
+<li>独立性: <code>Yi</code>值之间相互独立。</li>
+<li>线性: 因变量与自变量之间为线性相关。</li>
+<li>同方差性: 因变量的方差不随自变量的水平不同而变化。也可称作不变方差，但是说同方差性感觉上更犀利。</li>
+</ul>
+<h3 id="2-1-使用lm-拟合回归模型"><a href="#2-1-使用lm-拟合回归模型" class="headerlink" title="2.1 使用lm()拟合回归模型"></a>2.1 使用<code>lm()</code>拟合回归模型</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myfit &lt;- lm(formula, data)</div></pre></td></tr></table></figure>
+<p>常用的参数和解释<br><img src="/2017/01/03/chapter08-回归（一）/lm函数的参数解释.png" alt=""></p>
+<p>对拟合线性模型非常有用的其他函数:<br><img src="/2017/01/03/chapter08-回归（一）/lm辅助函数.png" alt=""></p>
+<h3 id="2-2-简单线性回归"><a href="#2-2-简单线性回归" class="headerlink" title="2.2 简单线性回归"></a>2.2 简单线性回归</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#OLS回归</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#简单线性回归 女性身高体重数据</span></div><div class="line">&gt; </div><div class="line">&gt; fit&lt;-lm(weight~height, data=women)</div><div class="line">&gt; </div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = weight ~ height, data = women)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">1.7333</span> -<span class="number">1.1333</span> -<span class="number">0.3833</span>  <span class="number">0.7417</span>  <span class="number">3.1167</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">             Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept) -<span class="number">87.51667</span>    <span class="number">5.93694</span>  -<span class="number">14.74</span> <span class="number">1.71e-09</span> ***</div><div class="line">height        <span class="number">3.45000</span>    <span class="number">0.09114</span>   <span class="number">37.85</span> <span class="number">1.09e-14</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">1.525</span> on <span class="number">13</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.991</span>,	Adjusted R-squared:  <span class="number">0.9903</span> </div><div class="line"><span class="literal">F</span>-statistic:  <span class="number">1433</span> on <span class="number">1</span> and <span class="number">13</span> DF,  p-value: <span class="number">1.091e-14</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; women$weight</div><div class="line"> [<span class="number">1</span>] <span class="number">115</span> <span class="number">117</span> <span class="number">120</span> <span class="number">123</span> <span class="number">126</span> <span class="number">129</span> <span class="number">132</span> <span class="number">135</span> <span class="number">139</span> <span class="number">142</span> <span class="number">146</span> <span class="number">150</span> <span class="number">154</span> <span class="number">159</span> <span class="number">164</span></div><div class="line">&gt; </div><div class="line">&gt; fitted(fit)</div><div class="line">       <span class="number">1</span>        <span class="number">2</span>        <span class="number">3</span>        <span class="number">4</span>        <span class="number">5</span>        <span class="number">6</span>        <span class="number">7</span>        <span class="number">8</span>        <span class="number">9</span>       <span class="number">10</span>       <span class="number">11</span> </div><div class="line"><span class="number">112.5833</span> <span class="number">116.0333</span> <span class="number">119.4833</span> <span class="number">122.9333</span> <span class="number">126.3833</span> <span class="number">129.8333</span> <span class="number">133.2833</span> <span class="number">136.7333</span> <span class="number">140.1833</span> <span class="number">143.6333</span> <span class="number">147.0833</span> </div><div class="line">      <span class="number">12</span>       <span class="number">13</span>       <span class="number">14</span>       <span class="number">15</span> </div><div class="line"><span class="number">150.5333</span> <span class="number">153.9833</span> <span class="number">157.4333</span> <span class="number">160.8833</span> </div><div class="line">&gt; </div><div class="line">&gt; residuals(fit)</div><div class="line">          <span class="number">1</span>           <span class="number">2</span>           <span class="number">3</span>           <span class="number">4</span>           <span class="number">5</span>           <span class="number">6</span>           <span class="number">7</span>           <span class="number">8</span> </div><div class="line"> <span class="number">2.41666667</span>  <span class="number">0.96666667</span>  <span class="number">0.51666667</span>  <span class="number">0.06666667</span> -<span class="number">0.38333333</span> -<span class="number">0.83333333</span> -<span class="number">1.28333333</span> -<span class="number">1.73333333</span> </div><div class="line">          <span class="number">9</span>          <span class="number">10</span>          <span class="number">11</span>          <span class="number">12</span>          <span class="number">13</span>          <span class="number">14</span>          <span class="number">15</span> </div><div class="line">-<span class="number">1.18333333</span> -<span class="number">1.63333333</span> -<span class="number">1.08333333</span> -<span class="number">0.53333333</span>  <span class="number">0.01666667</span>  <span class="number">1.56666667</span>  <span class="number">3.11666667</span> </div><div class="line">&gt; </div><div class="line">&gt; plot(women)</div><div class="line">&gt; abline(fit)</div><div class="line"><span class="comment"># 此模型的得到的方程式是：weight= -87.51667+3.45*height</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（一）/简单线性拟合对比图.png" alt=""></p>
+<h3 id="2-3-多项式回归"><a href="#2-3-多项式回归" class="headerlink" title="2.3 多项式回归"></a>2.3 多项式回归</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#增加一个二次项提高精度</span></div><div class="line">&gt; </div><div class="line">&gt; fit2&lt;-lm(weight~height+I(height^<span class="number">2</span>),data=women)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#此处I()的含义是height^2表示为一个常规的R表达式，因为^在在表达式中有特殊含义</span></div><div class="line">&gt; </div><div class="line">&gt; summary(fit2)</div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = weight ~ height + I(height^<span class="number">2</span>), data = women)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">     Min       1Q   Median       3Q      Max </div><div class="line">-<span class="number">0.50941</span> -<span class="number">0.29611</span> -<span class="number">0.00941</span>  <span class="number">0.28615</span>  <span class="number">0.59706</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">             Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept) <span class="number">261.87818</span>   <span class="number">25.19677</span>  <span class="number">10.393</span> <span class="number">2.36e-07</span> ***</div><div class="line">height       -<span class="number">7.34832</span>    <span class="number">0.77769</span>  -<span class="number">9.449</span> <span class="number">6.58e-07</span> ***</div><div class="line">I(height^<span class="number">2</span>)   <span class="number">0.08306</span>    <span class="number">0.00598</span>  <span class="number">13.891</span> <span class="number">9.32e-09</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">0.3841</span> on <span class="number">12</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.9995</span>,	Adjusted R-squared:  <span class="number">0.9994</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">1.139e+04</span> on <span class="number">2</span> and <span class="number">12</span> DF,  p-value: &lt; <span class="number">2.2e-16</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; women$weight</div><div class="line"> [<span class="number">1</span>] <span class="number">115</span> <span class="number">117</span> <span class="number">120</span> <span class="number">123</span> <span class="number">126</span> <span class="number">129</span> <span class="number">132</span> <span class="number">135</span> <span class="number">139</span> <span class="number">142</span> <span class="number">146</span> <span class="number">150</span> <span class="number">154</span> <span class="number">159</span> <span class="number">164</span></div><div class="line">&gt; </div><div class="line">&gt; fitted(fit2)</div><div class="line">       <span class="number">1</span>        <span class="number">2</span>        <span class="number">3</span>        <span class="number">4</span>        <span class="number">5</span>        <span class="number">6</span>        <span class="number">7</span>        <span class="number">8</span>        <span class="number">9</span>       <span class="number">10</span>       <span class="number">11</span>       <span class="number">12</span>       <span class="number">13</span> </div><div class="line"><span class="number">115.1029</span> <span class="number">117.4731</span> <span class="number">120.0094</span> <span class="number">122.7118</span> <span class="number">125.5804</span> <span class="number">128.6151</span> <span class="number">131.8159</span> <span class="number">135.1828</span> <span class="number">138.7159</span> <span class="number">142.4151</span> <span class="number">146.2804</span> <span class="number">150.3118</span> <span class="number">154.5094</span> </div><div class="line">      <span class="number">14</span>       <span class="number">15</span> </div><div class="line"><span class="number">158.8731</span> <span class="number">163.4029</span> </div><div class="line">&gt; </div><div class="line">&gt; residuals(fit2)</div><div class="line">           <span class="number">1</span>            <span class="number">2</span>            <span class="number">3</span>            <span class="number">4</span>            <span class="number">5</span>            <span class="number">6</span>            <span class="number">7</span>            <span class="number">8</span>            <span class="number">9</span> </div><div class="line">-<span class="number">0.102941176</span> -<span class="number">0.473109244</span> -<span class="number">0.009405301</span>  <span class="number">0.288170653</span>  <span class="number">0.419618617</span>  <span class="number">0.384938591</span>  <span class="number">0.184130575</span> -<span class="number">0.182805430</span>  <span class="number">0.284130575</span> </div><div class="line">          <span class="number">10</span>           <span class="number">11</span>           <span class="number">12</span>           <span class="number">13</span>           <span class="number">14</span>           <span class="number">15</span> </div><div class="line">-<span class="number">0.415061409</span> -<span class="number">0.280381383</span> -<span class="number">0.311829347</span> -<span class="number">0.509405301</span>  <span class="number">0.126890756</span>  <span class="number">0.597058824</span> </div><div class="line">&gt; </div><div class="line">&gt; plot(women)</div><div class="line">&gt; lines(women$height,fitted(fit2))</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（一）/二次项对比图.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#car包中的scatterplot方便的绘制二元关系图</span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line">scatterplot(weight~height,</div><div class="line">            data=women,</div><div class="line">            spread=<span class="literal">FALSE</span>,<span class="comment">#spread=FALSE选项删除了残差正负均方根在平滑</span></div><div class="line">            <span class="comment">#曲线上的展开和非对称信息</span></div><div class="line">            pch=<span class="number">19</span>,</div><div class="line">            main=<span class="string">"Women Age 30-39"</span>,</div><div class="line">            xlab=<span class="string">"Height (inches)"</span>,</div><div class="line">            ylab=<span class="string">"Weight (lbs.)"</span></div><div class="line">            )</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（一）/二次项对比图2.png" alt=""></p>
+<h3 id="2-4-多元线性回归"><a href="#2-4-多元线性回归" class="headerlink" title="2.4 多元线性回归"></a>2.4 多元线性回归</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#多项式回归</span></div><div class="line">&gt; <span class="comment">#观察谋杀率 人口 文盲率 平均收入 结霜天数关系</span></div><div class="line">&gt; states &lt;- as.data.frame(state.x77[,c(<span class="string">"Murder"</span>, <span class="string">"Population"</span>,<span class="string">"Illiteracy"</span>,<span class="string">"Income"</span>,<span class="string">"Frost"</span>)])</div><div class="line">&gt; <span class="comment">#观察二元关系</span></div><div class="line">&gt; cor(states)</div><div class="line">               Murder Population Illiteracy     Income      Frost</div><div class="line">Murder      <span class="number">1.0000000</span>  <span class="number">0.3436428</span>  <span class="number">0.7029752</span> -<span class="number">0.2300776</span> -<span class="number">0.5388834</span></div><div class="line">Population  <span class="number">0.3436428</span>  <span class="number">1.0000000</span>  <span class="number">0.1076224</span>  <span class="number">0.2082276</span> -<span class="number">0.3321525</span></div><div class="line">Illiteracy  <span class="number">0.7029752</span>  <span class="number">0.1076224</span>  <span class="number">1.0000000</span> -<span class="number">0.4370752</span> -<span class="number">0.6719470</span></div><div class="line">Income     -<span class="number">0.2300776</span>  <span class="number">0.2082276</span> -<span class="number">0.4370752</span>  <span class="number">1.0000000</span>  <span class="number">0.2262822</span></div><div class="line">Frost      -<span class="number">0.5388834</span> -<span class="number">0.3321525</span> -<span class="number">0.6719470</span>  <span class="number">0.2262822</span>  <span class="number">1.0000000</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(car)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#大致观察数据图示关系(见下图)</span></div><div class="line">&gt; scatterplotMatrix(states, spread = <span class="literal">FALSE</span>, lty = <span class="number">2</span>, main=<span class="string">"Scatter Plot Matrix"</span>)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#回归</span></div><div class="line">&gt; fit &lt;- lm(Murder ~ Population + Illiteracy + Income + Frost, data=states)</div><div class="line">&gt; </div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = Murder ~ Population + Illiteracy + Income + Frost, </div><div class="line">    data = states)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">4.7960</span> -<span class="number">1.6495</span> -<span class="number">0.0811</span>  <span class="number">1.4815</span>  <span class="number">7.6210</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">             Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept) <span class="number">1.235e+00</span>  <span class="number">3.866e+00</span>   <span class="number">0.319</span>   <span class="number">0.7510</span>    </div><div class="line">Population  <span class="number">2.237e-04</span>  <span class="number">9.052e-05</span>   <span class="number">2.471</span>   <span class="number">0.0173</span> *  </div><div class="line">Illiteracy  <span class="number">4.143e+00</span>  <span class="number">8.744e-01</span>   <span class="number">4.738</span> <span class="number">2.19e-05</span> ***</div><div class="line">Income      <span class="number">6.442e-05</span>  <span class="number">6.837e-04</span>   <span class="number">0.094</span>   <span class="number">0.9253</span>    </div><div class="line">Frost       <span class="number">5.813e-04</span>  <span class="number">1.005e-02</span>   <span class="number">0.058</span>   <span class="number">0.9541</span>    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">2.535</span> on <span class="number">45</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.567</span>,	Adjusted R-squared:  <span class="number">0.5285</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">14.73</span> on <span class="number">4</span> and <span class="number">45</span> DF,  p-value: <span class="number">9.133e-08</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#当预测变量不止一个时，回归系数的含义为，一个预测变量增加一个单位，其他预测变量保</span></div><div class="line">&gt; <span class="comment">#持不变时，因变量将要增加的数量。</span></div><div class="line">&gt; <span class="comment">#例如本例中，文盲率的回归系数为4.14，表示控制人口、收入和温度不变时，文盲率上升1%，</span></div><div class="line">&gt; <span class="comment">#谋杀率将会上升4.14%，它的系数在p&lt;0.001的水平下显著不为0。</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（一）/谋杀率的二元关系.png" alt=""></p>
+<h3 id="2-5-有交互项的多元线性回归"><a href="#2-5-有交互项的多元线性回归" class="headerlink" title="2.5 有交互项的多元线性回归"></a>2.5 有交互项的多元线性回归</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#有交互项的回归  y=x-y+xy</span></div><div class="line">&gt; fit &lt;- lm(mpg ~ hp + wt +hp:wt, data=mtcars)</div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = mpg ~ hp + wt + hp:wt, data = mtcars)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">3.0632</span> -<span class="number">1.6491</span> -<span class="number">0.7362</span>  <span class="number">1.4211</span>  <span class="number">4.5513</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept) <span class="number">49.80842</span>    <span class="number">3.60516</span>  <span class="number">13.816</span> <span class="number">5.01e-14</span> ***</div><div class="line">hp          -<span class="number">0.12010</span>    <span class="number">0.02470</span>  -<span class="number">4.863</span> <span class="number">4.04e-05</span> ***</div><div class="line">wt          -<span class="number">8.21662</span>    <span class="number">1.26971</span>  -<span class="number">6.471</span> <span class="number">5.20e-07</span> ***</div><div class="line">hp:wt        <span class="number">0.02785</span>    <span class="number">0.00742</span>   <span class="number">3.753</span> <span class="number">0.000811</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">2.153</span> on <span class="number">28</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.8848</span>,	Adjusted R-squared:  <span class="number">0.8724</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">71.66</span> on <span class="number">3</span> and <span class="number">28</span> DF,  p-value: <span class="number">2.981e-13</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#若两个预测</span></div><div class="line">&gt; <span class="comment">#变量的交互项显著，说明响应变量与其中一个预测变量的关系依赖于另外一个预测变量的水平。</span></div><div class="line">&gt; <span class="comment">#因此此例说明，每加仑汽油行驶英里数与汽车马力的关系依车重不同而不同。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#通过effects包中的effect()函数，你可以用图形展示交互项的结果。</span></div><div class="line">&gt; <span class="keyword">library</span>(effects)</div><div class="line">&gt; plot(effect(<span class="string">"hp:wt"</span>, fit, xlevels=list(wt=c(<span class="number">2.2</span>,<span class="number">3.2</span>,<span class="number">4.2</span>))),multiline=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（一）/交互项对比.png" alt=""><br>从图中可以很清晰地看出，随着车重的增加，马力与每加仑汽油行驶英里数的关系减弱了。<br>当wt = 4.2时，直线几乎是水平的，表明随着hp的增加， mpg不会发生改变。</p>
+<h2 id="3、回归诊断"><a href="#3、回归诊断" class="headerlink" title="3、回归诊断"></a>3、回归诊断</h2><ul>
+<li>对回归结果的信念，都只建立在你的数据满足统计假设的前提之上。<h3 id="3-1-标准方法"><a href="#3-1-标准方法" class="headerlink" title="3.1 标准方法"></a>3.1 标准方法</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#回归诊断</span></div><div class="line">fit&lt;- lm(weight~height,data=women)</div><div class="line"><span class="comment">#将plot()函数绘制的四幅图形组合在一个大的2×2的图中。</span></div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line">plot(fit)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2017/01/03/chapter08-回归（一）/基本回归诊断.png" alt=""></p>
+<ul>
+<li><p>正态性：当预测变量值固定时，因变量成正态分布，则残差值也应该是一个均值为0的正<br>态分布。正态Q-Q图（Normal Q-Q，右上）是在正态分布对应的值下，标准化残差的概率<br>图。若满足正态假设，那么图上的点应该落在呈45度角的直线上；若不是如此，那么就<br>违反了正态性的假设。</p>
+</li>
+<li><p>独立性：由样本的数据收集去确保</p>
+</li>
+<li><p>线性：若因变量与自变量线性相关，那么残差值与预测（拟合）值就没有任何系统关联。<br>换句话说，除了白噪声，模型应该包含数据中所有的系统方差。在“残差图与拟合图”<br>（Residuals vs Fitted，左上）中可以清楚的看到一个曲线关系，这暗示着你可能需要对回<br>归模型加上一个二次项。</p>
+</li>
+<li><p>同方差性 ：若满足不变方差假设，那么在位置尺度图（Scale-Location Graph，左下）中，<br>水平线周围的点应该随机分布。该图似乎满足此假设。</p>
+</li>
+<li><p>最后一幅“残差与杠杆图”（Residuals vs Leverage，右下）提供了你可能关注的单个观测点的信息。从图形可以鉴别出离群点、高杠杆值点和强影响点。</p>
+</li>
+</ul>
+<p>看下二次拟合的图：<br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fit&lt;- lm(weight~height+I(height^<span class="number">2</span>),data=women)</div><div class="line"><span class="comment">#将plot()函数绘制的四幅图形组合在一个大的2×2的图中。</span></div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line">plot(fit)</div><div class="line"><span class="comment">#这第二组图表明多项式回归拟合效果比较理想，基本符合了线性假设、残差正态性（除了</span></div><div class="line"><span class="comment">#观测点13）和同方差性（残差方差不变）。观测点15看起来像是强影响点（根据是它有较大的</span></div><div class="line"><span class="comment">#Cook距离值），删除它将会影响参数的估计。事实上，删除观测点13和15，模型会拟合得会更好。</span></div></pre></td></tr></table></figure></p>
+<p><img src="/2017/01/03/chapter08-回归（一）/基本诊断二次拟合.png" alt=""></p>
+<h3 id="3-2-改进的方法"><a href="#3-2-改进的方法" class="headerlink" title="3.2 改进的方法"></a>3.2 改进的方法</h3><p>car包提供多种函数用以评价回归模型：<br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">qqPlot() 分位数比较图</div><div class="line"></div><div class="line">durbinWatsonTest() 对误差自相关性做Durbin-Watson检验</div><div class="line"></div><div class="line">crPlots() 成分与残差图</div><div class="line"></div><div class="line">ncvTest() 对非恒定的误差方差做得分检验</div><div class="line"></div><div class="line">spreadLevelPlot() 分散水平检验</div><div class="line"></div><div class="line">outlierTest() Bonferroni离群点检验</div><div class="line"></div><div class="line">avPlots() 添加的变量图形</div><div class="line"></div><div class="line">inluencePlot() 回归影响图</div><div class="line"></div><div class="line">scatterplot() 增强的散点图</div><div class="line"></div><div class="line">scatterplotMatrix() 增强的散点图矩阵</div><div class="line"></div><div class="line">vif() 方差膨胀因子</div></pre></td></tr></table></figure></p>
+<ul>
+<li>正态性：qqPlot()<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#它画出了在n-p-1个自由度的t分布下的学生化残差（studentized residual，也称学生化删除残差或折叠</span></div><div class="line"><span class="comment">#化残差）图形，其中n是样本大小， p是回归参数的数目（包括截距项）。</span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line">fit&lt;-lm(Murder ~ Population + Illiteracy + Income + Frost, data=states)</div><div class="line">par(mfrow=c(<span class="number">1</span>,<span class="number">1</span>))</div><div class="line">qqPlot(fit,labels=row.names(states),id.method = <span class="string">"identify"</span>,simulate=<span class="literal">TRUE</span>, main=<span class="string">"Q-Q Plot"</span>)</div><div class="line"><span class="comment">#当simulate=TRUE时， 95%的置信区间将会用参数自助法</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2017/01/03/chapter08-回归（一）/qqPlot.png" alt=""></p>
+<p>另一种和可视化误差的方法<br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">residplot&lt;-<span class="keyword">function</span>(fit,nbreaks=<span class="number">10</span>)&#123;</div><div class="line">  z&lt;-rstudent(fit)</div><div class="line">  hist(z,breaks=nbreaks,freq = <span class="literal">FALSE</span>, xlab=<span class="string">"Studentized Residual"</span>,main=<span class="string">"Distribution of Errors"</span>)</div><div class="line">  rug(jitter(z), col = <span class="string">"brown"</span>)</div><div class="line">  curve(dnorm(x,mean=mean(z),sd=sd(z)),</div><div class="line">        add=<span class="literal">TRUE</span>, col=<span class="string">"blue"</span>,lwd=<span class="number">2</span>)</div><div class="line">  lines(density(z)$x,density(z)$y,col=<span class="string">"red"</span>,lwd=<span class="number">2</span>,lty=<span class="number">2</span>)</div><div class="line">  legend(<span class="string">"topright"</span>,legend = c(<span class="string">"Normal Curve"</span>,<span class="string">"Kernel Density Curve"</span>),lty=<span class="number">1</span>:<span class="number">2</span>,col=c(<span class="string">"blue"</span>,<span class="string">"red"</span>),cex=<span class="number">.7</span>)</div><div class="line">&#125;</div><div class="line">residplot(fit)</div></pre></td></tr></table></figure></p>
+<p><img src="/2017/01/03/chapter08-回归（一）/residplot.png" alt=""></p>
+<ul>
+<li><p>独立性</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#误差的独立性</span></div><div class="line">&gt; durbinWatsonTest(fit)</div><div class="line"> lag Autocorrelation D-W Statistic p-value</div><div class="line">   <span class="number">1</span>      -<span class="number">0.2006929</span>      <span class="number">2.317691</span>   <span class="number">0.258</span></div><div class="line"> Alternative hypothesis: rho != <span class="number">0</span></div><div class="line">&gt; <span class="comment">#p值不显著说明无相关性，误差项之间独立，滞后项（lag=1）表明数据集中</span></div><div class="line">&gt; <span class="comment">#每个数据都是与其后一个数据进行比较的。该检验适用于时间独立的数据，对于非聚集型的数据</span></div><div class="line">&gt; <span class="comment">#并不适用。注意， durbinWatsonTest()函数使用自助法（参见第12章）来导出p值，如果添加</span></div><div class="line">&gt; <span class="comment">#了选项simulate=FALSE，则每次运行测试时获得的结果都将略有不同。</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>线性</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">crPlots(fit)</div><div class="line"><span class="comment">#若图形存在非线性，则说明你可能对预测变量的函数形式建模不够充分，</span></div><div class="line"><span class="comment">#那么就需要添加一些曲线成分，比如多项式项，或对一个或多个变量进行变换（如用log(X)代</span></div><div class="line"><span class="comment">#替X），或用其他回归变体形式而不是线性回归。</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2017/01/03/chapter08-回归（一）/成分残差图.png" alt=""></p>
+<ul>
+<li>同方差性<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#线性</span></div><div class="line">&gt; crPlots(fit)</div><div class="line">&gt; <span class="comment">#若图形存在非线性，则说明你可能对预测变量的函数形式建模不够充分，</span></div><div class="line">&gt; <span class="comment">#那么就需要添加一些曲线成分，比如多项式项，或对一个或多个变量进行变换（如用log(X)代</span></div><div class="line">&gt; <span class="comment">#替X），或用其他回归变体形式而不是线性回归。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#同方差性</span></div><div class="line">&gt; <span class="comment">#ncvTest()函数生成一个计分检验，零假设为误差方差不变，备择假设为误差方差随着拟合值水平的变化而变化。</span></div><div class="line">&gt; <span class="comment">#若检验显著，则说明存在异方差性（误差方差不恒定）</span></div><div class="line">&gt; ncvTest(fit)</div><div class="line">Non-constant Variance Score Test </div><div class="line">Variance formula: ~ fitted.values </div><div class="line">Chisquare = <span class="number">1.746514</span>    Df = <span class="number">1</span>     p = <span class="number">0.1863156</span> </div><div class="line">&gt; p=<span class="number">0.18</span>不显著接受零假设</div><div class="line">&gt; <span class="comment">#spreadLevelPlot()函数创建一个添加了最佳拟合曲线的散点图，展示标准化残差绝对值与拟合值的关系。</span></div><div class="line">&gt; spreadLevelPlot(fit)</div><div class="line"></div><div class="line">Suggested power transformation:  <span class="number">1.209626</span> </div><div class="line"><span class="comment">#你将会看到一个非水平的曲线。代码结果建议幂次变换（suggested power transformation）的含义</span></div><div class="line"><span class="comment">#是，经过p次幂（Y^p）变换，非恒定的误差方差将会平稳。</span></div><div class="line"><span class="comment">#建议幂次转换为0.5，在回归等式中用 Y 代替Y，可能会使模型满足同方差性。若建议幂次为0，</span></div><div class="line"><span class="comment">#则使用对数变换。对于当前例子，异方差性很不明显，因此建议幂次接近1（不需要进行变换）。</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2017/01/03/chapter08-回归（一）/残差分布图.png" alt=""></p>
+<h3 id="3-3-线性模型假设的综合验证"><a href="#3-3-线性模型假设的综合验证" class="headerlink" title="3.3 线性模型假设的综合验证"></a>3.3 线性模型假设的综合验证</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">library</span>(gvlma)</div><div class="line">&gt; gvmodel&lt;-gvlma(fit)</div><div class="line">&gt; summary(gvmodel)</div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = Murder ~ Population + Illiteracy + Income + Frost, </div><div class="line">    data = states)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">4.7960</span> -<span class="number">1.6495</span> -<span class="number">0.0811</span>  <span class="number">1.4815</span>  <span class="number">7.6210</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">             Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept) <span class="number">1.235e+00</span>  <span class="number">3.866e+00</span>   <span class="number">0.319</span>   <span class="number">0.7510</span>    </div><div class="line">Population  <span class="number">2.237e-04</span>  <span class="number">9.052e-05</span>   <span class="number">2.471</span>   <span class="number">0.0173</span> *  </div><div class="line">Illiteracy  <span class="number">4.143e+00</span>  <span class="number">8.744e-01</span>   <span class="number">4.738</span> <span class="number">2.19e-05</span> ***</div><div class="line">Income      <span class="number">6.442e-05</span>  <span class="number">6.837e-04</span>   <span class="number">0.094</span>   <span class="number">0.9253</span>    </div><div class="line">Frost       <span class="number">5.813e-04</span>  <span class="number">1.005e-02</span>   <span class="number">0.058</span>   <span class="number">0.9541</span>    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">2.535</span> on <span class="number">45</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.567</span>,	Adjusted R-squared:  <span class="number">0.5285</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">14.73</span> on <span class="number">4</span> and <span class="number">45</span> DF,  p-value: <span class="number">9.133e-08</span></div><div class="line"></div><div class="line"></div><div class="line">ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS</div><div class="line">USING THE GLOBAL TEST ON <span class="number">4</span> DEGREES-OF-FREEDOM:</div><div class="line">Level of Significance =  <span class="number">0.05</span> </div><div class="line"></div><div class="line">Call:</div><div class="line"> gvlma(x = fit) </div><div class="line"></div><div class="line">                    Value p-value                Decision</div><div class="line">Global Stat        <span class="number">2.7728</span>  <span class="number">0.5965</span> Assumptions acceptable.</div><div class="line">Skewness           <span class="number">1.5374</span>  <span class="number">0.2150</span> Assumptions acceptable.</div><div class="line">Kurtosis           <span class="number">0.6376</span>  <span class="number">0.4246</span> Assumptions acceptable.</div><div class="line">Link Function      <span class="number">0.1154</span>  <span class="number">0.7341</span> Assumptions acceptable.</div><div class="line">Heteroscedasticity <span class="number">0.4824</span>  <span class="number">0.4873</span> Assumptions acceptable.</div><div class="line"></div><div class="line"><span class="comment">#从输出项（Global Stat中的文字栏）我们可以看到数据满足OLS回归模型所有的统计假设</span></div><div class="line"><span class="comment">#（p=0.5965597） 。若Decision下的文字表明违反了假设条件（比如p&lt;0.05） ，你可以使用前几节讨论</span></div><div class="line"><span class="comment">#的方法来判断哪些假设没有被满足。</span></div></pre></td></tr></table></figure>
+<h3 id="3-4-多重共线性"><a href="#3-4-多重共线性" class="headerlink" title="3.4 多重共线性"></a>3.4 多重共线性</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#多重共线性</span></div><div class="line">&gt; <span class="comment">#例如 握力~年龄+DOB(Date Of Birth)</span></div><div class="line">&gt; <span class="comment">#F检验显著， p&lt;0.001。但是当你观察DOB和年龄的回归系数时，却</span></div><div class="line">&gt; <span class="comment">#发现它们都不显著（也就是说无法证明它们与握力相关）</span></div><div class="line">&gt; <span class="comment">#原因是DOB与年龄在四舍五入后相关性极大。回归系数测量的是当其他预测变量不变时，某</span></div><div class="line">&gt; <span class="comment">#个预测变量对响应变量的影响。那么此处就相当于假定年龄不变，然后测量握力与年龄的关系，</span></div><div class="line">&gt; <span class="comment">#这种问题就称作多重共线性（multicollinearity）。它会导致模型参数的置信区间过大，使单个系数</span></div><div class="line">&gt; <span class="comment">#解释起来很困难。</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#使用VIF度量（Variance Inflation Factor，方差膨胀因子），</span></div><div class="line">&gt; <span class="comment">#VIF的平方根表示变量回归参数的置信区间能膨胀为与模型无关的预测变量的程度（因此而得名）</span></div><div class="line">&gt; <span class="keyword">library</span>(car)</div><div class="line">&gt; vif(fit)</div><div class="line">Population Illiteracy     Income      Frost </div><div class="line">  <span class="number">1.245282</span>   <span class="number">2.165848</span>   <span class="number">1.345822</span>   <span class="number">2.082547</span> </div><div class="line">&gt; sqrt(vif(fit))&gt;<span class="number">2</span></div><div class="line">Population Illiteracy     Income      Frost </div><div class="line">     <span class="literal">FALSE</span>      <span class="literal">FALSE</span>      <span class="literal">FALSE</span>      <span class="literal">FALSE</span></div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/回归/">回归</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/" data-title="chapter08 回归（一） | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/03/chapter08-回归（二）/" title="chapter08 回归（二）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter08 回归（二）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/12/28/The-Cornerstone-of-OOP-DP/"  title="The Cornerstone of OOP&amp;DP">
+ <strong>下一篇：</strong><br/> 
+ <span>The Cornerstone of OOP&amp;DP
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/01/03/chapter08-回归（一）/" data-title="chapter08 回归（一）" data-url="https://pingansheng.github.io/2017/01/03/chapter08-回归（一）/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#回归"><span class="toc-text">回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、回归的多面性"><span class="toc-text">1、回归的多面性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、最小二乘回归"><span class="toc-text">2、最小二乘回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-使用lm-拟合回归模型"><span class="toc-text">2.1 使用lm()拟合回归模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-简单线性回归"><span class="toc-text">2.2 简单线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-多项式回归"><span class="toc-text">2.3 多项式回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-多元线性回归"><span class="toc-text">2.4 多元线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-有交互项的多元线性回归"><span class="toc-text">2.5 有交互项的多元线性回归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、回归诊断"><span class="toc-text">3、回归诊断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-标准方法"><span class="toc-text">3.1 标准方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-改进的方法"><span class="toc-text">3.2 改进的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-线性模型假设的综合验证"><span class="toc-text">3.3 线性模型假设的综合验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-多重共线性"><span class="toc-text">3.4 多重共线性</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

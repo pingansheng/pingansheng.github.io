@@ -1,0 +1,718 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter12-重抽样与自助法 | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="重抽样与自助法1、置换检验12345678&amp;gt; #置换方法并不是将统计量与理论分布进行比较，而是将其与置换观测数据后获得的经验分布进行比较，&amp;gt; #根据统计量值的极端性判断是否有足够理由拒绝零假设。比如判断两组处理数据的内在差异性&amp;gt; #将所有观测组数据混合后重新随机拆分至所有组合计算统计量如（t值），所有统计量升序排列，根据第一个统计量&amp;gt; #（如t0）进行判断&amp;gt; #置换检">
+<meta name="keywords" content="R语言,重抽样与自助法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter12-重抽样与自助法">
+<meta property="og:url" content="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="重抽样与自助法1、置换检验12345678&amp;gt; #置换方法并不是将统计量与理论分布进行比较，而是将其与置换观测数据后获得的经验分布进行比较，&amp;gt; #根据统计量值的极端性判断是否有足够理由拒绝零假设。比如判断两组处理数据的内在差异性&amp;gt; #将所有观测组数据混合后重新随机拆分至所有组合计算统计量如（t值），所有统计量升序排列，根据第一个统计量&amp;gt; #（如t0）进行判断&amp;gt; #置换检">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/自助法.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/自助法2.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:09.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter12-重抽样与自助法">
+<meta name="twitter:description" content="重抽样与自助法1、置换检验12345678&amp;gt; #置换方法并不是将统计量与理论分布进行比较，而是将其与置换观测数据后获得的经验分布进行比较，&amp;gt; #根据统计量值的极端性判断是否有足够理由拒绝零假设。比如判断两组处理数据的内在差异性&amp;gt; #将所有观测组数据混合后重新随机拆分至所有组合计算统计量如（t值），所有统计量升序排列，根据第一个统计量&amp;gt; #（如t0）进行判断&amp;gt; #置换检">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/自助法.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/21/chapter12-重抽样与自助法/" title="chapter12-重抽样与自助法" itemprop="url">chapter12-重抽样与自助法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-21T03:26:58.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#重抽样与自助法"><span class="toc-text">重抽样与自助法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、置换检验"><span class="toc-text">1、置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、使用coin包进行置换检验"><span class="toc-text">2、使用coin包进行置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、ImPerm包置换检验"><span class="toc-text">3、ImPerm包置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、自助法"><span class="toc-text">4、自助法</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="重抽样与自助法"><a href="#重抽样与自助法" class="headerlink" title="重抽样与自助法"></a>重抽样与自助法</h1><h2 id="1、置换检验"><a href="#1、置换检验" class="headerlink" title="1、置换检验"></a>1、置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#置换方法并不是将统计量与理论分布进行比较，而是将其与置换观测数据后获得的经验分布进行比较，</span></div><div class="line">&gt; <span class="comment">#根据统计量值的极端性判断是否有足够理由拒绝零假设。比如判断两组处理数据的内在差异性</span></div><div class="line">&gt; <span class="comment">#将所有观测组数据混合后重新随机拆分至所有组合计算统计量如（t值），所有统计量升序排列，根据第一个统计量</span></div><div class="line">&gt; <span class="comment">#（如t0）进行判断</span></div><div class="line">&gt; <span class="comment">#置换检验真正发挥功用的地方是处理非正态数据（如分布偏倚很大）、存在离群点、</span></div><div class="line">&gt; <span class="comment">#样本很小或无法做参数检验等情况。不过，如果初始样本对感兴趣的总体情况代表性很差，即使</span></div><div class="line">&gt; <span class="comment">#是置换检验也无法提高推断效果。</span></div><div class="line">&gt; <span class="comment">#置换检验主要用于生成检验零假设的p值，它有助于回答“效应是否存在”这样的问题。</span></div></pre></td></tr></table></figure>
+<h2 id="2、使用coin包进行置换检验"><a href="#2、使用coin包进行置换检验" class="headerlink" title="2、使用coin包进行置换检验"></a>2、使用coin包进行置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#独立2样本检验和K样本检验</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; score &lt;- c(<span class="number">40</span>,<span class="number">57</span>,<span class="number">45</span>,<span class="number">55</span>,<span class="number">58</span>,<span class="number">57</span>,<span class="number">64</span>,<span class="number">55</span>,<span class="number">62</span>,<span class="number">65</span>)</div><div class="line">&gt; treatment &lt;- factor(c(rep(<span class="string">"A"</span>,<span class="number">5</span>), rep(<span class="string">"B"</span>,<span class="number">5</span>)))</div><div class="line">&gt; mydata &lt;- data.frame(treatment, score)</div><div class="line">&gt; t.test(score~treatment, data=mydata,  var.equal = <span class="literal">TRUE</span>)</div><div class="line"></div><div class="line">	Two Sample t-test</div><div class="line"></div><div class="line">data:  score by treatment</div><div class="line">t = -<span class="number">2.345</span>, df = <span class="number">8</span>, p-value = <span class="number">0.04705</span></div><div class="line">alternative hypothesis: true difference <span class="keyword">in</span> means is not equal to <span class="number">0</span></div><div class="line"><span class="number">95</span> percent confidence interval:</div><div class="line"> -<span class="number">19.0405455</span>  -<span class="number">0.1594545</span></div><div class="line">sample estimates:</div><div class="line">mean <span class="keyword">in</span> group A mean <span class="keyword">in</span> group B </div><div class="line">           <span class="number">51.0</span>            <span class="number">60.6</span> </div><div class="line"></div><div class="line">&gt; <span class="comment">#distribution = "exact"，那么在零假设条件下，分布的计算是精确的（即依据所有</span></div><div class="line">&gt; <span class="comment">#可能的排列组合）,当前仅可用于两样本问题</span></div><div class="line">&gt; oneway_test(score~treatment, data=mydata,  distribution=<span class="string">'exact'</span>)</div><div class="line"></div><div class="line">	Exact Two-Sample Fisher-Pitman Permutation Test</div><div class="line"></div><div class="line">data:  score by treatment (A, B)</div><div class="line">Z = -<span class="number">1.9147</span>, p-value = <span class="number">0.07143</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#测试美国南部与非南部的监禁概率</span></div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; UScrime &lt;- transform(UScrime, So = factor(So))</div><div class="line">&gt; wilcox_test(Prob ~ So, data=UScrime, distribution=<span class="string">"exact"</span>)</div><div class="line"></div><div class="line">	Exact Wilcoxon-Mann-Whitney Test</div><div class="line"></div><div class="line">data:  Prob by So (<span class="number">0</span>, <span class="number">1</span>)</div><div class="line">Z = -<span class="number">3.7493</span>, p-value = <span class="number">8.488e-05</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#监禁在南部可能更多</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#K样本问题, 五种治疗方案的差异性,参考分布得自于数据9999次的置换</span></div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; oneway_test(response ~ trt, data = cholesterol, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative K-Sample Fisher-Pitman Permutation Test</div><div class="line"></div><div class="line">data:  response by trt (1time, 2times, 4times, drugD, drugE)</div><div class="line">chi-squared = <span class="number">36.381</span>, p-value &lt; <span class="number">2.2e-16</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#列联表中的独立性</span></div><div class="line">&gt; <span class="comment">#检验两类别型变量的独立性</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; <span class="keyword">library</span>(vcd)</div><div class="line">&gt; <span class="comment">#转换治疗效果变量为分类因子，有序因子coin会生产一个线性与线性的趋势检验，而不是卡方检验</span></div><div class="line">&gt; Arthritis &lt;- transform(Arthritis, Improved=as.factor(as.numeric(Improved)))</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; chisq_test(Treatment ~ Improved, data=Arthritis, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative Pearson Chi-Squared Test</div><div class="line"></div><div class="line">data:  Treatment by Improved (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div><div class="line">chi-squared = <span class="number">13.055</span>, p-value = <span class="number">0.0018</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#两数值型变量的独立性置换检验，文盲率与谋杀率</span></div><div class="line">&gt; <span class="comment">#转换为数据框，x77是一个矩阵</span></div><div class="line">&gt; states &lt;- as.data.frame(state.x77)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; spearman_test(Illiteracy~Murder, data=states, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative Spearman Correlation Test</div><div class="line"></div><div class="line">data:  Illiteracy by Murder</div><div class="line">Z = <span class="number">4.7065</span>, p-value &lt; <span class="number">2.2e-16</span></div><div class="line">alternative hypothesis: true rho is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#两样本和K样本相关性检验</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; wilcoxsign_test(U1~U2, data=UScrime, distribution=<span class="string">"exact"</span>)</div><div class="line"></div><div class="line">	Exact Wilcoxon-Pratt Signed-Rank Test</div><div class="line"></div><div class="line">data:  y by x (pos, neg) </div><div class="line">	 stratified by block</div><div class="line">Z = <span class="number">5.9691</span>, p-value = <span class="number">1.421e-14</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div></pre></td></tr></table></figure>
+<h2 id="3、ImPerm包置换检验"><a href="#3、ImPerm包置换检验" class="headerlink" title="3、ImPerm包置换检验"></a>3、ImPerm包置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#ImPerm包 提供线性模型的置换方法，回归和方差分析</span></div><div class="line">&gt; <span class="comment">#简单回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; fit&lt;-lmp(weight~height, data=women, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = weight ~ height, data = women, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">1.7333</span> -<span class="number">1.1333</span> -<span class="number">0.3833</span>  <span class="number">0.7417</span>  <span class="number">3.1167</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">       Estimate Iter Pr(Prob)    </div><div class="line">height     <span class="number">3.45</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">1.525</span> on <span class="number">13</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.991</span>,	Adjusted R-squared: <span class="number">0.9903</span> </div><div class="line"><span class="literal">F</span>-statistic:  <span class="number">1433</span> on <span class="number">1</span> and <span class="number">13</span> DF,  p-value: <span class="number">1.091e-14</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多项式回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit&lt;-lmp(weight ~ height + I(height^<span class="number">2</span>), data = women, perm = <span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = weight ~ height + I(height^<span class="number">2</span>), data = women, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">      Min        1Q    Median        3Q       Max </div><div class="line">-<span class="number">0.509405</span> -<span class="number">0.296105</span> -<span class="number">0.009405</span>  <span class="number">0.286151</span>  <span class="number">0.597059</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Iter Pr(Prob)    </div><div class="line">height      -<span class="number">7.34832</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">I(height^<span class="number">2</span>)  <span class="number">0.08306</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">0.3841</span> on <span class="number">12</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.9995</span>,	Adjusted R-squared: <span class="number">0.9994</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">1.139e+04</span> on <span class="number">2</span> and <span class="number">12</span> DF,  p-value: &lt; <span class="number">2.2e-16</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多元回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; states &lt;- as.data.frame(state.x77)</div><div class="line">&gt; fit &lt;- lmp(Murder ~ Population + Illiteracy + Income + Frost, data=states, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = Murder ~ Population + Illiteracy + Income + Frost, </div><div class="line">    data = states, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">     Min       1Q   Median       3Q      Max </div><div class="line">-<span class="number">4.79597</span> -<span class="number">1.64946</span> -<span class="number">0.08112</span>  <span class="number">1.48150</span>  <span class="number">7.62104</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Iter Pr(Prob)    </div><div class="line">Population <span class="number">2.237e-04</span>   <span class="number">51</span>   <span class="number">1.0000</span>    </div><div class="line">Illiteracy <span class="number">4.143e+00</span> <span class="number">5000</span>   <span class="number">0.0004</span> ***</div><div class="line">Income     <span class="number">6.442e-05</span>   <span class="number">51</span>   <span class="number">1.0000</span>    </div><div class="line">Frost      <span class="number">5.813e-04</span>   <span class="number">51</span>   <span class="number">0.8627</span>    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">2.535</span> on <span class="number">45</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.567</span>,	Adjusted R-squared: <span class="number">0.5285</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">14.73</span> on <span class="number">4</span> and <span class="number">45</span> DF,  p-value: <span class="number">9.133e-08</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#单因素方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(response~trt, data=cholesterol, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS "</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter  Pr(Prob)    </div><div class="line">trt          <span class="number">4</span>  <span class="number">1351.37</span>    <span class="number">337.84</span> <span class="number">5000</span> &lt; <span class="number">2.2e-16</span> ***</div><div class="line">Residuals   <span class="number">45</span>   <span class="number">468.75</span>     <span class="number">10.42</span>                   </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#单因素协方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(weight ~ gesttime + dose, data=litter, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter Pr(Prob)    </div><div class="line">gesttime     <span class="number">1</span>   <span class="number">161.49</span>   <span class="number">161.493</span> <span class="number">5000</span>   <span class="number">0.0006</span> ***</div><div class="line">dose         <span class="number">3</span>   <span class="number">137.12</span>    <span class="number">45.708</span> <span class="number">5000</span>   <span class="number">0.0392</span> *  </div><div class="line">Residuals   <span class="number">69</span>  <span class="number">1151.27</span>    <span class="number">16.685</span>                  </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#双因素方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(len ~ supp * dose, data=ToothGrowth, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter Pr(Prob)    </div><div class="line">supp         <span class="number">1</span>   <span class="number">205.35</span>    <span class="number">205.35</span> <span class="number">5000</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">dose         <span class="number">1</span>  <span class="number">2224.30</span>   <span class="number">2224.30</span> <span class="number">5000</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">supp:dose    <span class="number">1</span>    <span class="number">88.92</span>     <span class="number">88.92</span> <span class="number">2032</span>  <span class="number">0.04724</span> *  </div><div class="line">Residuals   <span class="number">56</span>   <span class="number">933.63</span>     <span class="number">16.67</span>                  </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="4、自助法"><a href="#4、自助法" class="headerlink" title="4、自助法"></a>4、自助法</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#boot包中的自助法，即通过一个函数重复执行多次取得统计量的序列分布</span></div><div class="line">&gt; <span class="comment">#对单个统计量使用自助法</span></div><div class="line">&gt; rsq &lt;- <span class="keyword">function</span>(formula, data, indicates) &#123;</div><div class="line">+     d &lt;- data[indicates,]</div><div class="line">+     fit &lt;- lm(formula, data=d)</div><div class="line">+     <span class="keyword">return</span>(summary(fit)$r.square)</div><div class="line">+ &#125;</div><div class="line">&gt; <span class="keyword">library</span>(boot)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; results &lt;- boot(data=mtcars, statistic = rsq, R=<span class="number">1000</span>, formula=mpg~wt+disp)</div><div class="line">&gt; </div><div class="line">&gt; print(results)</div><div class="line"></div><div class="line">ORDINARY NONPARAMETRIC BOOTSTRAP</div><div class="line"></div><div class="line"></div><div class="line">Call:</div><div class="line">boot(data = mtcars, statistic = rsq, R = <span class="number">1000</span>, formula = mpg ~ </div><div class="line">    wt + disp)</div><div class="line"></div><div class="line"></div><div class="line">Bootstrap Statistics :</div><div class="line">     original    bias    std. error</div><div class="line">t1* <span class="number">0.7809306</span> <span class="number">0.0133367</span>  <span class="number">0.05068926</span></div><div class="line">&gt; plot(results)</div><div class="line"><span class="comment">#置信区间都不包含R平方值0，所以拒绝零假设</span></div><div class="line">&gt; boot.ci(results, type=c(<span class="string">"perc"</span>, <span class="string">"bca"</span>))</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = c(<span class="string">"perc"</span>, <span class="string">"bca"</span>))</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level     Percentile            BCa          </div><div class="line"><span class="number">95</span>%   ( <span class="number">0.6838</span>,  <span class="number">0.8833</span> )   ( <span class="number">0.6344</span>,  <span class="number">0.8549</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div><div class="line">Some BCa intervals may be unstable</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/21/chapter12-重抽样与自助法/自助法.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#多个统计量自助法</span></div><div class="line">&gt; bs &lt;- <span class="keyword">function</span>(formula, data, indices) &#123;</div><div class="line">+   d &lt;- data[indices,]</div><div class="line">+   fit &lt;- lm(formula, data=d)</div><div class="line">+   <span class="keyword">return</span>(coef(fit))</div><div class="line">+ &#125;</div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(boot)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; results &lt;- boot(data=mtcars, statistic = bs, R=<span class="number">1000</span>, formula=mpg~wt+disp)</div><div class="line">&gt; </div><div class="line">&gt; print(results)</div><div class="line"></div><div class="line">ORDINARY NONPARAMETRIC BOOTSTRAP</div><div class="line"></div><div class="line"></div><div class="line">Call:</div><div class="line">boot(data = mtcars, statistic = bs, R = <span class="number">1000</span>, formula = mpg ~ </div><div class="line">    wt + disp)</div><div class="line"></div><div class="line"></div><div class="line">Bootstrap Statistics :</div><div class="line">       original        bias    std. error</div><div class="line">t1* <span class="number">34.96055404</span>  <span class="number">0.1378732942</span> <span class="number">2.485756673</span></div><div class="line">t2* -<span class="number">3.35082533</span> -<span class="number">0.0539040965</span> <span class="number">1.170427539</span></div><div class="line">t3* -<span class="number">0.01772474</span> -<span class="number">0.0001208075</span> <span class="number">0.008786803</span></div><div class="line">&gt; <span class="comment">#查看车重的抽样结果</span></div><div class="line">&gt; plot(results, index=<span class="number">2</span>)</div><div class="line">&gt; <span class="comment">#查看车重的95置信区间</span></div><div class="line">&gt; boot.ci(results, type= <span class="string">"bca"</span>, index=<span class="number">2</span>)</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = <span class="string">"bca"</span>, index = <span class="number">2</span>)</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level       BCa          </div><div class="line"><span class="number">95</span>%   (-<span class="number">5.655</span>, -<span class="number">1.194</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div><div class="line">&gt; <span class="comment">#查看排量的95置信区间</span></div><div class="line">&gt; boot.ci(results, type= <span class="string">"bca"</span>, index=<span class="number">3</span>)</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = <span class="string">"bca"</span>, index = <span class="number">3</span>)</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level       BCa          </div><div class="line"><span class="number">95</span>%   (-<span class="number">0.0331</span>,  <span class="number">0.0010</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/21/chapter12-重抽样与自助法/自助法2.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/重抽样与自助法/">重抽样与自助法</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/" data-title="chapter12-重抽样与自助法 | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/11/23/chapter13-广义线性模型/" title="chapter13-广义线性模型">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter13-广义线性模型</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/03/Understand-JVM-Part-IV/"  title="Understand JVM Part IV">
+ <strong>下一篇：</strong><br/> 
+ <span>Understand JVM Part IV
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/11/21/chapter12-重抽样与自助法/" data-title="chapter12-重抽样与自助法" data-url="https://pingansheng.github.io/2017/11/21/chapter12-重抽样与自助法/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#重抽样与自助法"><span class="toc-text">重抽样与自助法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、置换检验"><span class="toc-text">1、置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、使用coin包进行置换检验"><span class="toc-text">2、使用coin包进行置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、ImPerm包置换检验"><span class="toc-text">3、ImPerm包置换检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、自助法"><span class="toc-text">4、自助法</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

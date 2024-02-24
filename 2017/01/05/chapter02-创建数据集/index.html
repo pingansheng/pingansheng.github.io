@@ -1,0 +1,772 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter02 创建数据集 | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="创建数据集 1. 向量12a&amp;lt;-c(1,2,3,4,5);b&amp;lt;-c(&quot;one&quot;,&quot;two&quot;,&quot;three&quot;)cc&amp;lt;-c(TRUE,FALSE,TRUE)  单个向量的数据类型必须一致  2. 标量只含一个元素的向量：f&amp;lt;-3 3. 向量的访问： 4. 矩阵矩阵每个元素相同的模式  5. 数组： 6. 数据框最常用的数据结构，可以包含不同的数据模式（数据类型）mydaya &amp;">
+<meta name="keywords" content="R语言,R数据集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter02 创建数据集">
+<meta property="og:url" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="创建数据集 1. 向量12a&amp;lt;-c(1,2,3,4,5);b&amp;lt;-c(&quot;one&quot;,&quot;two&quot;,&quot;three&quot;)cc&amp;lt;-c(TRUE,FALSE,TRUE)  单个向量的数据类型必须一致  2. 标量只含一个元素的向量：f&amp;lt;-3 3. 向量的访问： 4. 矩阵矩阵每个元素相同的模式  5. 数组： 6. 数据框最常用的数据结构，可以包含不同的数据模式（数据类型）mydaya &amp;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/R_dataSet.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/vectorAccess.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/matrix.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/array.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/dataFrame1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/dataFrame2.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/dataFrame3.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/factor1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/factor2.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/list.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/autoextend.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/varFlag1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/varFlag2.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:05.409Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter02 创建数据集">
+<meta name="twitter:description" content="创建数据集 1. 向量12a&amp;lt;-c(1,2,3,4,5);b&amp;lt;-c(&quot;one&quot;,&quot;two&quot;,&quot;three&quot;)cc&amp;lt;-c(TRUE,FALSE,TRUE)  单个向量的数据类型必须一致  2. 标量只含一个元素的向量：f&amp;lt;-3 3. 向量的访问： 4. 矩阵矩阵每个元素相同的模式  5. 数组： 6. 数据框最常用的数据结构，可以包含不同的数据模式（数据类型）mydaya &amp;">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/R_dataSet.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/05/chapter02-创建数据集/" title="chapter02 创建数据集" itemprop="url">chapter02 创建数据集</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-05T03:11:24.000Z" itemprop="datePublished"> 发表于 2017-01-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#创建数据集"><span class="toc-text">创建数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-向量"><span class="toc-text">1. 向量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-标量"><span class="toc-text">2. 标量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-向量的访问："><span class="toc-text">3. 向量的访问：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-矩阵"><span class="toc-text">4. 矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-数组："><span class="toc-text">5. 数组：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-数据框"><span class="toc-text">6. 数据框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-因子"><span class="toc-text">7. 因子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-列表"><span class="toc-text">8. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-自动扩展特性"><span class="toc-text">9. 自动扩展特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-删除变量"><span class="toc-text">10. 删除变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-导入csv"><span class="toc-text">11. 导入csv:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-变量标签与值标签"><span class="toc-text">12. 变量标签与值标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-实用函数"><span class="toc-text">13. 实用函数</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="创建数据集"><a href="#创建数据集" class="headerlink" title="创建数据集"></a>创建数据集</h1><p><img src="/2017/01/05/chapter02-创建数据集/R_dataSet.png" alt=""></p>
+<h2 id="1-向量"><a href="#1-向量" class="headerlink" title="1. 向量"></a>1. 向量</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a&lt;-c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);b&lt;-c(<span class="string">"one"</span>,<span class="string">"two"</span>,<span class="string">"three"</span>)</div><div class="line">cc&lt;-c(<span class="literal">TRUE</span>,<span class="literal">FALSE</span>,<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>单个向量的数据类型必须一致</li>
+</ul>
+<h2 id="2-标量"><a href="#2-标量" class="headerlink" title="2. 标量"></a>2. 标量</h2><p>只含一个元素的向量：<code>f&lt;-3</code></p>
+<h2 id="3-向量的访问："><a href="#3-向量的访问：" class="headerlink" title="3. 向量的访问："></a>3. 向量的访问：</h2><p><img src="/2017/01/05/chapter02-创建数据集/vectorAccess.png" alt=""></p>
+<h2 id="4-矩阵"><a href="#4-矩阵" class="headerlink" title="4. 矩阵"></a>4. 矩阵</h2><p>矩阵每个元素相同的模式</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/matrix.png" alt=""></p>
+<h2 id="5-数组："><a href="#5-数组：" class="headerlink" title="5. 数组："></a>5. 数组：</h2><p><img src="/2017/01/05/chapter02-创建数据集/array.png" alt=""></p>
+<h2 id="6-数据框"><a href="#6-数据框" class="headerlink" title="6. 数据框"></a>6. 数据框</h2><p>最常用的数据结构，可以包含不同的数据模式（数据类型）<br><code>mydaya &lt;- data.frame(col1,col2,col3),col1~col3</code>可以为任何类型</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame1.png" alt=""></p>
+<p>数据框变量内容的读取：</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame2.png" alt=""></p>
+<p>其中，变量名可以进行局部化：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">attach</span>(patientData)</div><div class="line">table(diabetes,age)<span class="comment">#此处直接可以使用</span></div><div class="line"><span class="keyword">detach</span>()<span class="comment">#移除搜索路径</span></div><div class="line"></div><div class="line">with(patientData,&#123;</div><div class="line">data1&lt;- table(diabetes,age)</div><div class="line">data2&lt;&lt;- table(diabetes,age)</div><div class="line">&#125;)<span class="comment">#单行可以直接写语句不需要大括号, 但普通方式赋值的变量外部无法使用，&lt;&lt;-可以外部使用</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame3.png" alt=""></p>
+<h2 id="7-因子"><a href="#7-因子" class="headerlink" title="7. 因子"></a>7. 因子</h2><pre><code>变量可归结为名义型、有序型或连续型变量，
+</code></pre><ul>
+<li>名义型-无顺序(类别标识，男，女)-因子</li>
+<li>有序型-有递进顺序，但不连续(病情的情况，好转，一般，差)-因子    </li>
+<li>连续型-有顺序的任意范围内值(年龄)    </li>
+</ul>
+<p><img src="/2017/01/05/chapter02-创建数据集/factor1.png" alt=""><br><img src="/2017/01/05/chapter02-创建数据集/factor2.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">str(pData)<span class="comment">#显示数据的结构</span></div><div class="line">summary(pData)<span class="comment">#显示简要的描述性统计</span></div></pre></td></tr></table></figure>
+<h2 id="8-列表"><a href="#8-列表" class="headerlink" title="8. 列表"></a>8. 列表</h2><p>对象的有序集合，可以为任意对象：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">list&lt;-list(o1,…,o2)</div><div class="line">list&lt;-list(name1=o1,…,name2=o2)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter02-创建数据集/list.png" alt=""></p>
+<h2 id="9-自动扩展特性"><a href="#9-自动扩展特性" class="headerlink" title="9. 自动扩展特性"></a>9. 自动扩展特性</h2><p>将一个值赋给某个向量、矩阵、数组或列表中一个不存在的元素时， R将自动扩展这个数据结构以容纳新值。</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/autoextend.png" alt=""></p>
+<h2 id="10-删除变量"><a href="#10-删除变量" class="headerlink" title="10. 删除变量"></a>10. 删除变量</h2><p><code>rm(var1)</code></p>
+<h2 id="11-导入csv"><a href="#11-导入csv" class="headerlink" title="11. 导入csv:"></a>11. 导入csv:</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">read.csv(<span class="string">"area.csv"</span>,header = <span class="literal">TRUE</span>, sep=<span class="string">","</span>, row.names=<span class="string">"ID"</span>)</div><div class="line">read.table(<span class="string">"area.csv"</span>,header = <span class="literal">TRUE</span>, sep=<span class="string">","</span>, row.names=<span class="string">"ID"</span>)</div><div class="line">fread(<span class="string">"finaldata.csv"</span>, integer64=<span class="string">"numeric"</span>, na.strings=c(<span class="string">"NULL"</span>,<span class="string">"NA"</span>, <span class="string">""</span>, <span class="string">"\\N"</span>))</div></pre></td></tr></table></figure>
+<h2 id="12-变量标签与值标签"><a href="#12-变量标签与值标签" class="headerlink" title="12. 变量标签与值标签"></a>12. 变量标签与值标签</h2><p><img src="/2017/01/05/chapter02-创建数据集/varFlag1.png" alt=""><br><img src="/2017/01/05/chapter02-创建数据集/varFlag2.png" alt=""></p>
+<h2 id="13-实用函数"><a href="#13-实用函数" class="headerlink" title="13. 实用函数"></a>13. 实用函数</h2><ul>
+<li><code>length(object)</code>         显示对象中元素/成分的数量</li>
+<li><code>dim(object)</code>         显示某个对象的维度</li>
+<li><code>str(object)</code>         显示某个对象的结构</li>
+<li><code>class(object)</code>         显示某个对象的类或类型</li>
+<li><code>mode(object)</code>         显示某个对象的模式</li>
+<li><code>names(object)</code>         显示某对象中各成分的名称</li>
+<li><code>c(objectt,…)</code>         将对象合并入一个向量</li>
+<li><code>cbind(object,…)</code>     按列合并对象</li>
+<li><code>rbind(object, …)</code>    按行合并对象</li>
+<li><code>Object</code>                 输出某个对象</li>
+<li><code>head(object)</code>         列出某个对象的开始部分</li>
+<li><code>tail(object)</code>         列出某个对象的最后部分</li>
+<li><code>ls()</code>                 显示当前的对象列表</li>
+<li><code>rm(object, …)</code>       删除一个或更多个对象。语句rm(list = ls())将删除当前工作环境中的几乎所有对象</li>
+<li><code>newobject &lt;- edit(object)</code> 编辑对象并另存为newobject fix(object) 直接编辑对象</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R数据集/">R数据集</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/" data-title="chapter02 创建数据集 | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/05/chapter03-图形初步/" title="chapter03 图形初步">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter03 图形初步</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/01/05/chapter01-初窥/"  title="chapter01 初窥">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter01 初窥
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/01/05/chapter02-创建数据集/" data-title="chapter02 创建数据集" data-url="https://pingansheng.github.io/2017/01/05/chapter02-创建数据集/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#创建数据集"><span class="toc-text">创建数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-向量"><span class="toc-text">1. 向量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-标量"><span class="toc-text">2. 标量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-向量的访问："><span class="toc-text">3. 向量的访问：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-矩阵"><span class="toc-text">4. 矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-数组："><span class="toc-text">5. 数组：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-数据框"><span class="toc-text">6. 数据框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-因子"><span class="toc-text">7. 因子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-列表"><span class="toc-text">8. 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-自动扩展特性"><span class="toc-text">9. 自动扩展特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-删除变量"><span class="toc-text">10. 删除变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-导入csv"><span class="toc-text">11. 导入csv:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-变量标签与值标签"><span class="toc-text">12. 变量标签与值标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-实用函数"><span class="toc-text">13. 实用函数</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

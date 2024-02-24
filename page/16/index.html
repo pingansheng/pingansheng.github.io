@@ -1,0 +1,881 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/16/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/05/chapter02-创建数据集/" title="chapter02 创建数据集" itemprop="url">chapter02 创建数据集</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-05T03:11:24.000Z" itemprop="datePublished"> 发表于 2017-01-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="创建数据集"><a href="#创建数据集" class="headerlink" title="创建数据集"></a>创建数据集</h1><p><img src="/2017/01/05/chapter02-创建数据集/R_dataSet.png" alt=""></p>
+<h2 id="1-向量"><a href="#1-向量" class="headerlink" title="1. 向量"></a>1. 向量</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a&lt;-c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);b&lt;-c(<span class="string">"one"</span>,<span class="string">"two"</span>,<span class="string">"three"</span>)</div><div class="line">cc&lt;-c(<span class="literal">TRUE</span>,<span class="literal">FALSE</span>,<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>单个向量的数据类型必须一致</li>
+</ul>
+<h2 id="2-标量"><a href="#2-标量" class="headerlink" title="2. 标量"></a>2. 标量</h2><p>只含一个元素的向量：<code>f&lt;-3</code></p>
+<h2 id="3-向量的访问："><a href="#3-向量的访问：" class="headerlink" title="3. 向量的访问："></a>3. 向量的访问：</h2><p><img src="/2017/01/05/chapter02-创建数据集/vectorAccess.png" alt=""></p>
+<h2 id="4-矩阵"><a href="#4-矩阵" class="headerlink" title="4. 矩阵"></a>4. 矩阵</h2><p>矩阵每个元素相同的模式</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/matrix.png" alt=""></p>
+<h2 id="5-数组："><a href="#5-数组：" class="headerlink" title="5. 数组："></a>5. 数组：</h2><p><img src="/2017/01/05/chapter02-创建数据集/array.png" alt=""></p>
+<h2 id="6-数据框"><a href="#6-数据框" class="headerlink" title="6. 数据框"></a>6. 数据框</h2><p>最常用的数据结构，可以包含不同的数据模式（数据类型）<br><code>mydaya &lt;- data.frame(col1,col2,col3),col1~col3</code>可以为任何类型</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame1.png" alt=""></p>
+<p>数据框变量内容的读取：</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame2.png" alt=""></p>
+<p>其中，变量名可以进行局部化：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">attach</span>(patientData)</div><div class="line">table(diabetes,age)<span class="comment">#此处直接可以使用</span></div><div class="line"><span class="keyword">detach</span>()<span class="comment">#移除搜索路径</span></div><div class="line"></div><div class="line">with(patientData,&#123;</div><div class="line">data1&lt;- table(diabetes,age)</div><div class="line">data2&lt;&lt;- table(diabetes,age)</div><div class="line">&#125;)<span class="comment">#单行可以直接写语句不需要大括号, 但普通方式赋值的变量外部无法使用，&lt;&lt;-可以外部使用</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter02-创建数据集/dataFrame3.png" alt=""></p>
+<h2 id="7-因子"><a href="#7-因子" class="headerlink" title="7. 因子"></a>7. 因子</h2><pre><code>变量可归结为名义型、有序型或连续型变量，
+</code></pre><ul>
+<li>名义型-无顺序(类别标识，男，女)-因子</li>
+<li>有序型-有递进顺序，但不连续(病情的情况，好转，一般，差)-因子    </li>
+<li>连续型-有顺序的任意范围内值(年龄)    </li>
+</ul>
+<p><img src="/2017/01/05/chapter02-创建数据集/factor1.png" alt=""><br><img src="/2017/01/05/chapter02-创建数据集/factor2.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">str(pData)<span class="comment">#显示数据的结构</span></div><div class="line">summary(pData)<span class="comment">#显示简要的描述性统计</span></div></pre></td></tr></table></figure>
+<h2 id="8-列表"><a href="#8-列表" class="headerlink" title="8. 列表"></a>8. 列表</h2><p>对象的有序集合，可以为任意对象：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">list&lt;-list(o1,…,o2)</div><div class="line">list&lt;-list(name1=o1,…,name2=o2)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter02-创建数据集/list.png" alt=""></p>
+<h2 id="9-自动扩展特性"><a href="#9-自动扩展特性" class="headerlink" title="9. 自动扩展特性"></a>9. 自动扩展特性</h2><p>将一个值赋给某个向量、矩阵、数组或列表中一个不存在的元素时， R将自动扩展这个数据结构以容纳新值。</p>
+<p><img src="/2017/01/05/chapter02-创建数据集/autoextend.png" alt=""></p>
+<h2 id="10-删除变量"><a href="#10-删除变量" class="headerlink" title="10. 删除变量"></a>10. 删除变量</h2><p><code>rm(var1)</code></p>
+<h2 id="11-导入csv"><a href="#11-导入csv" class="headerlink" title="11. 导入csv:"></a>11. 导入csv:</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">read.csv(<span class="string">"area.csv"</span>,header = <span class="literal">TRUE</span>, sep=<span class="string">","</span>, row.names=<span class="string">"ID"</span>)</div><div class="line">read.table(<span class="string">"area.csv"</span>,header = <span class="literal">TRUE</span>, sep=<span class="string">","</span>, row.names=<span class="string">"ID"</span>)</div><div class="line">fread(<span class="string">"finaldata.csv"</span>, integer64=<span class="string">"numeric"</span>, na.strings=c(<span class="string">"NULL"</span>,<span class="string">"NA"</span>, <span class="string">""</span>, <span class="string">"\\N"</span>))</div></pre></td></tr></table></figure>
+<h2 id="12-变量标签与值标签"><a href="#12-变量标签与值标签" class="headerlink" title="12. 变量标签与值标签"></a>12. 变量标签与值标签</h2><p><img src="/2017/01/05/chapter02-创建数据集/varFlag1.png" alt=""><br><img src="/2017/01/05/chapter02-创建数据集/varFlag2.png" alt=""></p>
+<h2 id="13-实用函数"><a href="#13-实用函数" class="headerlink" title="13. 实用函数"></a>13. 实用函数</h2><ul>
+<li><code>length(object)</code>         显示对象中元素/成分的数量</li>
+<li><code>dim(object)</code>         显示某个对象的维度</li>
+<li><code>str(object)</code>         显示某个对象的结构</li>
+<li><code>class(object)</code>         显示某个对象的类或类型</li>
+<li><code>mode(object)</code>         显示某个对象的模式</li>
+<li><code>names(object)</code>         显示某对象中各成分的名称</li>
+<li><code>c(objectt,…)</code>         将对象合并入一个向量</li>
+<li><code>cbind(object,…)</code>     按列合并对象</li>
+<li><code>rbind(object, …)</code>    按行合并对象</li>
+<li><code>Object</code>                 输出某个对象</li>
+<li><code>head(object)</code>         列出某个对象的开始部分</li>
+<li><code>tail(object)</code>         列出某个对象的最后部分</li>
+<li><code>ls()</code>                 显示当前的对象列表</li>
+<li><code>rm(object, …)</code>       删除一个或更多个对象。语句rm(list = ls())将删除当前工作环境中的几乎所有对象</li>
+<li><code>newobject &lt;- edit(object)</code> 编辑对象并另存为newobject fix(object) 直接编辑对象</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R数据集/">R数据集</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/05/chapter02-创建数据集/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/05/chapter02-创建数据集/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/05/chapter01-初窥/" title="chapter01 初窥" itemprop="url">chapter01 初窥</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-05T02:56:30.000Z" itemprop="datePublished"> 发表于 2017-01-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="初窥"><a href="#初窥" class="headerlink" title="初窥"></a>初窥</h1><ol>
+<li>c()函数，输入向量，x &lt;- c(1,2,3,4,5)</li>
+<li><p>帮助函数：<br><img src="/2017/01/05/chapter01-初窥/help.png" alt=""></p>
+</li>
+<li><p>工作空间：<br><img src="/2017/01/05/chapter01-初窥/workspace.png" alt=""></p>
+</li>
+<li><p>输入输出：<code>sink(“filename”,append=TRUE,split=TRUE)</code>,将程序的输出定向至文件中，append表示追加，split表示是否同时在屏幕与文件同时输出，不加参数<code>sink()</code>仅指向屏幕，并且释放文件句柄。</p>
+</li>
+<li><p>图形输出使用以下命令：dev.off()释放文件句柄并将输出返回终端。<br><img src="/2017/01/05/chapter01-初窥/imgsave.png" alt=""></p>
+</li>
+<li><p><code>.libPaths()</code>显示库所在的位置; <code>library()</code>显示库中有哪些包。<code>Search()</code>显示那些包已经加载</p>
+</li>
+<li><p>包的管理</p>
+<ul>
+<li><code>install.packages(&quot;xxx&quot;)</code> 安装包</li>
+<li><code>update.packages()</code>       更新包</li>
+<li><code>installed.packages()</code>    已安装的包</li>
+<li><code>library(gclus)</code>          载入包</li>
+<li><code>help(package=&quot;xx&quot;)</code>      查看包的信息与函数</li>
+</ul>
+</li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/初窥/">初窥</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/05/chapter01-初窥/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/05/chapter01-初窥/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/04/chapter09-方差分析/" title="chapter09 方差分析" itemprop="url">chapter09 方差分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-04T02:31:34.000Z" itemprop="datePublished"> 发表于 2017-01-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="方差分析"><a href="#方差分析" class="headerlink" title="方差分析"></a>方差分析</h1><ul>
+<li>当包含的因子是解释变量时，我们关注的重点通常会从预测转向组别差异的分析，这种分析法称作方差分析 （ANOVA）。<h2 id="1、术语"><a href="#1、术语" class="headerlink" title="1、术语"></a>1、术语</h2></li>
+<li>均衡/非均衡设计：不同观测方案的观测数相同/不同</li>
+<li>单因素方差分析：仅有一个类别型变量，一般为组间两水平因子（两种药物）</li>
+<li>单因素组内方差分析：仅有一个类型形变量，一般为组内两水平因子（同种药物，作用时间不同）</li>
+<li>因素方差分析：设计包含两个甚至更多的因子</li>
+<li>混合模型方差分析：因子设计包括组内和组间因子</li>
+<li>混淆因素/干扰因子：你不关心的因素，但其能解释你关心的组间差异</li>
+<li>协方差分析（ANCOVA）：度量并将混淆因子作为协变量考虑在模型中的方差分析</li>
+<li>多元方差分析（MANOVA）：因变量不止一个</li>
+<li>多元协方差分析（MANCOVA）：因变量不止一个的协方差分析</li>
+</ul>
+<h2 id="2、ANOVA模型拟合"><a href="#2、ANOVA模型拟合" class="headerlink" title="2、ANOVA模型拟合"></a>2、ANOVA模型拟合</h2><ul>
+<li>lm函数与aov函数都可以分析方差分析模型，ANOVA和回归本质上都属于广义线性模型<h3 id="2-1、aov-函数"><a href="#2-1、aov-函数" class="headerlink" title="2.1、aov()函数"></a>2.1、aov()函数</h3></li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">aov(formula, data = dataframe)</div><div class="line"><span class="comment">#formula可使用的参数符号见回归（一）</span></div></pre></td></tr></table></figure>
+<p>一些常见的研究设计表达式：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#单因素ANOVA</span></div><div class="line">y ~ A</div><div class="line"><span class="comment">#含单个协变量的单因素ANCOVA </span></div><div class="line">y ~ x + A</div><div class="line"><span class="comment">#双因素ANOVA </span></div><div class="line">y ~ A * B</div><div class="line"><span class="comment">#含两个协变量的双因素ANCOVA </span></div><div class="line">y ~ x1 + x2 + A*B</div><div class="line"><span class="comment">#随机化区组 </span></div><div class="line">y ~ B + A（B是区组因子）</div><div class="line"><span class="comment">#单因素组内ANOVA  Subject标识一个独特的被试者</span></div><div class="line">y ~ A + Error(Subject/A)</div><div class="line"><span class="comment">#含单个组内因子（W）和单个组间因子（B）的重复测量ANOVA </span></div><div class="line">y ~ B * W + Error(Subject/W)</div></pre></td></tr></table></figure>
+<h3 id="2-2、顺序很重要"><a href="#2-2、顺序很重要" class="headerlink" title="2.2、顺序很重要"></a>2.2、顺序很重要</h3><ul>
+<li>例如，对于双因素方差分析，不同的处理方式观测数不同，则y~A<em>B与y~B</em>A结果不同</li>
+</ul>
+<p>假设你正使用如下表达式对数据进行建模：</p>
+<ul>
+<li>Y ~ A + B + A:B</li>
+</ul>
+<p>有三种类型的方法可以分解等式右边各效应对y所解释的方差。</p>
+<ul>
+<li>类型I（序贯型）：效应根据表达式中先出现的效应做调整。 A不做调整， B根据A调整， A:B交互项根据A和B调整。</li>
+<li>类型II（分层型）：效应根据同水平或低水平的效应做调整。 A根据B调整， B依据A调整，A:B交互项同时根据A和B调整。</li>
+<li>类型III（边界型）：每个效应根据模型其他各效应做相应调整。 A根据B和A:B做调整， A:B交互项根据A和B调整。</li>
+</ul>
+<blockquote>
+<p>样本大小越不平衡，效应项的顺序对结果的影响越大。一般来说，越基础性的效应越需要放在表达式前面。具体来讲，首先是协变量，然后是主效应，接着是双因素的交互项，再接着是三因素的交互项，以此类推。</p>
+<ul>
+<li>R默认调用类型I方法，其他软件（比如SAS和SPSS）默认调用类型III方法。</li>
+<li>car包中的Anova()函数（不要与标准anova()函数混淆）提供了使用类型II或类型III方法的选项。</li>
+</ul>
+</blockquote>
+<h2 id="3、单因素方差分析"><a href="#3、单因素方差分析" class="headerlink" title="3、单因素方差分析"></a>3、单因素方差分析</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#单因素方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; <span class="keyword">attach</span>(cholesterol)</div><div class="line">The following objects are masked from cholesterol (pos = <span class="number">4</span>):</div><div class="line"></div><div class="line">    response, trt</div><div class="line"></div><div class="line">&gt; table(trt)<span class="comment">#各组样本大小</span></div><div class="line">trt</div><div class="line"> 1time 2times 4times  drugD  drugE </div><div class="line">    <span class="number">10</span>     <span class="number">10</span>     <span class="number">10</span>     <span class="number">10</span>     <span class="number">10</span> </div><div class="line">&gt; aggregate(response,by=list(trt),FUN=mean)<span class="comment">#计算response的均值</span></div><div class="line">  Group.1        x</div><div class="line"><span class="number">1</span>   1time  <span class="number">5.78197</span></div><div class="line"><span class="number">2</span>  2times  <span class="number">9.22497</span></div><div class="line"><span class="number">3</span>  4times <span class="number">12.37478</span></div><div class="line"><span class="number">4</span>   drugD <span class="number">15.36117</span></div><div class="line"><span class="number">5</span>   drugE <span class="number">20.94752</span></div><div class="line">&gt; aggregate(response,by=list(trt),FUN=sd)<span class="comment">#计算response的标准差</span></div><div class="line">  Group.1        x</div><div class="line"><span class="number">1</span>   1time <span class="number">2.878113</span></div><div class="line"><span class="number">2</span>  2times <span class="number">3.483054</span></div><div class="line"><span class="number">3</span>  4times <span class="number">2.923119</span></div><div class="line"><span class="number">4</span>   drugD <span class="number">3.454636</span></div><div class="line"><span class="number">5</span>   drugE <span class="number">3.345003</span></div><div class="line">&gt; fit&lt;-aov(response~trt)</div><div class="line">&gt; summary(fit)</div><div class="line">            Df Sum Sq Mean Sq <span class="literal">F</span> value   Pr(&gt;<span class="literal">F</span>)    </div><div class="line">trt          <span class="number">4</span> <span class="number">1351.4</span>   <span class="number">337.8</span>   <span class="number">32.43</span> <span class="number">9.82e-13</span> ***</div><div class="line">Residuals   <span class="number">45</span>  <span class="number">468.8</span>    <span class="number">10.4</span>                     </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; <span class="comment">#ANOVA对治疗方式（trt）的F检验非常显著（p&lt;0.0001），说明五种疗法的效果不同</span></div><div class="line">&gt; <span class="keyword">library</span>(gplots)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#图形展示了带有95%的置信区间的各疗法均值，可以清楚看到它们之间的差异</span></div><div class="line">&gt; plotmeans(response~trt, xlab=<span class="string">"Treatment"</span>, ylab=<span class="string">"Response"</span>, main=<span class="string">"Mean Plot"</span>)</div><div class="line">&gt; <span class="keyword">detach</span>(cholesterol)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/均值对比图.png" alt=""></p>
+<h3 id="3-1、多重比较"><a href="#3-1、多重比较" class="headerlink" title="3.1、多重比较"></a>3.1、多重比较</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">TukeyHSD(fit)</div><div class="line">par(las=<span class="number">2</span>)</div><div class="line">par(mar=c(<span class="number">5</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">2</span>))</div><div class="line">plot(TukeyHSD(fit))</div><div class="line"><span class="comment">#图形中置信区间包含0的疗法说明差异不显著（p&gt;0.05）。</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/成对比较图.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(multcomp)</div><div class="line">par(mar=c(<span class="number">5</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">2</span>))</div><div class="line">tuk&lt;-glht(fit,linfct=mcp(trt=<span class="string">"Tukey"</span>))</div><div class="line">plot(cld(tuk, level = <span class="number">.05</span>),col=<span class="string">"lightgrey"</span>)</div><div class="line"><span class="comment">#有相同字母的组差异不显著，图中，1time和2times差异不显著，1time和4times差异显著</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/glht多重比较方法.png" alt=""></p>
+<h3 id="3-2、检验的假设条件"><a href="#3-2、检验的假设条件" class="headerlink" title="3.2、检验的假设条件"></a>3.2、检验的假设条件</h3><ul>
+<li>样本随机独立</li>
+<li>因变量的正态性</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#单因素方差分析中，我们假设因变量服从正态分布，各组方差相等。可以使用Q-Q图来检验正态性假设</span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line">qqPlot(lm(response~trt,data=cholesterol),simulate=<span class="literal">TRUE</span>,main=<span class="string">"Q-Q Plot"</span>, labels=<span class="literal">FALSE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/QQ.png" alt=""></p>
+<ul>
+<li>样本的方差齐性（总体方差相等）</li>
+</ul>
+<blockquote>
+<p><font color="red">注意：</font>F检验对于数据的正态性非常敏感，因此在检验方差齐性的时候，Levene检验, Bartlett检验或者Brown–Forsythe检验的稳健性都要优于F检验。 F检验还可以用于三组或者多组之间的均值比较，但是如果被检验的数据无法满足均是正态分布的条件时，该数据的稳健型会大打折扣，特别是当显著性水平比较低时。但是，如果数据符合正态分布，而且alpha值至少为0.05，该检验的稳健型还是相当可靠的。</p>
+</blockquote>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Bartlett检验</span></div><div class="line">&gt; bartlett.test(response~trt,data=cholesterol)</div><div class="line"></div><div class="line">	Bartlett test of homogeneity of variances</div><div class="line"></div><div class="line">data:  response by trt</div><div class="line">Bartlett K-squared = <span class="number">0.57975</span>, df = <span class="number">4</span>,</div><div class="line">p-value = <span class="number">0.9653</span></div><div class="line"></div><div class="line"><span class="comment">#Bartlett检验表明五组的方差并没有显著不同（p=0.97）。</span></div><div class="line"><span class="comment">#方差齐性分析对离群点非常敏感</span></div><div class="line">&gt; fit&lt;-aov(response~trt)</div><div class="line">&gt; outlierTest(fit) <span class="comment">#识别离群</span></div><div class="line"></div><div class="line">No Studentized residuals with Bonferonni p &lt; <span class="number">0.05</span></div><div class="line">Largest |rstudent|:</div><div class="line">   rstudent unadjusted p-value Bonferonni p</div><div class="line"><span class="number">19</span> <span class="number">2.251149</span>           <span class="number">0.029422</span>           <span class="literal">NA</span></div><div class="line"><span class="comment">#从输出结果来看，并没有证据说明胆固醇数据中含有离群点（当p&gt;1时将产生NA） 。</span></div></pre></td></tr></table></figure>
+<h2 id="4、协方差分析"><a href="#4、协方差分析" class="headerlink" title="4、协方差分析"></a>4、协方差分析</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#协方差分析</span></div><div class="line">&gt; <span class="comment">#怀孕小鼠分组接收不同剂量药物，因变量幼崽体重，协变量怀孕时间</span></div><div class="line">&gt; data(litter,package = <span class="string">"multcomp"</span>)</div><div class="line">&gt; <span class="keyword">attach</span>(litter)</div><div class="line">The following objects are masked from litter (pos = <span class="number">4</span>):</div><div class="line"></div><div class="line">    dose, gesttime, number, weight</div><div class="line"></div><div class="line">&gt; table(dose)</div><div class="line">dose</div><div class="line">  <span class="number">0</span>   <span class="number">5</span>  <span class="number">50</span> <span class="number">500</span> </div><div class="line"> <span class="number">20</span>  <span class="number">19</span>  <span class="number">18</span>  <span class="number">17</span> </div><div class="line">&gt; aggregate(weight,by=list(dose),FUN=mean)<span class="comment">#计算weight的均值</span></div><div class="line">  Group.1        x</div><div class="line"><span class="number">1</span>       <span class="number">0</span> <span class="number">32.30850</span></div><div class="line"><span class="number">2</span>       <span class="number">5</span> <span class="number">29.30842</span></div><div class="line"><span class="number">3</span>      <span class="number">50</span> <span class="number">29.86611</span></div><div class="line"><span class="number">4</span>     <span class="number">500</span> <span class="number">29.64647</span></div><div class="line">&gt; </div><div class="line">&gt; fit&lt;-aov(weight~gesttime+dose)</div><div class="line">&gt; summary(fit)</div><div class="line">            Df Sum Sq Mean Sq <span class="literal">F</span> value  Pr(&gt;<span class="literal">F</span>)   </div><div class="line">gesttime     <span class="number">1</span>  <span class="number">134.3</span>  <span class="number">134.30</span>   <span class="number">8.049</span> <span class="number">0.00597</span> **</div><div class="line">dose         <span class="number">3</span>  <span class="number">137.1</span>   <span class="number">45.71</span>   <span class="number">2.739</span> <span class="number">0.04988</span> * </div><div class="line">Residuals   <span class="number">69</span> <span class="number">1151.3</span>   <span class="number">16.69</span>                   </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; <span class="comment">#我们得到：(a)怀孕时间与幼崽出生体重相关； (b)控制怀孕时间，药物剂量与出生体重相关。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#去除协变量效应后的组均值</span></div><div class="line">&gt; <span class="keyword">library</span>(effects)</div><div class="line">&gt; effect(<span class="string">"dose"</span>,fit)</div><div class="line"></div><div class="line"> dose effect</div><div class="line">dose</div><div class="line">       <span class="number">0</span>        <span class="number">5</span>       <span class="number">50</span>      <span class="number">500</span> </div><div class="line"><span class="number">32.35367</span> <span class="number">28.87672</span> <span class="number">30.56614</span> <span class="number">29.33460</span> </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#multcomp包校验用户自定义的均值假设</span></div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; <span class="comment">#c(3, -1, -1, -1)设定第一组和其他三组的均值进行比较</span></div><div class="line">&gt; contrast&lt;-rbind(<span class="string">"no drug vs. drug"</span>=c(<span class="number">3</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>))</div><div class="line">&gt; summary(glht(fit,linfct=mcp(dose=contrast)))</div><div class="line"></div><div class="line">	 Simultaneous Tests <span class="keyword">for</span> General Linear Hypotheses</div><div class="line"></div><div class="line">Multiple Comparisons of Means: User-defined Contrasts</div><div class="line"></div><div class="line"></div><div class="line">Fit: aov(formula = weight ~ gesttime + dose)</div><div class="line"></div><div class="line">Linear Hypotheses:</div><div class="line">                      Estimate Std. Error t value Pr(&gt;|t|)  </div><div class="line">no drug vs. drug == <span class="number">0</span>    <span class="number">8.284</span>      <span class="number">3.209</span>   <span class="number">2.581</span>    <span class="number">0.012</span> *</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">(Adjusted p values reported -- single-step method)</div><div class="line"></div><div class="line">&gt; <span class="comment">#可以得出未用药组比其他用药条件下的出生体重高的结论</span></div></pre></td></tr></table></figure>
+<h3 id="4-1、检验的假设条件"><a href="#4-1、检验的假设条件" class="headerlink" title="4.1、检验的假设条件"></a>4.1、检验的假设条件</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#假设条件</span></div><div class="line">&gt; <span class="comment">#正态性和同方差性同方差分析</span></div><div class="line">&gt; <span class="comment">#回归斜率相同</span></div><div class="line">&gt; fit2&lt;-aov(weight~gesttime*dose,data = litter)</div><div class="line">&gt; summary(fit2)</div><div class="line">              Df Sum Sq Mean Sq <span class="literal">F</span> value  Pr(&gt;<span class="literal">F</span>)   </div><div class="line">gesttime       <span class="number">1</span>  <span class="number">134.3</span>  <span class="number">134.30</span>   <span class="number">8.289</span> <span class="number">0.00537</span> **</div><div class="line">dose           <span class="number">3</span>  <span class="number">137.1</span>   <span class="number">45.71</span>   <span class="number">2.821</span> <span class="number">0.04556</span> * </div><div class="line">gesttime:dose  <span class="number">3</span>   <span class="number">81.9</span>   <span class="number">27.29</span>   <span class="number">1.684</span> <span class="number">0.17889</span>   </div><div class="line">Residuals     <span class="number">66</span> <span class="number">1069.4</span>   <span class="number">16.20</span>                   </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; <span class="comment">#可以看到交互效应不显著，支持了斜率相等的假设。</span></div></pre></td></tr></table></figure>
+<h3 id="4-2、可视化"><a href="#4-2、可视化" class="headerlink" title="4.2、可视化"></a>4.2、可视化</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#可视化</span></div><div class="line"><span class="keyword">library</span>(HH)</div><div class="line">ancova(weight~gesttime+dose,data=litter)</div><div class="line"><span class="comment">#可以看到，用怀孕时间来预测出生体重的回归线相互平行，只是截距项不同。随着怀</span></div><div class="line"><span class="comment">#孕时间增加，幼崽出生体重也会增加。另外，还可以看到0剂量组截距项最大， 5剂量组截距项最小。</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/covaVisual.png" alt=""></p>
+<h2 id="5、双因素方差分析"><a href="#5、双因素方差分析" class="headerlink" title="5、双因素方差分析"></a>5、双因素方差分析</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#双因素方差分析</span></div><div class="line">&gt; <span class="keyword">attach</span>(ToothGrowth)</div><div class="line">The following objects are masked from ToothGrowth (pos = <span class="number">3</span>):</div><div class="line"></div><div class="line">    dose, len, supp</div><div class="line"></div><div class="line">&gt; table(supp,dose)</div><div class="line">    dose</div><div class="line">supp <span class="number">0.5</span>  <span class="number">1</span>  <span class="number">2</span></div><div class="line">  OJ  <span class="number">10</span> <span class="number">10</span> <span class="number">10</span></div><div class="line">  VC  <span class="number">10</span> <span class="number">10</span> <span class="number">10</span></div><div class="line">&gt; aggregate(len,by=list(supp,dose),FUN=mean)</div><div class="line">  Group.1 Group.2     x</div><div class="line"><span class="number">1</span>      OJ     <span class="number">0.5</span> <span class="number">13.23</span></div><div class="line"><span class="number">2</span>      VC     <span class="number">0.5</span>  <span class="number">7.98</span></div><div class="line"><span class="number">3</span>      OJ     <span class="number">1.0</span> <span class="number">22.70</span></div><div class="line"><span class="number">4</span>      VC     <span class="number">1.0</span> <span class="number">16.77</span></div><div class="line"><span class="number">5</span>      OJ     <span class="number">2.0</span> <span class="number">26.06</span></div><div class="line"><span class="number">6</span>      VC     <span class="number">2.0</span> <span class="number">26.14</span></div><div class="line">&gt; aggregate(len,by=list(supp,dose),FUN=sd)</div><div class="line">  Group.1 Group.2        x</div><div class="line"><span class="number">1</span>      OJ     <span class="number">0.5</span> <span class="number">4.459709</span></div><div class="line"><span class="number">2</span>      VC     <span class="number">0.5</span> <span class="number">2.746634</span></div><div class="line"><span class="number">3</span>      OJ     <span class="number">1.0</span> <span class="number">3.910953</span></div><div class="line"><span class="number">4</span>      VC     <span class="number">1.0</span> <span class="number">2.515309</span></div><div class="line"><span class="number">5</span>      OJ     <span class="number">2.0</span> <span class="number">2.655058</span></div><div class="line"><span class="number">6</span>      VC     <span class="number">2.0</span> <span class="number">4.797731</span></div><div class="line">&gt; fit&lt;-aov(len~supp*dose)</div><div class="line">&gt; summary(fit)</div><div class="line">            Df Sum Sq Mean Sq <span class="literal">F</span> value   Pr(&gt;<span class="literal">F</span>)    </div><div class="line">supp         <span class="number">1</span>  <span class="number">205.4</span>   <span class="number">205.4</span>  <span class="number">12.317</span> <span class="number">0.000894</span> ***</div><div class="line">dose         <span class="number">1</span> <span class="number">2224.3</span>  <span class="number">2224.3</span> <span class="number">133.415</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">supp:dose    <span class="number">1</span>   <span class="number">88.9</span>    <span class="number">88.9</span>   <span class="number">5.333</span> <span class="number">0.024631</span> *  </div><div class="line">Residuals   <span class="number">56</span>  <span class="number">933.6</span>    <span class="number">16.7</span>                     </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; <span class="comment">#可以看到主效应（supp和dose）和交互效应都非常显著</span></div><div class="line"></div><div class="line"><span class="comment">#可视化 推荐interaction2wt可展示双因素、三因素等</span></div><div class="line">interaction2wt(len~supp*dose)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/协方差可视化.png" alt=""></p>
+<h2 id="6、重复测量方差分析"><a href="#6、重复测量方差分析" class="headerlink" title="6、重复测量方差分析"></a>6、重复测量方差分析</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#重复测量方差分析</span></div><div class="line">&gt; <span class="comment">#数据为不同浓度二氧化碳环境下两种植物对其的吸收量</span></div><div class="line">&gt; w1b1&lt;-subset(CO2,Treatment==<span class="string">'chilled'</span>)</div><div class="line">&gt; fit&lt;-aov(uptake~conc*Type+Error(Plant/conc),w1b1)</div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Error: Plant</div><div class="line">          Df Sum Sq Mean Sq <span class="literal">F</span> value  Pr(&gt;<span class="literal">F</span>)   </div><div class="line">Type       <span class="number">1</span> <span class="number">2667.2</span>  <span class="number">2667.2</span>   <span class="number">60.41</span> <span class="number">0.00148</span> **</div><div class="line">Residuals  <span class="number">4</span>  <span class="number">176.6</span>    <span class="number">44.1</span>                   </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Error: Plant:conc</div><div class="line">          Df Sum Sq Mean Sq <span class="literal">F</span> value   Pr(&gt;<span class="literal">F</span>)    </div><div class="line">conc       <span class="number">1</span>  <span class="number">888.6</span>   <span class="number">888.6</span>  <span class="number">215.46</span> <span class="number">0.000125</span> ***</div><div class="line">conc:Type  <span class="number">1</span>  <span class="number">239.2</span>   <span class="number">239.2</span>   <span class="number">58.01</span> <span class="number">0.001595</span> ** </div><div class="line">Residuals  <span class="number">4</span>   <span class="number">16.5</span>     <span class="number">4.1</span>                     </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Error: Within</div><div class="line">          Df Sum Sq Mean Sq <span class="literal">F</span> value Pr(&gt;<span class="literal">F</span>)</div><div class="line">Residuals <span class="number">30</span>    <span class="number">869</span>   <span class="number">28.97</span>               </div><div class="line">&gt; </div><div class="line">&gt; par(las=<span class="number">2</span>)</div><div class="line">&gt; par(mar=c(<span class="number">10</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">2</span>))</div><div class="line">&gt; with(w1b1,interaction.plot(conc,Type,uptake,type=<span class="string">"b"</span>,col=c(<span class="string">"red"</span>,<span class="string">"blue"</span>),pch = c(<span class="number">16</span>,<span class="number">18</span>),main=</div><div class="line">+                              <span class="string">"植物类型和二氧化碳浓度的交互图"</span>))</div><div class="line">&gt; boxplot(uptake~conc*Type,data=w1b1,col=(c(<span class="string">"gold"</span>,<span class="string">"green"</span>)),main=<span class="string">"魁北克与密西西比植物对二氧化碳吸收的交互图"</span>)</div><div class="line">&gt; <span class="comment">#魁北克省的植物比密西西比州的植物二氧化碳吸收率高，而且随着CO2浓度的升高，差异越来越明显。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#注意 该方法为传统的重复测量方差分析。该方法假设任意组内因子的协方差矩阵为球形，并且任意组内因子两水平间的方差之差都相等。</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/组间组内交互图.png" alt=""><br><img src="/2017/01/04/chapter09-方差分析/交互箱图.png" alt=""></p>
+<h2 id="7、多元方差分析"><a href="#7、多元方差分析" class="headerlink" title="7、多元方差分析"></a>7、多元方差分析</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#研究美国谷物中的卡路</span></div><div class="line">&gt; <span class="comment">#里、脂肪和糖含量是否会因为储存架位置的不同而发生变化。其中1代表底层货架， 2代表中层货</span></div><div class="line">&gt; <span class="comment">#架， 3代表顶层货架。卡路里、脂肪和糖含量是因变量，货架是三水平（1、 2、 3）的自变量。</span></div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; <span class="keyword">attach</span>(UScereal)</div><div class="line">The following objects are masked from UScereal (pos = <span class="number">7</span>):</div><div class="line"></div><div class="line">    calories, carbo, fat, fibre, mfr, potassium, protein, shelf, sodium, sugars, vitamins</div><div class="line"></div><div class="line">The following objects are masked from UScereal (pos = <span class="number">9</span>):</div><div class="line"></div><div class="line">    calories, carbo, fat, fibre, mfr, potassium, protein, shelf, sodium, sugars, vitamins</div><div class="line"></div><div class="line">&gt; y&lt;-cbind(calories,fat,sugars)</div><div class="line">&gt; aggregate(y,by=list(shelf),FUN=mean)</div><div class="line">  Group.1 calories       fat    sugars</div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">119.4774</span> <span class="number">0.6621338</span>  <span class="number">6.295493</span></div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">129.8162</span> <span class="number">1.3413488</span> <span class="number">12.507670</span></div><div class="line"><span class="number">3</span>       <span class="number">3</span> <span class="number">180.1466</span> <span class="number">1.9449071</span> <span class="number">10.856821</span></div><div class="line">&gt; fit&lt;-manova(y~shelf)</div><div class="line">&gt; summary(fit)</div><div class="line">          Df  Pillai approx <span class="literal">F</span> num Df den Df  Pr(&gt;<span class="literal">F</span>)   </div><div class="line">shelf      <span class="number">1</span> <span class="number">0.19594</span>    <span class="number">4.955</span>      <span class="number">3</span>     <span class="number">61</span> <span class="number">0.00383</span> **</div><div class="line">Residuals <span class="number">63</span>                                          </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; </div><div class="line">&gt; summary.aov(fit)<span class="comment">#输出单变量结果</span></div><div class="line"> Response calories :</div><div class="line">            Df Sum Sq Mean Sq <span class="literal">F</span> value    Pr(&gt;<span class="literal">F</span>)    </div><div class="line">shelf        <span class="number">1</span>  <span class="number">45313</span>   <span class="number">45313</span>  <span class="number">13.995</span> <span class="number">0.0003983</span> ***</div><div class="line">Residuals   <span class="number">63</span> <span class="number">203982</span>    <span class="number">3238</span>                      </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line"> Response fat :</div><div class="line">            Df  Sum Sq Mean Sq <span class="literal">F</span> value   Pr(&gt;<span class="literal">F</span>)   </div><div class="line">shelf        <span class="number">1</span>  <span class="number">18.421</span> <span class="number">18.4214</span>   <span class="number">7.476</span> <span class="number">0.008108</span> **</div><div class="line">Residuals   <span class="number">63</span> <span class="number">155.236</span>  <span class="number">2.4641</span>                    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line"> Response sugars :</div><div class="line">            Df  Sum Sq Mean Sq <span class="literal">F</span> value  Pr(&gt;<span class="literal">F</span>)  </div><div class="line">shelf        <span class="number">1</span>  <span class="number">183.34</span>  <span class="number">183.34</span>   <span class="number">5.787</span> <span class="number">0.01909</span> *</div><div class="line">Residuals   <span class="number">63</span> <span class="number">1995.87</span>   <span class="number">31.68</span>                  </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div></pre></td></tr></table></figure>
+<h3 id="7-1、评估假设检验"><a href="#7-1、评估假设检验" class="headerlink" title="7.1、评估假设检验"></a>7.1、评估假设检验</h3><ul>
+<li>多元正太性</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">center&lt;-colMeans(y)</div><div class="line">n&lt;-nrow(y)</div><div class="line">p&lt;-ncol(y)</div><div class="line">cov&lt;-cov(y)</div><div class="line">d&lt;-mahalanobis(y,center,cov)</div><div class="line">coord&lt;-qqplot(qchisq(ppoints(n),df=p),d,main=<span class="string">"Q-Q Plot"</span>,ylab=<span class="string">"Maalanobis D2"</span>)</div><div class="line">abline(a=<span class="number">0</span>,b=<span class="number">1</span>)</div><div class="line">identify(coord$x,coord$y,labels=row.names(UScereal))</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/04/chapter09-方差分析/多元正太性.png" alt=""></p>
+<ul>
+<li><p>方差-协方差矩阵同质性</p>
+<blockquote>
+<p>暂时没找到合适的方法来进行检验</p>
+</blockquote>
+</li>
+<li><p>多元离群点</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(mvoutlier)</div><div class="line">aq.plot(y)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="7-2、稳健多元方差分析"><a href="#7-2、稳健多元方差分析" class="headerlink" title="7.2、稳健多元方差分析"></a>7.2、稳健多元方差分析</h3><ul>
+<li>多元正态性或方差-协方差同质性不满足或担心离群点时</li>
+<li>rrcov包中Wilks.test(y.dataframe,x,method=”mcp”)</li>
+<li>vegan包中的adonis()<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#稳健多元方差分析</span></div><div class="line"><span class="keyword">library</span>(MASS)</div><div class="line"><span class="keyword">attach</span>(UScereal)</div><div class="line"><span class="comment">#稳健多元单因素方差分析</span></div><div class="line"><span class="keyword">library</span>(rrcov)</div><div class="line">y&lt;-cbind(calories,fat,sugars)</div><div class="line">Wilks.test(y,shelf,method=<span class="string">"mcd"</span>)<span class="comment">#性能较慢</span></div><div class="line"><span class="comment">#非参数多元方差分析</span></div><div class="line"><span class="keyword">library</span>(vegan)</div><div class="line">adonis(y~shelf)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="8、用回归做ANOVA"><a href="#8、用回归做ANOVA" class="headerlink" title="8、用回归做ANOVA"></a>8、用回归做ANOVA</h2><ul>
+<li>当lm()函数碰到因子时，它会用一系列与因子水平相对应的数值型对照变量来代替因子。（s1,s2,s3=&gt;(0,0,0),(0,1,0),(0,0,1)）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>创建方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>contr.helmert</td>
+<td>第二个水平对照第一个水平，第三个水平对照前两个的均值，第四个水平对照前三个的均值，以此类推</td>
+</tr>
+<tr>
+<td>contr.poly</td>
+<td>基于正交多项式的对照，用于趋势分析（线性、二次、三次等）和等距水平的有序因子</td>
+</tr>
+<tr>
+<td>contr.sum</td>
+<td>对照变量之和限制为0。也称作偏差找对，对各水平的均值与所有水平的均值进行比较</td>
+</tr>
+<tr>
+<td>contr.treatment</td>
+<td>各水平对照基线水平（默认第一个水平）。也称作虚拟编码</td>
+</tr>
+<tr>
+<td>contr.SAS</td>
+<td>类似于contr.treatment，只是基线水平变成了最后一个水平。生成的系数类似于大部分SAS过程中使用的对照变量</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>fit.lm &lt;- lm(response ~ trt, data=cholesterol, contrasts=”contr.SAS”)的contrasts参数来改变创建方法，默认的创建方法为contr.treatment) <figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##使用回归进行方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; levels(cholesterol$trt)</div><div class="line">[<span class="number">1</span>] <span class="string">"1time"</span>  <span class="string">"2times"</span> <span class="string">"4times"</span> <span class="string">"drugD"</span>  <span class="string">"drugE"</span> </div><div class="line">&gt; fit.aov &lt;- aov(response ~ trt, data=cholesterol)</div><div class="line">&gt; summary(fit.aov)</div><div class="line">            Df Sum Sq Mean Sq <span class="literal">F</span> value   Pr(&gt;<span class="literal">F</span>)    </div><div class="line">trt          <span class="number">4</span> <span class="number">1351.4</span>   <span class="number">337.8</span>   <span class="number">32.43</span> <span class="number">9.82e-13</span> ***</div><div class="line">Residuals   <span class="number">45</span>  <span class="number">468.8</span>    <span class="number">10.4</span>                     </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line">&gt; </div><div class="line">&gt; fit.lm &lt;- lm(response ~ trt, data=cholesterol)</div><div class="line">&gt; summary(fit.lm) <span class="comment">#二者一致</span></div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = response ~ trt, data = cholesterol)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">6.5418</span> -<span class="number">1.9672</span> -<span class="number">0.0016</span>  <span class="number">1.8901</span>  <span class="number">6.6008</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept)    <span class="number">5.782</span>      <span class="number">1.021</span>   <span class="number">5.665</span> <span class="number">9.78e-07</span> ***</div><div class="line">trt2times      <span class="number">3.443</span>      <span class="number">1.443</span>   <span class="number">2.385</span>   <span class="number">0.0213</span> *  </div><div class="line">trt4times      <span class="number">6.593</span>      <span class="number">1.443</span>   <span class="number">4.568</span> <span class="number">3.82e-05</span> ***</div><div class="line">trtdrugD       <span class="number">9.579</span>      <span class="number">1.443</span>   <span class="number">6.637</span> <span class="number">3.53e-08</span> ***</div><div class="line">trtdrugE      <span class="number">15.166</span>      <span class="number">1.443</span>  <span class="number">10.507</span> <span class="number">1.08e-13</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">3.227</span> on <span class="number">45</span> degrees of freedom</div><div class="line">Multiple R-squared:  <span class="number">0.7425</span>,	Adjusted R-squared:  <span class="number">0.7196</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">32.43</span> on <span class="number">4</span> and <span class="number">45</span> DF,  p-value: <span class="number">9.819e-13</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/方差分析/">方差分析</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/04/chapter09-方差分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/04/chapter09-方差分析/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/15/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/17/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

@@ -1,0 +1,778 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/10/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/04/chapter11-中级绘图/" title="chapter11 中级绘图" itemprop="url">chapter11 中级绘图</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-04T02:45:45.000Z" itemprop="datePublished"> 发表于 2017-02-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="中级绘图"><a href="#中级绘图" class="headerlink" title="中级绘图"></a>中级绘图</h1><h2 id="1、散点图"><a href="#1、散点图" class="headerlink" title="1、散点图"></a>1、散点图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#散点图</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">plot(wt,mpg,main=<span class="string">"基本散点图：英里数与车重"</span>,xlab = <span class="string">"车重（lbs/1000）"</span>,ylab=<span class="string">"一加仑的公里数"</span>,pch=<span class="number">19</span>)</div><div class="line"><span class="comment">#添加一条拟合的直线</span></div><div class="line">abline(lm(mpg~wt),col=<span class="string">"red"</span>,lwd=<span class="number">2</span>,lty=<span class="number">1</span>)</div><div class="line"><span class="comment">#添加一条拟合的平滑曲线</span></div><div class="line">lines(lowess(wt,mpg),col=<span class="string">"blue"</span>,lwd=<span class="number">2</span>,lty=<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img1.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(car)</div><div class="line">scatterplot(mpg~wt|cyl,data=mtcars,lwd=<span class="number">2</span>,main=<span class="string">"不同气缸英里数与车重"</span>,xlab=<span class="string">"车重（lbs/1000）"</span>,ylab=<span class="string">"每加仑距离"</span>,legend.plot=<span class="literal">TRUE</span>,id.method=<span class="string">"identify"</span>,labels=row.names(mtcars),boxplots=<span class="string">"xy"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img2.png" alt=""></p>
+<h3 id="1-1、散点矩阵图"><a href="#1-1、散点矩阵图" class="headerlink" title="1.1、散点矩阵图"></a>1.1、散点矩阵图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#散点图矩阵</span></div><div class="line">plot(~mpg+disp+drat+wt,data=mtcars)</div><div class="line"><span class="comment">#upper.panel = NULL只展现下三角，图形是对称的</span></div><div class="line">pairs(~mpg+disp+drat+wt,data=mtcars,upper.panel = <span class="literal">NULL</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img3.png" alt=""><br><img src="/2017/02/04/chapter11-中级绘图/img4.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#car包中的函数</span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line"><span class="comment">#主对角线添加了核密度曲线和轴须图</span></div><div class="line">scatterplotMatrix(~mpg+disp+drat+wt,data=mtcars,spread=<span class="literal">FALSE</span>,lty.smooth=<span class="number">2</span>,main=<span class="string">"散点矩阵图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img5.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#根据某变量进行分组展现by.groups = TRUE根据各个子集生成拟合图</span></div><div class="line">scatterplotMatrix(~mpg+disp+drat+wt|cyl,data=mtcars,by.groups = <span class="literal">TRUE</span>,diagonal=<span class="string">"histogram"</span>,main=<span class="string">"散点矩阵图"</span>)</div></pre></td></tr></table></figure></p>
+<p><img src="/2017/02/04/chapter11-中级绘图/img6.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(gclus)</div><div class="line">mydata&lt;-mtcars[c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>)]</div><div class="line"><span class="comment">#获取相关系数的绝对值矩阵</span></div><div class="line">mydata.corr&lt;-abs(cor(mydata))</div><div class="line"><span class="comment">#根据相关系数获取颜色矩阵</span></div><div class="line">mycolors&lt;-dmat.color(mydata.corr)</div><div class="line"><span class="comment">#根据相关系数重排变量</span></div><div class="line">myorder&lt;-order.single(mydata.corr)</div><div class="line"></div><div class="line">cpairs(mydata,myorder,panel.colors = mycolors,gap=<span class="number">.5</span>,main=<span class="string">"根据相关性排序与着色图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img7.png" alt=""></p>
+<h3 id="1-2、高密度散点图"><a href="#1-2、高密度散点图" class="headerlink" title="1.2、高密度散点图"></a>1.2、高密度散点图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">n&lt;-<span class="number">10000</span></div><div class="line">c1&lt;-matrix(rnorm(n,mean = <span class="number">0</span>,sd=<span class="number">0.5</span>),ncol=<span class="number">2</span>)</div><div class="line">c2&lt;-matrix(rnorm(n,mean = <span class="number">3</span>,sd=<span class="number">2</span>),ncol=<span class="number">2</span>)</div><div class="line"></div><div class="line">mydata&lt;-rbind(c1,c2)</div><div class="line">mydata&lt;-as.data.frame(mydata)</div><div class="line">names(mydata)&lt;-c(<span class="string">"x"</span>,<span class="string">"y"</span>)</div><div class="line">with(mydata,plot(x,y,pch=<span class="number">19</span>,main=<span class="string">"Scatter Plot with 10000 points"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img8.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">with(mydata,smoothScatter(x,y,main=<span class="string">"Scatter Plot with 10000 points"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img9.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(hexbin)</div><div class="line">with(mydata,&#123;</div><div class="line">  bin&lt;-hexbin(x,y,xbins=<span class="number">50</span>)</div><div class="line">  plot(bin,main=<span class="string">"六边形散点图"</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img10.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(IDPmisc)</div><div class="line">with(mydata,iplot(x,y,main=<span class="string">"颜色散点图"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img11.png" alt=""></p>
+<h3 id="1-3、三维散点图"><a href="#1-3、三维散点图" class="headerlink" title="1.3、三维散点图"></a>1.3、三维散点图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(scatterplot3d)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">scatterplot3d(wt,disp,mpg,main=<span class="string">"三维散点图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img12.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#增加垂线</span></div><div class="line">scatterplot3d(wt,disp,mpg,pch=<span class="number">16</span>,highlight.3d=<span class="literal">TRUE</span>,type=<span class="string">"h"</span>,main=<span class="string">"三维散点图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img13.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#增加回归面</span></div><div class="line">s3d&lt;-scatterplot3d(wt,disp,mpg,pch=<span class="number">16</span>,highlight.3d=<span class="literal">TRUE</span>,type=<span class="string">"h"</span>,main=<span class="string">"三维散点图与回归面"</span>)</div><div class="line">fit&lt;-lm(mpg~wt+disp)</div><div class="line">s3d$plane3d(fit)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img14.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#交互式可旋转三维图形</span></div><div class="line"><span class="keyword">library</span>(rgl)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">plot3d(wt,disp,mpg,col=<span class="string">"red"</span>,size=<span class="number">5</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img15.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#另一种交互图，更好</span></div><div class="line"><span class="keyword">library</span>(Rcmdr)</div><div class="line">scatter3d(wt,disp,mpg)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img16.png" alt=""></p>
+<h3 id="1-4、气泡图"><a href="#1-4、气泡图" class="headerlink" title="1.4、气泡图"></a>1.4、气泡图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##气泡图</span></div><div class="line">r&lt;-sqrt(disp/pi)</div><div class="line">symbols(wt,mpg,circle=r,inches = <span class="number">0.30</span>,fg=<span class="string">"white"</span>,bg=<span class="string">"lightblue"</span>,main=<span class="string">"气泡图，比例为排量"</span>,</div><div class="line">        ylab=<span class="string">"每加仑公里数"</span>,xlab=<span class="string">"自重（lbs/1000）"</span>)</div><div class="line">text(wt,mpg,rownames(mtcars),cex=<span class="number">0.6</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img17.png" alt=""></p>
+<h2 id="2、折线图"><a href="#2、折线图" class="headerlink" title="2、折线图"></a>2、折线图</h2><ul>
+<li>大多数内容第三章已经说明</li>
+</ul>
+<p><img src="/2017/02/04/chapter11-中级绘图/img18.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#转换为数值型</span></div><div class="line">Orange$Tree&lt;-as.numeric(Orange$Tree)</div><div class="line">ntrees&lt;-max(Orange$Tree)</div><div class="line"></div><div class="line">xrange&lt;-range(Orange$age)</div><div class="line">yrange&lt;-range(Orange$circumference)</div><div class="line"></div><div class="line">plot(xrange,yrange,type=<span class="string">"n"</span>,</div><div class="line">     xlab=<span class="string">"树龄/天"</span>,ylab=<span class="string">"直径/mm"</span>)</div><div class="line"></div><div class="line">colors&lt;-rainbow(ntrees)</div><div class="line">linetype&lt;-c(<span class="number">1</span>:ntrees)</div><div class="line">plotchar&lt;-seq(<span class="number">18</span>,<span class="number">18</span>+ntrees,<span class="number">1</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:ntrees)&#123;</div><div class="line">  tree&lt;-subset(Orange,Tree==i)</div><div class="line">  lines(tree$age,tree$circumference,</div><div class="line">        type=<span class="string">"b"</span>,lwd=<span class="number">2</span>,</div><div class="line">        lty=linetype[i],</div><div class="line">        col=colors[i],</div><div class="line">        pch=plotchar[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line">title(<span class="string">"树图"</span>,<span class="string">"折线示例"</span>)</div><div class="line"></div><div class="line">legend(xrange[<span class="number">1</span>],yrange[<span class="number">2</span>],</div><div class="line">       <span class="number">1</span>:ntrees,cex=<span class="number">0.8</span>,col=colors,pch=plotchar,lty=linetype,title=<span class="string">"Tree"</span>)</div></pre></td></tr></table></figure></p>
+<p><img src="/2017/02/04/chapter11-中级绘图/img19.png" alt=""></p>
+<h2 id="3、相关图"><a href="#3、相关图" class="headerlink" title="3、相关图"></a>3、相关图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##相关图</span></div><div class="line"><span class="keyword">library</span>(corrgram)</div><div class="line"><span class="comment">#order = TRUE矩阵行列均使用主成分分析进行了重新排序</span></div><div class="line"><span class="comment">#lower.panel与upper.panel设置下与上对角线元素类型</span></div><div class="line"><span class="comment">#panel.pie 用饼图的填充比例来表示相关性大小</span></div><div class="line"><span class="comment">#panel.shade 用阴影的深度来表示相关性</span></div><div class="line"><span class="comment">#panel.ellipse 绘制置信椭圆和平滑拟合曲线</span></div><div class="line"><span class="comment">#panel.pts 绘制散点图</span></div><div class="line"></div><div class="line"><span class="comment">#text.panel与diag.panel控制主对角线元素类型</span></div><div class="line"><span class="comment">#panel.minmax 输出变量的最大最小值</span></div><div class="line"><span class="comment">#panel.txt 输出的变量名字</span></div><div class="line">corrgram(mtcars,order=<span class="literal">TRUE</span>,lower.panel = panel.shade,upper.panel = panel.pie,text.panel = panel.txt,</div><div class="line">         main=<span class="string">"相关系数图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img20.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">corrgram(mtcars,order=<span class="literal">TRUE</span>,</div><div class="line">         lower.panel = panel.ellipse,</div><div class="line">         upper.panel = panel.pts,</div><div class="line">         text.panel = panel.txt,</div><div class="line">         diag.panel = panel.minmax,</div><div class="line">         main=<span class="string">"相关系数图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img21.png" alt=""></p>
+<h2 id="4、马赛克图"><a href="#4、马赛克图" class="headerlink" title="4、马赛克图"></a>4、马赛克图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#马赛克图</span></div><div class="line"><span class="keyword">library</span>(vcd)</div><div class="line">ftable(Titanic)</div><div class="line"><span class="comment">#马赛克图隐含着大量的数据信息。例如： </span></div><div class="line"><span class="comment">#(1)从船员到头等舱，存活率陡然提高；</span></div><div class="line"><span class="comment">#(2)大部分孩子都处在三等舱和二等舱中；</span></div><div class="line"><span class="comment">#(3)在头等舱中的大部分女性都存活了下来，而三等舱中仅有一半女性存活；</span></div><div class="line"><span class="comment">#(4)船员中女性很少，导致该组的Survived标签重叠（图底部的No和Yes）。</span></div><div class="line">mosaic(Titanic,shade = <span class="literal">TRUE</span>,legend=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/04/chapter11-中级绘图/img22.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/中级绘图/">中级绘图</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/04/chapter11-中级绘图/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/04/chapter11-中级绘图/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/03/chapter10-功效分析/" title="chapter10 功效分析" itemprop="url">chapter10 功效分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-03T06:33:08.000Z" itemprop="datePublished"> 发表于 2017-02-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="功效分析"><a href="#功效分析" class="headerlink" title="功效分析"></a>功效分析</h1><ul>
+<li>在给定置信度的情况下，判断检测到给定效应值时所需的样本量。反过来，它也可以帮助你在给定置信度水平情况下，计算在某样本量内能检测到给定效应值的概率。</li>
+</ul>
+<h2 id="1、假设检验速览"><a href="#1、假设检验速览" class="headerlink" title="1、假设检验速览"></a>1、假设检验速览</h2><ul>
+<li>样本大小: 实验设计中每种条件/组中观测的数目</li>
+<li>显著性水平: I型错误的概率来定义。也可以把它看做是发现效应不发生的概率</li>
+<li>功效: 通过1减去II型错误的概率来定义。可以把它看做是真实效应发生的概率。</li>
+<li>效应值: 指的是在备择或研究假设下效应的量。效应值的表达式依赖于假设检验中使用的统计方法</li>
+</ul>
+<p><strong>功效分析就是给定三个值得情况下，求得另外一个值</strong></p>
+<h2 id="2、用-pwr-包做功效分析"><a href="#2、用-pwr-包做功效分析" class="headerlink" title="2、用 pwr 包做功效分析"></a>2、用 pwr 包做功效分析</h2><h3 id="2-1、t检验"><a href="#2-1、t检验" class="headerlink" title="2.1、t检验"></a>2.1、t检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pwr.t.test(n=,d=,sig.level=,power=,alternative=)</div><div class="line"><span class="comment">#n: 样本大小</span></div><div class="line"><span class="comment">#d: 效应值,d=(u1-u2)/o, u1与u2为两组均值，o为标准差</span></div><div class="line"><span class="comment">#sig.level: 显著水平</span></div><div class="line"><span class="comment">#power: 功效水平</span></div><div class="line"><span class="comment">#type: 检验类型，双样本t检验（two.sample）、单样本t检验（one.sample）或相依样本t检验（paired）。默认为双样本t检验。</span></div><div class="line"><span class="comment">#alternative: 指统计检验是双侧检验（two.sided）还是单侧检验（less或greater）。默认为双侧检验</span></div></pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##t检验</span></div><div class="line">&gt; <span class="keyword">library</span>(pwr)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#实例1、手机与驾驶反应时间实验，根据过去经验知道反应时间的标准差为1.25s,当前认为相差1s表示巨大差异，此时可</span></div><div class="line">&gt; <span class="comment">#设定d=1/1.25=0.8或更大，如果差异存在，你希望90%把握检测到，由于随机变异性存在，希望95%把握不会误报差异显著</span></div><div class="line">&gt; pwr.t.test(d=<span class="number">0.8</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>,type = <span class="string">"two.sample"</span>,alternative = <span class="string">"two.side"</span>)</div><div class="line"></div><div class="line">     Two-sample t test power calculation </div><div class="line"></div><div class="line">              n = <span class="number">33.82554</span></div><div class="line">              d = <span class="number">0.8</span></div><div class="line">      sig.level = <span class="number">0.05</span></div><div class="line">          power = <span class="number">0.9</span></div><div class="line">    alternative = two.sided</div><div class="line"></div><div class="line">NOTE: n is number <span class="keyword">in</span> *each* group</div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#结果显示需要每组34个受试者，一共2组68人</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#实例2、如果在比较实例1的2种情况时候，想检测到总体均值0.5个标准差的差异，将误报的几率限制在%1，只有40个受试者，</span></div><div class="line">&gt; <span class="comment">#那么能检测到这种差异的概率是多大？</span></div><div class="line">&gt; pwr.t.test(n=<span class="number">20</span>,d=<span class="number">0.5</span>,sig.level = <span class="number">0.01</span>,type = <span class="string">"two.sample"</span>,alternative = <span class="string">"two.side"</span>)</div><div class="line"></div><div class="line">     Two-sample t test power calculation </div><div class="line"></div><div class="line">              n = <span class="number">20</span></div><div class="line">              d = <span class="number">0.5</span></div><div class="line">      sig.level = <span class="number">0.01</span></div><div class="line">          power = <span class="number">0.1439551</span></div><div class="line">    alternative = two.sided</div><div class="line"></div><div class="line">NOTE: n is number <span class="keyword">in</span> *each* group</div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#结果表明只有14%的把握能检测到这种差异，即差值为0.5*1.25=0.625s,86%的可能性会错过，此时考虑是否应该进行该测试</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#如果两组的样本大小不同，使用：</span></div><div class="line">&gt; pwr.t2n.test(n1=<span class="number">20</span>,n2=<span class="number">30</span>,d=<span class="number">0.5</span>,sig.level = <span class="number">0.01</span>,alternative = <span class="string">"two.side"</span>)</div><div class="line"></div><div class="line">     t test power calculation </div><div class="line"></div><div class="line">             n1 = <span class="number">20</span></div><div class="line">             n2 = <span class="number">30</span></div><div class="line">              d = <span class="number">0.5</span></div><div class="line">      sig.level = <span class="number">0.01</span></div><div class="line">          power = <span class="number">0.183246</span></div><div class="line">    alternative = two.sided</div></pre></td></tr></table></figure>
+<h3 id="2-2、方差分析"><a href="#2-2、方差分析" class="headerlink" title="2.2、方差分析"></a>2.2、方差分析</h3><p>效应值f计算公式：<br><img src="/2017/02/03/chapter10-功效分析/img1.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##方差分析</span></div><div class="line">&gt; <span class="comment">#pwr.anova.test(k=组数,n=各组样本大小,f=效应值,sig.level=显著水平,power=功效)</span></div><div class="line">&gt; pwr.anova.test(k=<span class="number">5</span>,f=<span class="number">0.25</span>,sig.level=<span class="number">0.05</span>,power=<span class="number">0.8</span>)</div><div class="line"></div><div class="line">     Balanced one-way analysis of variance power calculation </div><div class="line"></div><div class="line">              k = <span class="number">5</span></div><div class="line">              n = <span class="number">39.1534</span></div><div class="line">              f = <span class="number">0.25</span></div><div class="line">      sig.level = <span class="number">0.05</span></div><div class="line">          power = <span class="number">0.8</span></div><div class="line"></div><div class="line">NOTE: n is number <span class="keyword">in</span> each group</div><div class="line"></div><div class="line">&gt; <span class="comment">#此方法需要估计同方差时5个组的均值</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-3、相关性"><a href="#2-3、相关性" class="headerlink" title="2.3、相关性"></a>2.3、相关性</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##相关性</span></div><div class="line">&gt; <span class="comment">#pwr.r.test(n=观测数,r=效应值（线性相关系数）,sig.level = 显著水平,power = 功效,alternative =c("two.sided", "less","greater"))</span></div><div class="line">&gt; <span class="comment">#抑郁与孤独的关系，设定相关系数为0.25,大于0.25表示有关系拒绝零假设，显著水平为0.05,90%的信心拒绝零假设，</span></div><div class="line">&gt; pwr.r.test(r=<span class="number">0.25</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>,alternative =<span class="string">"greater"</span>)</div><div class="line"></div><div class="line">     approximate correlation power calculation (arctangh transformation) </div><div class="line"></div><div class="line">              n = <span class="number">133.2803</span></div><div class="line">              r = <span class="number">0.25</span></div><div class="line">      sig.level = <span class="number">0.05</span></div><div class="line">          power = <span class="number">0.9</span></div><div class="line">    alternative = greater</div><div class="line"></div><div class="line">&gt; <span class="comment">#需要134个受试者</span></div></pre></td></tr></table></figure>
+<h3 id="2-4、线性模型"><a href="#2-4、线性模型" class="headerlink" title="2.4、线性模型"></a>2.4、线性模型</h3><p>效应值f2计算公式：<br><img src="/2017/02/03/chapter10-功效分析/img2.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##线性模型</span></div><div class="line">&gt; <span class="comment">#pwr.f2.test(u=分子自由度,v=分母自由度,f2=效应值,sig.level = ,power = )</span></div><div class="line">&gt; <span class="comment">#当要评价一组预测变量对结果的影响程度时，适宜用第一个公式来计算f2；当要评价一组预</span></div><div class="line">&gt; <span class="comment">#测变量对结果的影响超过第二组变量（协变量）多少时，适宜用第二个公式。</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#现假设你想研究老板的领导风格对员工满意度的影响，是否超过薪水和工作小费对员工满意度的影响。</span></div><div class="line">&gt; <span class="comment">#领导风格可用四个变量来评估，薪水和小费与三个变量有关。过去的经验表明，薪水</span></div><div class="line">&gt; <span class="comment">#和小费能够解释约30%的员工满意度的方差。而从现实出发，领导风格至少能解释35%的方差。</span></div><div class="line">&gt; <span class="comment">#假定显著性水平为0.05，那么在90%的置信度情况下，你需要多少受试者才能得到这样的方差贡</span></div><div class="line">&gt; <span class="comment">#献率呢？</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#此时u=3(总预测变量-集合B预测变量)，f2=(0.35-0.3)/(1-0.35)=0.0769</span></div><div class="line">&gt; pwr.f2.test(u=<span class="number">3</span>,f2=<span class="number">0.0769</span>,sig.level =<span class="number">0.05</span> ,power = <span class="number">0.9</span>)</div><div class="line"></div><div class="line">     Multiple regression power calculation </div><div class="line"></div><div class="line">              u = <span class="number">3</span></div><div class="line">              v = <span class="number">184.2426</span></div><div class="line">             f2 = <span class="number">0.0769</span></div><div class="line">      sig.level = <span class="number">0.05</span></div><div class="line">          power = <span class="number">0.9</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多元回归中，分母的自由度等于N- k- 1， N是总观测数， k是预测变量数。本例中， N-7-1= 185，即需要样本大小N = 185 + 7 + 1 = 193</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-5、比例检验"><a href="#2-5、比例检验" class="headerlink" title="2.5、比例检验"></a>2.5、比例检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">##比例检验</span></div><div class="line">&gt; <span class="comment">#pwr.2p.test(h=效应值,n=各组相同的样本量,sig.level = ,power = )</span></div><div class="line">&gt; <span class="comment">#当n不同时候，使用</span></div><div class="line">&gt; <span class="comment">#pwr.2p.test(h=效应值,n1=,n2=,sig.level = ,power = )</span></div><div class="line">&gt; <span class="comment">#h使用ES.h(p1,p2)计算</span></div><div class="line">&gt; <span class="comment">#假定你对某流行药物能缓解60%使用者的症状感到怀疑。而一种更贵的新药如果能缓解65%</span></div><div class="line">&gt; <span class="comment">#使用者的症状，就会被投放到市场中。此时，在研究中你需要多少受试者才能够检测到两种药物</span></div><div class="line">&gt; <span class="comment">#存在这一特定的差异？</span></div><div class="line">&gt; pwr.2p.test(h=ES.h(<span class="number">0.65</span>,<span class="number">0.6</span>),sig.level = <span class="number">0.05</span>,power=<span class="number">0.9</span>,alternative = <span class="string">"greater"</span>)</div><div class="line"></div><div class="line">     Difference of proportion power calculation <span class="keyword">for</span> binomial distribution (arcsine transformation) </div><div class="line"></div><div class="line">              h = <span class="number">0.1033347</span></div><div class="line">              n = <span class="number">1604.007</span></div><div class="line">      sig.level = <span class="number">0.05</span></div><div class="line">          power = <span class="number">0.9</span></div><div class="line">    alternative = greater</div><div class="line"></div><div class="line">NOTE: same sample sizes</div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#每组1605个人</span></div></pre></td></tr></table></figure>
+<h3 id="2-6、卡方检验"><a href="#2-6、卡方检验" class="headerlink" title="2.6、卡方检验"></a>2.6、卡方检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##卡方检验</span></div><div class="line"><span class="comment">#常常用来评价两个类别型变量的关系。典型的零假设是变量之间独立，备择假设是不独立。 </span></div><div class="line">pwr.chisq.test(w=效应值,N=总样本大小,df=自由度,sig.level = ,power = )</div><div class="line"><span class="comment">#ES.w2(P)可以用来计算双因素列联表备择假设的效应值，P为一个假设的双因素概率表</span></div><div class="line"><span class="comment">#假设你想研究人种与工作晋升的关系。你预期样本中70%是白种人， 10%是美国黑人， 20%西班牙裔人。而且，你认为相比30%的美国黑人和50%的西班牙裔人， 60%的</span></div><div class="line"><span class="comment">#白种人更容易晋升。晋升概率如表所示。</span></div><div class="line"><span class="comment">#|人种|晋升比例|未晋升|</span></div><div class="line"><span class="comment">#|白  |0.42    |  0.28|</span></div><div class="line"><span class="comment">#|黑  |0.03    |  0.07|</span></div><div class="line"><span class="comment">#|西裔|0.10    |  0.10|</span></div><div class="line"></div><div class="line">prob&lt;-matrix(c(<span class="number">0.42</span>,<span class="number">0.28</span>,<span class="number">0.03</span>,<span class="number">0.07</span>,<span class="number">0.10</span>,<span class="number">0.10</span>),byrow = <span class="literal">TRUE</span>,nrow = <span class="number">3</span>)</div><div class="line">ES.w2(prob)</div><div class="line">pwr.chisq.test(w=ES.w2(prob),df=<span class="number">2</span>,sig.level = <span class="number">0.05</span>,power = <span class="number">0.9</span>)</div><div class="line"></div><div class="line"><span class="comment">#需要369个测试者</span></div></pre></td></tr></table></figure>
+<h2 id="3、绘制功效图形"><a href="#3、绘制功效图形" class="headerlink" title="3、绘制功效图形"></a>3、绘制功效图形</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##绘制功效分析图形</span></div><div class="line"><span class="keyword">library</span>(pwr)</div><div class="line"><span class="comment">#生成一系列相关系数和功效值</span></div><div class="line">r&lt;-seq(<span class="number">0.1</span>,<span class="number">0.5</span>,<span class="number">0.01</span>)</div><div class="line">nr&lt;-length(r)</div><div class="line">p&lt;-seq(<span class="number">0.4</span>,<span class="number">0.9</span>,<span class="number">0.1</span>)</div><div class="line">np&lt;-length(p)</div><div class="line"></div><div class="line"><span class="comment">#构建一个空数组存储结果</span></div><div class="line">samsize&lt;-array(numeric(nr*np),dim=c(nr,np))</div><div class="line"><span class="comment">#每种相关系数和功效的值对产生需要的样本数</span></div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:np)&#123;</div><div class="line">  <span class="keyword">for</span>(j <span class="keyword">in</span> <span class="number">1</span>:nr)&#123;</div><div class="line">    result &lt;- pwr.r.test(n=<span class="literal">NULL</span>,r=r[j],sig.level = <span class="number">0.05</span>,power=p[i],alternative = <span class="string">"two.side"</span>)</div><div class="line">    samsize[j,i]&lt;-ceiling(result$n)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#返回最小值与最大值</span></div><div class="line">xrange&lt;-range(r)</div><div class="line"><span class="comment">#返回最小值与最大值，向上取整</span></div><div class="line">yrange&lt;-round(range(samsize))</div><div class="line"></div><div class="line"><span class="comment">#产生一组彩虹色</span></div><div class="line">colors&lt;-rainbow(length(p))</div><div class="line"><span class="comment">#绘制坐标系</span></div><div class="line">plot(xrange,yrange,type=<span class="string">"n"</span>,xlab=<span class="string">"相关系数"</span>,ylab=<span class="string">"样本大小"</span>)</div><div class="line"><span class="comment">#每一种功效绘制曲线</span></div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:np)&#123;</div><div class="line">   lines(r,samsize[,i],type=<span class="string">"l"</span>,lwd=<span class="number">2</span>,col=colors[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line">abline(v=<span class="number">0</span>,h=seq(<span class="number">0</span>,yrange[<span class="number">2</span>],<span class="number">50</span>),lty=<span class="number">2</span>,col=<span class="string">"grey89"</span>)</div><div class="line"></div><div class="line">abline(h=<span class="number">0</span>,v=seq(xrange[<span class="number">1</span>],xrange[<span class="number">2</span>],<span class="number">0.02</span>),lty=<span class="number">2</span>,col=<span class="string">"grey89"</span>)</div><div class="line"></div><div class="line">title(<span class="string">"相关性分析的样本大小估计，显著水平0.05，双尾"</span>)</div><div class="line">legend(<span class="string">"topright"</span>,title=<span class="string">"功效"</span>,as.character(p),fill = colors)</div></pre></td></tr></table></figure>
+<p><img src="/2017/02/03/chapter10-功效分析/img3.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/功效分析/">功效分析</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/03/chapter10-功效分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/03/chapter10-功效分析/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/23/InnoDB引擎对于SQL语句的加锁策略/" title="InnoDB引擎对于SQL语句的加锁策略" itemprop="url">InnoDB引擎对于SQL语句的加锁策略</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-23T07:26:20.000Z" itemprop="datePublished"> 发表于 2017-01-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="InnoDB引擎对于SQL语句的加锁策略"><a href="#InnoDB引擎对于SQL语句的加锁策略" class="headerlink" title="InnoDB引擎对于SQL语句的加锁策略"></a>InnoDB引擎对于SQL语句的加锁策略</h1><ul>
+<li><p>加锁状态的读、更新或删除操作一般会将其扫描到的每一个索引的记录进行加锁，它并不关心where条件是否会包含这些行，InnoDB不记得具体的where条件，仅仅知道扫描了哪些索引区间，这种锁就是通常的next-key锁，其同时封锁了在此记录之前的区间插入（gap锁）。gap锁可以被禁用，这将导致next-key锁不再使用，事务的隔离级别也会影响加锁。</p>
+</li>
+<li><p>如果一个二级索引用在一个查询上，并且索引记录加了排它锁，InnoDB同时也睡将相应的聚簇索引记录加锁</p>
+</li>
+<li><p>如果没有合适的索引用于你的语句，MySQL必须扫描全表，则每一行都会被加锁，这样锁住了其他所有用户的插入，创建合适的索引非常重要。</p>
+</li>
+<li><p>对于<code>SELECT ... FOR UPDATE</code>或者<code>SELECT ... LOCK IN SHARE MODE</code>来说，其将锁加在扫描到的行上，并且在这些扫描到的行中那些不匹配结果的行（不符合where条件）会去释放锁，但是在一些情况下，这些行不会立即释放锁，因为最后的结果行和之前的原始行之间的联系在查询过程中丢失了，比如，在<code>UNION</code>中，扫描到的行插入了临时表进而再判断是否符合要求，这种情况下，原始的行在查询完成后锁才会释放。</p>
+</li>
+<li><p>InnoDB的加锁方式</p>
+<ul>
+<li><code>SELECT ... FROM</code>: 快照读，不加锁，除非事务的隔离级别设置为<code>SERIALIZABLE</code>,这种情况下查询在其查询到的记录索引上加next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
+<li><code>SELECT ... FROM ... LOCK IN SHARE MODE</code>: 对所有查询到的记录加共享的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
+<li><code>SELECT ... FROM ... FOR UPDATE</code>: 对查询到的每一条记录设置排他的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。对于查询到的记录，其还会在其他会话进行确定事务隔离级别的<code>SELECT ... FROM ... LOCK IN SHARE MODE</code></li>
+<li><code>UPDATE ... WHERE ...</code>: 记录添加排他的next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
+<li>当`UPDATE修改聚簇索引记录时，其会对影响到的二级索引加共享锁，当其对二级索引的插入进行重复性检查时或者二级索引进行插入时。</li>
+<li><code>DELETE FROM ... WHERE ...</code>: 所有扫描到的记录加排他next-key锁，如果查询通过唯一索引查询唯一的一行，则对该索引加记录锁。</li>
+<li><code>INSERT</code>对插入的行加排他锁，是记录锁而不是next-key锁，不锁区间</li>
+<li>在插入行之前，会设置插入意向区间锁，此锁表示这种插入的动作在多个会话同时对同一索引区间进行插入是只要不是插入同样的位置并不需要相互等待，例如在4,7之间插入5,6，两个会话在对插入的记录加排它锁之前都会在4,7之间加插入意向区间锁，这是并不会相互等待因为行无冲突。</li>
+<li><p>如果在<code>INSERT</code>过程中，重复索引错误发生（<code>duplicate-key error</code>），则对这个重复的索引记录添加共享锁，此时可能发生死锁当多个会话试图插入同一行而另一个会话已经拥有一个排它锁时，这在删除该行时会发生。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1 (i <span class="built_in">INT</span>, PRIMARY <span class="keyword">KEY</span> (i)) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</div><div class="line"></div><div class="line"><span class="comment">--session1</span></div><div class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</div><div class="line"><span class="comment">--session2</span></div><div class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</div><div class="line"><span class="comment">--session3</span></div><div class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span>;</div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">--session1</span></div><div class="line"><span class="keyword">ROLLBACK</span>;</div><div class="line"></div><div class="line"><span class="comment">--死锁发生，1有排它锁，2,3重复错误，尝试获取共享锁，1回滚，排它锁释放，2,3都获得了共享锁，但是2,3均获取不到排它锁，发生死锁（及时发生了重复错误，insert的执行依然要最后尝试去获得排它锁）</span></div><div class="line"><span class="comment">--session换成DELETE FROM t1 WHERE i = 1;commit;效果一样</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>INSERT ... ON DUPLICATE KEY UPDATE</code>: 与insert的区别是在发生duplicate-key错误时，加的是排他的next-key锁</p>
+</li>
+<li><code>REPLACE</code>: 类似没有唯一索引冲突的INSERT，另外当更新成功时候，行上加排他next-key锁。</li>
+<li><code>INSERT INTO T SELECT ... FROM S WHERE ...</code>: 对插入到T中的每一行加排他记录锁，如果事务的隔离级别是RC,或者innodb_locks_unsafe_for_binlog启用并且隔离级别不是序列化，Innodb将S上的查询当作一个快照读，此时没有锁，否则，S上查询到的每一行加共享的next-key锁。</li>
+<li><code>CREATE TABLE ... SELECT ...</code>: 类似上一个，只处理select部分的锁。</li>
+<li>当select执行类似<code>REPLACE INTO t SELECT ... FROM s WHERE ...</code>或<code>UPDATE t ... WHERE col IN (SELECT ... FROM s ...)</code>:InnoDB对s上的记录加共享的next-key锁。</li>
+<li>当表上有自增列时，InnoDB对自增列涉及的索引最后一个加排它锁，访问自增计数器时，InnoDB用一种特殊的AUTO-INC表锁模式，此锁仅保持到当前的SQL查询的结束部分，而不是整个事务的结束部分，AUTO-INC被持有时，其他会话无法插入。</li>
+</ul>
+</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/DB/">DB</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/DB/">DB</a><a href="/tags/InnoDB加锁/">InnoDB加锁</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/23/InnoDB引擎对于SQL语句的加锁策略/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/23/InnoDB引擎对于SQL语句的加锁策略/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

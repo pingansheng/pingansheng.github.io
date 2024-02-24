@@ -1,0 +1,793 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/21/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/05/Mediator-中介者/" title="Mediator(中介者)" itemprop="url">Mediator(中介者)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-05T11:23:04.000Z" itemprop="datePublished"> 发表于 2016-12-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h1><ul>
+<li>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散。可以独立地改变他们之间的交互。i<br><img src="/2016/12/05/Mediator-中介者/Mediator.png" alt="Mediator" title="Mediator"></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Mediator</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">change</span><span class="params">(Module <span class="keyword">module</span>)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolMediator</span> <span class="keyword">implements</span> <span class="title">Mediator</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Speaker speaker;</div><div class="line">    <span class="keyword">private</span> VolButton volButton;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">(Module <span class="keyword">module</span>)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (volButton == <span class="keyword">module</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (volButton.status==<span class="number">0</span>)&#123;</div><div class="line">                speaker.louder(volButton.vol);</div><div class="line">                System.out.println(<span class="string">"音量加"</span>+volButton.vol);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                speaker.lighter(volButton.vol);</div><div class="line">                System.out.println(<span class="string">"音量减"</span>+volButton.vol);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSpeaker</span><span class="params">(Speaker speaker)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.speaker = speaker;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVolButton</span><span class="params">(VolButton volButton)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.volButton = volButton;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Module</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">protected</span> Mediator mediator;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Module</span><span class="params">(Mediator mediator)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.mediator=mediator;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Speaker</span> <span class="keyword">extends</span> <span class="title">Module</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Speaker</span><span class="params">(Mediator mediator)</span></span>&#123;</div><div class="line">        <span class="keyword">super</span>(mediator);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">louder</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"音量增加"</span> + i);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lighter</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"音量减少"</span>+i);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolButton</span> <span class="keyword">extends</span> <span class="title">Module</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> status=<span class="number">0</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> vol=<span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VolButton</span><span class="params">(Mediator mediator)</span></span>&#123;</div><div class="line">        <span class="keyword">super</span>(mediator);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">up</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</div><div class="line">        status=<span class="number">0</span>;</div><div class="line">        vol=i;</div><div class="line">        mediator.change(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">down</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</div><div class="line">        status=<span class="number">1</span>;</div><div class="line">        vol=i;</div><div class="line">        mediator.change(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        VolMediator mediator=<span class="keyword">new</span> VolMediator();</div><div class="line">        Speaker speaker=<span class="keyword">new</span> Speaker(mediator);</div><div class="line">        VolButton volButton=<span class="keyword">new</span> VolButton(mediator);</div><div class="line">        mediator.setSpeaker(speaker);</div><div class="line">        mediator.setVolButton(volButton);</div><div class="line">        volButton.up(<span class="number">10</span>);</div><div class="line">        volButton.down(<span class="number">10</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>►<a class="article-category-link" href="/categories/设计模式/行为模式/">行为模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/设计模式/">设计模式</a><a href="/tags/行为模式/">行为模式</a><a href="/tags/中介者模式/">中介者模式</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/05/Mediator-中介者/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/05/Mediator-中介者/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/02/一个关于insert-ignore死锁问题的记录/" title="一个关于insert ignore死锁问题的记录" itemprop="url">一个关于insert ignore死锁问题的记录</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-02T05:31:08.000Z" itemprop="datePublished"> 发表于 2016-12-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>近日在线上系统的使用过程中发现一个死锁问题，场景如下：</p>
+<ol>
+<li>存在一批string，可重复性，乱序</li>
+<li>并发将此批string插入同一张表，表中该字段有二级唯一索引，主键为自增id </li>
+<li>需要防重，防重采用insert ignore语句结合唯一索引进行防重 </li>
+<li>并发线程池批次为数千，并发量为5 </li>
+<li>数据库为mysql，innodb引擎</li>
+</ol>
+<p>发生死锁，死锁日志如下： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div></pre></td><td class="code"><pre><div class="line">*************************** 1. row ***************************</div><div class="line">  Type: InnoDB</div><div class="line">  Name: </div><div class="line">Status: </div><div class="line">=====================================</div><div class="line">160118 15:43:52 INNODB MONITOR OUTPUT</div><div class="line">=====================================</div><div class="line">Per second averages calculated from the last 60 seconds</div><div class="line">-----------------</div><div class="line">BACKGROUND THREAD</div><div class="line">-----------------</div><div class="line">srv_master_thread loops: 8828234 1_second, 8828233 sleeps, 870289 10_second, 132572 background, 132569 flush</div><div class="line">srv_master_thread <span class="built_in">log</span> flush and writes: 8833888</div><div class="line">----------</div><div class="line">SEMAPHORES</div><div class="line">----------</div><div class="line">OS WAIT ARRAY INFO: reservation count 1455871, signal count 1762722</div><div class="line">Mutex spin waits 4496319, rounds 19049903, OS waits 466437</div><div class="line">RW-shared spins 1034217, rounds 27237845, OS waits 877524</div><div class="line">RW-excl spins 511562, rounds 4307928, OS waits 107605</div><div class="line">Spin rounds per <span class="built_in">wait</span>: 4.24 mutex, 26.34 RW-shared, 8.42 RW-excl</div><div class="line">------------------------</div><div class="line">LATEST DETECTED DEADLOCK</div><div class="line">------------------------</div><div class="line">160114 20:12:17</div><div class="line">*** (1) TRANSACTION:</div><div class="line">TRANSACTION 53D484B6, ACTIVE 0 sec inserting</div><div class="line">mysql tables <span class="keyword">in</span> use 1, locked 1</div><div class="line">LOCK WAIT 11 lock struct(s), heap size 3112, 24 row lock(s), undo <span class="built_in">log</span> entries 143</div><div class="line">MySQL thread id 2972572, OS thread handle 0x7f45609d5700, query id 1469111789 172.22.108.1 admin_rw update</div><div class="line">insert ignore into data_info(</div><div class="line">        data,</div><div class="line">        id,</div><div class="line">        created_date )</div><div class="line">        values</div><div class="line"></div><div class="line">            ( <span class="string">'156321690_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'156512811_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'156529371_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'156988901_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'157280438_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'157663173_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'1578435-748742'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'15801111'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158102438_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158108127_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158194111_p'</span>, 13, now())</div><div class="line">         ,</div><div class="line">            ( <span class="string">'158218753_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158243936a'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158277715_p'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'158516632_p'</span></div><div class="line">*** (1) WAITING FOR THIS LOCK TO BE GRANTED:</div><div class="line">RECORD LOCKS space id 4 page no 125769 n bits 400 index `unique_index` of table `db1`.`data_info` trx id 53D484B6 lock_mode X locks gap before rec insert intention waiting</div><div class="line">Record lock, heap no 267 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 18; hex 333732e6bb91e58ebfe5b2b3e4bc9ae88bb9; asc 372               ;;</div><div class="line"> 2: len 8; hex 8000000000d0b8d0; asc         ;;</div><div class="line"></div><div class="line">*** (2) TRANSACTION:</div><div class="line">TRANSACTION 53D484B0, ACTIVE 0 sec inserting, thread declared inside InnoDB 213</div><div class="line">mysql tables <span class="keyword">in</span> use 1, locked 1</div><div class="line">13 lock struct(s), heap size 3112, 20 row lock(s), undo <span class="built_in">log</span> entries 1895</div><div class="line">MySQL thread id 2972504, OS thread handle 0x7f47cc1fd700, query id 1469111770 172.22.108.1 admin_rw update</div><div class="line">insert ignore into data_info(</div><div class="line">        userpin,</div><div class="line">        id,</div><div class="line">        created_date )</div><div class="line">        values</div><div class="line"></div><div class="line">            ( <span class="string">'2185363-8112782'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'220074-12104'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'22317872-263437'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'22432677a'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'243_m'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'2486026_m'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'24q'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'2482839-58590'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'250357-87215'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'2537348-53461'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'2652844-357754'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'27106373_m'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'27923390_m'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'27554-68485737'</span>, 13, now())</div><div class="line">         , </div><div class="line">            ( <span class="string">'2911506-437245'</span></div><div class="line">*** (2) HOLDS THE LOCK(S):</div><div class="line">RECORD LOCKS space id 4 page no 125769 n bits 336 index `unique_index` of table `db1`.`data_info` trx id 53D484B0 lock mode S</div><div class="line">Record lock, heap no 265 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 16; hex 3336303434393037342d313431393333; asc 360449074-141933;;</div><div class="line"> 2: len 8; hex 8000000000d0b8ce; asc         ;;</div><div class="line"></div><div class="line">Record lock, heap no 267 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 18; hex 333732e6bb91e58ebfe5b2b3e4bc9ae88bb9; asc 372               ;;</div><div class="line"> 2: len 8; hex 8000000000d0b8d0; asc         ;;</div><div class="line"></div><div class="line">Record lock, heap no 296 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 16; hex 3530313738343438312d343835343539; asc 501784481-485459;;</div><div class="line"> 2: len 8; hex 8000000000d0b8ed; asc         ;;</div><div class="line"></div><div class="line">Record lock, heap no 314 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 9; hex 36363662616e616e61; asc 666banana;;</div><div class="line"> 2: len 8; hex 8000000000d0b8ff; asc         ;;</div><div class="line"></div><div class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</div><div class="line">RECORD LOCKS space id 4 page no 125781 n bits 496 index `unique_index` of table `db1`.`data_info` trx id 53D484B0 lock_mode X locks gap before rec insert intention waiting</div><div class="line">Record lock, heap no 242 PHYSICAL RECORD: n_fields 3; compact format; info bits 0</div><div class="line"> 0: len 4; hex 8000000d; asc     ;;</div><div class="line"> 1: len 13; hex 31383238353135313135385f70; asc 18285151158_p;;</div><div class="line"> 2: len 8; hex 8000000000d0c0b0; asc         ;;</div><div class="line"></div><div class="line">*** WE ROLL BACK TRANSACTION (1)</div></pre></td></tr></table></figure>
+<h1 id="基本分析"><a href="#基本分析" class="headerlink" title="基本分析"></a>基本分析</h1><p>根据日志所述:</p>
+<ul>
+<li>事务1在执行的过程中需要获取锁：gap before rec insert intention  </li>
+<li>事务2需要获取的锁：gap before rec insert intention  </li>
+</ul>
+<ul>
+<li><p>根据观察进行问题重现时发现一个事实，而根据每个事务执行的SQL，每个事务中欲获取的锁对应的记录并不在其相应的插入值列表中，而每个事务却要获取一个与其相关的GAP INSERT INTENTION LOCK（插入意向间隔锁）。</p>
+</li>
+<li><p>还有一个有趣的事实，每个事务准备获取的间隔锁涉及的记录在另一个事务中SQL中的存在两天重复数据并相邻排序（例如，123,aaa,aaa,232），根据undo entry分析，涉及的双方记录都已经进行插入。（MYSQL批量插入在底层同样拆分为单个操作进行，这里由于使用insert ignore语句，因此重复的记录并不会引发报错）</p>
+</li>
+</ul>
+<h1 id="查证"><a href="#查证" class="headerlink" title="查证"></a>查证</h1><ul>
+<li><p>下文中有关的实验使用的表信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t_1`</span> (</div><div class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</div><div class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</div><div class="line">  <span class="keyword">UNIQUE</span> <span class="keyword">KEY</span> <span class="string">`name_index`</span> (<span class="string">`name`</span>)</div><div class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</div></pre></td></tr></table></figure>
+</li>
+<li><p>根据mysql的官方对于这块的解释，insert在唯一索引下会对欲插入的记录索引与上一个索引加插入意向间隔锁，在多个事务对有交叉的间隔中加间隔锁不会发生互相等待，除非多个事务欲插入的记录均为同一个记录，例如，当前数据表table(name varchar)中存在记录a,m, 当前索引表中同样是2个记录(a,m)。<a href="http://dev.mysql.com/doc/refman/5.5/en/innodb-locks-set.html" target="_blank" rel="noopener">参考</a></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>表情况</th>
+<th>事务1</th>
+<th>事务2</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a,m</td>
+<td></td>
+<td></td>
+<td>当前索引[a,m]</td>
+</tr>
+<tr>
+<td>a,m</td>
+<td>insert e</td>
+<td></td>
+<td>OK 持有意向锁(a,e] 当前索引[a,e,m]</td>
+</tr>
+<tr>
+<td>a,m</td>
+<td></td>
+<td>insert e</td>
+<td>OK 持有意向锁(a,c]，意向锁之间不冲突 当前索引[a,c,e,m]</td>
+</tr>
+<tr>
+<td>a,m</td>
+<td>insert c</td>
+<td></td>
+<td>wait 插入同一条记录 与索引c冲突，等待</td>
+</tr>
+</tbody>
+</table>
+<p>以上处理事务均为手动提交模式（start transaction）.同时印证，在事务未提交之前，SQL操作也会在底层上修改索引记录。</p>
+<h1 id="进一步查证"><a href="#进一步查证" class="headerlink" title="进一步查证"></a>进一步查证</h1><p>随后进一步查找资料求解释，终于在一篇文章当中有提及，<a href="http://novoland.github.io/%E6%95%B0%E6%8D%AE%E5%BA%93/2015/08/17/InnoDB%20%E9%94%81.html" target="_blank" rel="noopener">参考</a>，其中关于insert的加锁中有些阐述：</p>
+<blockquote>
+<p><code>INSERT</code>的加锁：</p>
+<ol>
+<li>插入之前，对插入的间隙加插入意向GAP锁 ；<br>插入意向GAP锁表明将向某个间隙插入记录，如果该间隙已被加上了GAP Lock或<strong>Next-Key Lock，则加锁失败</strong>。<br>不同事务加的插入意向GAP锁互相兼容，否则就无法并发insert了。</li>
+<li>插入成功后，对插入的这条记录加X Record Lock；</li>
+<li>如果违反唯一性约束导致插入失败，则对记录加S Next-Key Lock。这一点在并发插入时可能导致死锁。</li>
+</ol>
+</blockquote>
+<p><strong>根据3与1的综合判断，基本得出结论，产生死锁的两个事务分别获得了一个区间的间隔锁，并在数据的插入过程中违反了唯一性约束（重复数据），导致区间被加上了next-key锁，之后分别向对方请求区间锁导致循环等待。关于next-key锁的介绍可以<a href="http://dev.mysql.com/doc/refman/5.5/en/innodb-record-level-locks.html" target="_blank" rel="noopener">参见</a></strong></p>
+<p><strong><font color="red">此处后来分析有疑问，测试中发现貌似真正导致后一个事务加不上插入意向锁的原因是因为第一个事务违反唯一索引冲突后对该记录加了S行锁导致事务2加意向GAP锁时候冲突，因为区间锁是左开右闭(x1,x2],而如果在一个事务中再次执行一个插入（比如初始a,m,插入g之后插入e），此时a,e之间无法插入元素的原因是事务1对a,e之间加了S级GAP锁,可以通过如下SQL查询锁的信息</font></strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USE</span> information_schema;</div><div class="line"><span class="comment">--锁等待和持有锁的相互关系</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> INNODB_LOCK_WAITS\G;</div><div class="line"><span class="comment">--锁等待的原因</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> INNODB_LOCKS\G;</div></pre></td></tr></table></figure></p>
+<p>由于线上情景涉及数据较多，现在以最简单方式进行重现：</p>
+<p>仍然使用之间提到的测试表t_1：<br>现有数据：<br><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/initData.png" alt=""><br>开启mysql会话控制台，启动两个事务，事务1与事务2：<br><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/transStart.png" alt=""></p>
+<p>事务1中进行：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">ignore</span> <span class="keyword">into</span> t_1(<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'e'</span>),(<span class="string">'e'</span>);</div></pre></td></tr></table></figure></p>
+<p><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/trans1.png" alt=""></p>
+<p>由于采用insert ignore批量插入，且发生了违反唯一索引的情况，故插入一行记录，由于有ignore关键字，重复的索引自行忽略，语句没有报错，<br><strong>但是，mysql仍然对第二个’e’进行了尝试，以至于产生了duplicates 1,根据上文分析，此时事务1对于区间(a,e]拥有next-key锁。其他事务无法立即对此区域内的任何记录进行插入。如图所示：</strong><br><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/trans2.png" alt=""></p>
+<p>可以看到，事务2执行：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">ignore</span> <span class="keyword">into</span> t_1(<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'b'</span>);</div></pre></td></tr></table></figure></p>
+<p>由于等待事务1而无法立即插入，在不干预的情况下最终timeout.</p>
+<p>此时只有单向等待，事务2等待事务1，事务1并没有等待事务2，因此尚未构成死锁。接下来，构造一个环境让事务1等待事务2.</p>
+<p>事务2执行：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">ignore</span> <span class="keyword">into</span> t_1(<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'g'</span>),(<span class="string">'g'</span>);</div></pre></td></tr></table></figure></p>
+<p><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/trans3.png" alt=""></p>
+<p>同样，事务2插入成功一行，同时产生了一个duplicate.此时事务2拥有区间(e,g]的next-key锁。</p>
+<p>最后一步:<br>事务1执行:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">ignore</span> <span class="keyword">into</span> t_1(<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'f'</span>);</div></pre></td></tr></table></figure></p>
+<p>事务2执行:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">insert</span> <span class="keyword">ignore</span> <span class="keyword">into</span> t_1(<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'b'</span>);</div></pre></td></tr></table></figure></p>
+<p><img src="/2016/12/02/一个关于insert-ignore死锁问题的记录/trans4.png" alt=""></p>
+<p>事务1想要插入的 <code>f</code> 属于事务2持有next-key锁的区间<code>(e,g]</code>，事务1等待事务2；<br>事务2想要插入的 <code>b</code> 属于事务1持有next-key锁的区间<code>(a,e]</code>，事务2等待事务1。<br>循环等待，立即死锁，最后mysql回滚了事务2，执行了事务1。此时两个事务均未提交.</p>
+<p>根据<code>SHOW ENGINE INNODB STATUS</code>查看此次试验的死锁日志:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">------------------------</div><div class="line">LATEST DETECTED DEADLOCK</div><div class="line">------------------------</div><div class="line">2016-01-21 21:51:49 5c94</div><div class="line">*** (1) TRANSACTION:</div><div class="line">TRANSACTION 52392, ACTIVE 959 sec inserting</div><div class="line">mysql tables <span class="keyword">in</span> use 1, locked 1</div><div class="line">LOCK WAIT 4 lock struct(s), heap size 1184, 3 row lock(s), undo <span class="built_in">log</span> entries 2</div><div class="line">MySQL thread id 11, OS thread handle 0x60d0, query id 681 localhost ::1 root update</div><div class="line">insert ignore into t_1(name) values(<span class="string">'f'</span>)</div><div class="line">*** (1) WAITING FOR THIS LOCK TO BE GRANTED:</div><div class="line">RECORD LOCKS space id 36 page no 4 n bits 80 index `name_index` of table `<span class="built_in">test</span>`.`t_1` trx id 52392 lock_mode X locks gap before rec insert intention waiting</div><div class="line">Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0</div><div class="line"> 0: len 1; hex 67; asc g;;</div><div class="line"> 1: len 4; hex 0000001d; asc     ;;</div><div class="line"></div><div class="line">*** (2) TRANSACTION:</div><div class="line">TRANSACTION 52393, ACTIVE 509 sec inserting, thread declared inside InnoDB 5000</div><div class="line">mysql tables <span class="keyword">in</span> use 1, locked 1</div><div class="line">4 lock struct(s), heap size 1184, 3 row lock(s), undo <span class="built_in">log</span> entries 2</div><div class="line">MySQL thread id 12, OS thread handle 0x5c94, query id 682 localhost ::1 root update</div><div class="line">insert ignore into t_1(name) values(<span class="string">'b'</span>)</div><div class="line">*** (2) HOLDS THE LOCK(S):</div><div class="line">RECORD LOCKS space id 36 page no 4 n bits 80 index `name_index` of table `<span class="built_in">test</span>`.`t_1` trx id 52393 lock mode S</div><div class="line">Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0</div><div class="line"> 0: len 1; hex 67; asc g;;</div><div class="line"> 1: len 4; hex 0000001d; asc     ;;</div><div class="line"></div><div class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</div><div class="line">RECORD LOCKS space id 36 page no 4 n bits 80 index `name_index` of table `<span class="built_in">test</span>`.`t_1` trx id 52393 lock_mode X locks gap before rec insert intention waiting</div><div class="line">Record lock, heap no 3 PHYSICAL RECORD: n_fields 2; compact format; info bits 0</div><div class="line"> 0: len 1; hex 65; asc e;;</div><div class="line"> 1: len 4; hex 0000001a; asc     ;;</div><div class="line"></div><div class="line">*** WE ROLL BACK TRANSACTION (2)</div></pre></td></tr></table></figure></p>
+<h1 id="回顾一下"><a href="#回顾一下" class="headerlink" title="回顾一下"></a>回顾一下</h1><p>此次死锁的几个条件：</p>
+<ol>
+<li>使用了insert ignore ，dao层检测到重复的唯一索引没有及时中断，导致事务持有了区间next-key锁。</li>
+<li>欲插入的数据没有进行预处理，去重与排序<br>  （1）去重不会发生duplicate，从而不会导致事务持有某个区间的next-key锁，<br>  （2）排序之后事务之间请求的区间不会交叉，从另一方面规避了相互等待区间next-key锁</li>
+<li>并发对同一张表进行insert操作（线程数&gt;=2）</li>
+<li>1,2,3最根本的原因是内因3，去除1可以防止但会影响功能，2只能某种程度规避问题并不能解决，因为当前数据库中的数据不确定。</li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/DB/">DB</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/DB/">DB</a><a href="/tags/insert-ignore/">insert ignore</a><a href="/tags/dead-lock/">dead lock</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/02/一个关于insert-ignore死锁问题的记录/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/02/一个关于insert-ignore死锁问题的记录/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/01/Iterator-迭代器/" title="Iterator(迭代器)" itemprop="url">Iterator(迭代器)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-01T07:20:30.000Z" itemprop="datePublished"> 发表于 2016-12-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h1><ul>
+<li><p>提供一种方法顺序访问一个聚合对象中各个元素，而又不需要暴露该对象的内部表示。<br><img src="/2016/12/01/Iterator-迭代器/Iterator.png" alt="Iterator" title="Iterator"></p>
+</li>
+<li><p>本示例实现了二叉树的前中后序遍历的迭代器</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CommonIterator</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">    <span class="function">E <span class="title">first</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function">E <span class="title">next</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function">Boolean <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Tree</span> </span>&#123;</div><div class="line">    <span class="function">CommonIterator <span class="title">createFrontIndexIterator</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">CommonIterator <span class="title">createMiddleIndexIterator</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">CommonIterator <span class="title">createBackIndexIterIterator</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Tree</span></span>&#123;</div><div class="line">    <span class="keyword">public</span> Node left;</div><div class="line">    <span class="keyword">public</span> Node right;</div><div class="line">    <span class="keyword">public</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Node left, Node right, String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.left = left;</div><div class="line">        <span class="keyword">this</span>.right = right;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> CommonIterator&lt;Node&gt; <span class="title">createFrontIndexIterator</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> FrontIndexIter(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> CommonIterator&lt;Node&gt; <span class="title">createMiddleIndexIterator</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> MiddleIndexIter(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> CommonIterator&lt;Node&gt; <span class="title">createBackIndexIterIterator</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> BackIndexIter(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrontIndexIter</span> <span class="keyword">implements</span> <span class="title">CommonIterator</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Node root;</div><div class="line">    <span class="keyword">private</span> Node cursor = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">private</span> Boolean isDone = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Stack&lt;Node&gt; stack;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FrontIndexIter</span><span class="params">(Node root)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.root = root;</div><div class="line">        stack = <span class="keyword">new</span> Stack&lt;&gt;();</div><div class="line">        cursor = root;</div><div class="line">        stack.push(cursor);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">first</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> root;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</div><div class="line">            isDone = <span class="keyword">true</span>;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node top=stack.pop();</div><div class="line">        cursor = top.right;</div><div class="line">        <span class="keyword">if</span> (cursor!=<span class="keyword">null</span>)&#123;</div><div class="line">            stack.push(cursor);</div><div class="line">        &#125;</div><div class="line">        cursor = top.left;</div><div class="line">        <span class="keyword">if</span> (cursor!=<span class="keyword">null</span>)&#123;</div><div class="line">            stack.push(cursor);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> top;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">isDone</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isDone;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MiddleIndexIter</span> <span class="keyword">implements</span> <span class="title">CommonIterator</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Node root;</div><div class="line">    <span class="keyword">private</span> Node cursor = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">private</span> Boolean isDone = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">private</span> Stack&lt;Node&gt; stack;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MiddleIndexIter</span><span class="params">(Node root)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.root = root;</div><div class="line">        stack = <span class="keyword">new</span> Stack&lt;&gt;();</div><div class="line">        cursor = root;</div><div class="line">        <span class="keyword">while</span> (cursor != <span class="keyword">null</span>) &#123;</div><div class="line">            stack.push(cursor);</div><div class="line">            cursor = cursor.left;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">first</span><span class="params">()</span> </span>&#123;</div><div class="line">        Node res = root;</div><div class="line">        <span class="keyword">while</span> ((res = res.left) != <span class="keyword">null</span>) &#123;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</div><div class="line">            isDone = <span class="keyword">true</span>;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node top = stack.peek();</div><div class="line">        stack.pop();</div><div class="line">        cursor = top.right;</div><div class="line">        <span class="keyword">while</span> (cursor != <span class="keyword">null</span>) &#123;</div><div class="line">            stack.push(cursor);</div><div class="line">            cursor = cursor.left;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> top;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">isDone</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isDone;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BackIndexIter</span> <span class="keyword">implements</span> <span class="title">CommonIterator</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Node root;</div><div class="line">    <span class="keyword">private</span> Node cursor = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">private</span> Boolean isDone = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">private</span> Stack&lt;Node&gt; stack;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BackIndexIter</span><span class="params">(Node root)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.root = root;</div><div class="line">        stack = <span class="keyword">new</span> Stack&lt;&gt;();</div><div class="line">        cursor = root;</div><div class="line">        <span class="keyword">while</span> (cursor != <span class="keyword">null</span>) &#123;</div><div class="line">            stack.push(cursor);</div><div class="line">            cursor = cursor.left;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">first</span><span class="params">()</span> </span>&#123;</div><div class="line">        Node res = root;</div><div class="line">        <span class="keyword">while</span> ((res = res.left) != <span class="keyword">null</span>) &#123;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (stack.isEmpty()) &#123;</div><div class="line">            isDone = <span class="keyword">true</span>;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node top = stack.peek();</div><div class="line">        stack.pop();</div><div class="line">        <span class="keyword">if</span> (!stack.isEmpty()) &#123;</div><div class="line">            cursor = stack.peek();</div><div class="line">            <span class="keyword">if</span> ((cursor = cursor.right) != <span class="keyword">null</span> &amp;&amp; cursor != top) &#123;</div><div class="line">                <span class="keyword">while</span> (cursor != <span class="keyword">null</span>) &#123;</div><div class="line">                    stack.push(cursor);</div><div class="line">                    cursor = cursor.left;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> top;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">isDone</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> isDone;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Node one = <span class="keyword">new</span> Node(</div><div class="line">                <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"8"</span>),<span class="keyword">null</span>,<span class="string">"3"</span>), <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"6"</span>), <span class="keyword">new</span> Node(<span class="string">"7"</span>), <span class="string">"4"</span>), <span class="string">"2"</span>),</div><div class="line">                <span class="keyword">new</span> Node(<span class="keyword">new</span> Node(<span class="string">"9"</span>),<span class="keyword">null</span>,<span class="string">"5"</span>), <span class="string">"1"</span>);</div><div class="line"></div><div class="line">        CommonIterator&lt;Node&gt; iter = one.createFrontIndexIterator();</div><div class="line"></div><div class="line">        Node d;</div><div class="line">        <span class="keyword">while</span> (!iter.isDone() &amp;&amp; (d = iter.next()) != <span class="keyword">null</span>) &#123;</div><div class="line">            System.out.print(d.name+<span class="string">" "</span>);<span class="comment">//1 2 3 8 4 6 7 5 9</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println();</div><div class="line"></div><div class="line">        iter = one.createMiddleIndexIterator();</div><div class="line">        <span class="keyword">while</span> (!iter.isDone() &amp;&amp; (d = iter.next()) != <span class="keyword">null</span>) &#123;</div><div class="line">            System.out.print(d.name+<span class="string">" "</span>);<span class="comment">//8 3 2 6 4 7 1 9 5</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println();</div><div class="line"></div><div class="line">        iter = one.createBackIndexIterIterator();</div><div class="line">        <span class="keyword">while</span> (!iter.isDone() &amp;&amp; (d = iter.next()) != <span class="keyword">null</span>) &#123;</div><div class="line">            System.out.print(d.name+<span class="string">" "</span>);<span class="comment">//8 3 6 7 4 2 9 5 1</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>►<a class="article-category-link" href="/categories/设计模式/行为模式/">行为模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/设计模式/">设计模式</a><a href="/tags/行为模式/">行为模式</a><a href="/tags/迭代器模式/">迭代器模式</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/01/Iterator-迭代器/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/01/Iterator-迭代器/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/20/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/22/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

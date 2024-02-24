@@ -1,0 +1,922 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Understand JVM Part I | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="自动内存管理机制Java的内存区域 1、程序计数（寄存）器 可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态 此内存区域是唯一一个不定义OutOfMemoryError的区域 如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空  2、Java虚拟机栈 线程私有，生命周期与线程相同 此区域描述的是Java方法执行的内存模型 - 每个">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understand JVM Part I">
+<meta property="og:url" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="自动内存管理机制Java的内存区域 1、程序计数（寄存）器 可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态 此内存区域是唯一一个不定义OutOfMemoryError的区域 如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空  2、Java虚拟机栈 线程私有，生命周期与线程相同 此区域描述的是Java方法执行的内存模型 - 每个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/运行时数据区.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/对象创建过程.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/对象头结构.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/MarkWord结构.jpg">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/GCs.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:09.224Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Understand JVM Part I">
+<meta name="twitter:description" content="自动内存管理机制Java的内存区域 1、程序计数（寄存）器 可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态 此内存区域是唯一一个不定义OutOfMemoryError的区域 如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空  2、Java虚拟机栈 线程私有，生命周期与线程相同 此区域描述的是Java方法执行的内存模型 - 每个">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/运行时数据区.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/14/Understand-JVM-Part-I/" title="Understand JVM Part I" itemprop="url">Understand JVM Part I</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-14T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#自动内存管理机制"><span class="toc-text">自动内存管理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java的内存区域"><span class="toc-text">Java的内存区域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、程序计数（寄存）器"><span class="toc-text">1、程序计数（寄存）器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、Java虚拟机栈"><span class="toc-text">2、Java虚拟机栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、本地方法栈"><span class="toc-text">3、本地方法栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、Java堆"><span class="toc-text">4、Java堆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、方法区"><span class="toc-text">5、方法区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6、运行时常量池"><span class="toc-text">6、运行时常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7、直接内存"><span class="toc-text">7、直接内存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java对象"><span class="toc-text">Java对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、对象的创建"><span class="toc-text">1、对象的创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、对象的内存布局"><span class="toc-text">2、对象的内存布局</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、对象的访问"><span class="toc-text">3、对象的访问</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器与内存分配"><span class="toc-text">垃圾收集器与内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、需要收集的内存"><span class="toc-text">1、需要收集的内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、寻找可回收的对象"><span class="toc-text">2、寻找可回收的对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、最后一次挣扎"><span class="toc-text">3、最后一次挣扎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、关于方法区"><span class="toc-text">4、关于方法区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、垃圾回收算法"><span class="toc-text">5、垃圾回收算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6、HotSpot算法实现"><span class="toc-text">6、HotSpot算法实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7、垃圾收集器"><span class="toc-text">7、垃圾收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8、内存分配与回收策略"><span class="toc-text">8、内存分配与回收策略</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h1><h2 id="Java的内存区域"><a href="#Java的内存区域" class="headerlink" title="Java的内存区域"></a>Java的内存区域</h2><p><img src="/2017/06/14/Understand-JVM-Part-I/运行时数据区.png" alt=""></p>
+<h4 id="1、程序计数（寄存）器"><a href="#1、程序计数（寄存）器" class="headerlink" title="1、程序计数（寄存）器"></a>1、程序计数（寄存）器</h4><ul>
+<li>可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态</li>
+<li>此内存区域是唯一一个不定义OutOfMemoryError的区域</li>
+<li>如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空</li>
+</ul>
+<h4 id="2、Java虚拟机栈"><a href="#2、Java虚拟机栈" class="headerlink" title="2、Java虚拟机栈"></a>2、Java虚拟机栈</h4><ul>
+<li>线程私有，生命周期与线程相同</li>
+<li>此区域描述的是Java方法执行的内存模型 - 每个方法执行同时在栈中创建一个新的栈元素，即栈帧(Stack Frame), 用于存储局部变量表、操作数栈、动态链接、方法出口等信息（递归调用如果没有终止条件或次数过多，每次递归调用都会创建栈帧，栈就会无法容纳足够的栈帧而溢出）</li>
+<li>局部变量表在编译期间完成分配，进入方法时，这个方法在栈帧中的局部变量表分配空间完全确定，运行期间不会改变</li>
+<li>当线程请求的栈深度超过允许抛出StackOverflowError</li>
+<li>若是虚拟机允许动态扩展此区域（大多数都可以），那么扩展时申请不到足够的内存，抛出OOM</li>
+</ul>
+<h4 id="3、本地方法栈"><a href="#3、本地方法栈" class="headerlink" title="3、本地方法栈"></a>3、本地方法栈</h4><ul>
+<li>类似于虚拟机栈，为Native方法服务</li>
+<li>也会抛出两种异常SOE、OOM</li>
+</ul>
+<h4 id="4、Java堆"><a href="#4、Java堆" class="headerlink" title="4、Java堆"></a>4、Java堆</h4><ul>
+<li>JVM管理的最大一块内存，所有线程共享</li>
+<li>分配所有的对象实例与数组</li>
+<li>JVM的优化技术如逃逸分析、栈上分配、标量替换会导致上条规则不绝对</li>
+<li>进一步可分为新生代与老年代或Eden、FromSurvivor、ToSurvivor空间</li>
+<li>内存分配时也可能会分出线程私有的分配缓冲区（Thread Local Allocation Buffer, TLAB）</li>
+<li>Java堆划分的目的都是为了更好更快的回收与分配内存</li>
+<li>堆分配可抛出OOM</li>
+<li>多线程创建过程中，如果每个线程分配的内存过大，更容易OOM，此时需要减少最大堆与栈容量来换取更多线程（每个进程OS分配的内存是有上限的）</li>
+</ul>
+<h4 id="5、方法区"><a href="#5、方法区" class="headerlink" title="5、方法区"></a>5、方法区</h4><ul>
+<li>线程共享，存储被虚拟机加载的类信息、常量、静态变量、即时编译器(JIT)编译后的代码</li>
+<li>HotSpot虚拟机使用永久代来实现方法区，这样可以使得GC一起管理这部分内存</li>
+<li>未来逐步将采用Native Memory来实现，避免内存溢出，Java8已经使用元空间来实现这一部分</li>
+<li>分配可抛出OOM</li>
+</ul>
+<h4 id="6、运行时常量池"><a href="#6、运行时常量池" class="headerlink" title="6、运行时常量池"></a>6、运行时常量池</h4><ul>
+<li>方法区的一部分</li>
+<li>存放Class文件中的各种字面量和符号引用，以及翻译出来的直接引用</li>
+<li>具备动态性，运行期间也可以将新的常量放入</li>
+<li>可抛出OOM</li>
+</ul>
+<h4 id="7、直接内存"><a href="#7、直接内存" class="headerlink" title="7、直接内存"></a>7、直接内存</h4><ul>
+<li>不属于运行时数据区，不是Java虚拟机规范中定义的内存区域</li>
+<li>此部分内存也频繁的使用且会抛出OOM</li>
+<li>NIO类可以使用Native函数直接分配堆外内存，通过存储在Java堆中的DirectByteBuffer对象作为内存的引用进行操作，这样可以避免在Native堆与Java堆复制数据</li>
+<li>此区域内存不受Java堆限制，当各个区域内存总和大于物理内存时，动态扩展时出现OOM</li>
+</ul>
+<h2 id="Java对象"><a href="#Java对象" class="headerlink" title="Java对象"></a>Java对象</h2><h4 id="1、对象的创建"><a href="#1、对象的创建" class="headerlink" title="1、对象的创建"></a>1、对象的创建</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/对象创建过程.png" alt=""></p>
+<h4 id="2、对象的内存布局"><a href="#2、对象的内存布局" class="headerlink" title="2、对象的内存布局"></a>2、对象的内存布局</h4><ul>
+<li>对象结构包含对象头（Header）、示例数据（Instance Data）、对齐填空（Padding）</li>
+<li>32位机器上，非数组对象，对象头一共4 + 4 = 8字节，64为机器为8 + 8 = 16字节，数组长度始终为4字节<br><img src="/2017/06/14/Understand-JVM-Part-I/对象头结构.png" alt=""></li>
+<li><p>其中MarkWord结构如下<br><img src="/2017/06/14/Understand-JVM-Part-I/MarkWord结构.jpg" alt=""></p>
+</li>
+<li><p>由于HotSpot要求对象的起始地址为8字节的整数倍，所有需要Padding来补全</p>
+</li>
+</ul>
+<h4 id="3、对象的访问"><a href="#3、对象的访问" class="headerlink" title="3、对象的访问"></a>3、对象的访问</h4><ul>
+<li>直接指针访问<blockquote>
+<p>本地变量表中存储Java堆中的对象引用，堆中对象存储指向方法区类型数据</p>
+</blockquote>
+</li>
+<li>句柄访问<blockquote>
+<p>本地变量表中存储指向句柄池中的对象句柄地址，句柄中包含实例数据地址与类型数据地址，对象移动时，只改变句柄池中的指针，本地变量表指向的是稳定的句柄地址</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="垃圾收集器与内存分配"><a href="#垃圾收集器与内存分配" class="headerlink" title="垃圾收集器与内存分配"></a>垃圾收集器与内存分配</h2><h4 id="1、需要收集的内存"><a href="#1、需要收集的内存" class="headerlink" title="1、需要收集的内存"></a>1、需要收集的内存</h4><ul>
+<li>程序计数器、虚拟机栈、本地方法栈随线程消亡而消亡（栈帧入栈与出栈）</li>
+<li>堆（包括方法区）需要垃圾回收器参与</li>
+</ul>
+<h4 id="2、寻找可回收的对象"><a href="#2、寻找可回收的对象" class="headerlink" title="2、寻找可回收的对象"></a>2、寻找可回收的对象</h4><ul>
+<li>引用计数：难以解决循环引用问题</li>
+<li>可达性分析：Java、C#使用, 通过GC Roots系列对象进行可达性分析，不可用的对象就可以回收，GC Root对象主要包括：栈中的引用（本地变量表）、方法区类静态属性引用、方法区常量引用、本地方法栈中JNI(Native方法)的引用</li>
+<li>引用的加强：JVM对引用进行了进一步划分<ol>
+<li>强引用：一般情况下的引用，<code>Object o = new Object()</code></li>
+<li>软引用：系统发送OOM之前将这些引用再次回收，如果还不够才OOM, 参见类<code>SoftReference</code></li>
+<li>弱引用：存活至下一次垃圾回收，参见类<code>WeakReference</code></li>
+<li>虚引用：无法通过虚引用来获取一个对象，为一个对象设置虚引用关联唯一目的是在其回收时收到一个通知，参见类<code>PhantomReference</code></li>
+</ol>
+</li>
+</ul>
+<h4 id="3、最后一次挣扎"><a href="#3、最后一次挣扎" class="headerlink" title="3、最后一次挣扎"></a>3、最后一次挣扎</h4><ul>
+<li>对象判定不可达之后不会马上回收，会进行判定需要不需要执行<code>finalize()</code>方法，如果需要执行，进入F-Queue，Finalizer线程会进行处理，如果<code>finalize()</code>方法中对象成功“自救”则不会回收（重新与引用链挂钩，例如将自己挂在某个类的静态变量下）</li>
+<li>强制！！finalize方法不允许使用！</li>
+</ul>
+<h4 id="4、关于方法区"><a href="#4、关于方法区" class="headerlink" title="4、关于方法区"></a>4、关于方法区</h4><ul>
+<li>存在垃圾回收，主要有废弃常量与无用类</li>
+<li>废弃常量判断条件：如果没有地方引用某个常量，则垃圾回收时可以回收</li>
+<li>废弃类判断条件按：该类所有实例被回收、该类的ClassLoder被回收、该类对应的Class对象没有被引用，无法在任何地方通过反射该类的方法</li>
+<li>JVM创建的3个默认的类加载器（BootStrap Classloader、ExtClassLoader、AppClassLoader）加载的系统类（如String）或应用类都不能再运行时释放，无法满足上面的条件</li>
+</ul>
+<h4 id="5、垃圾回收算法"><a href="#5、垃圾回收算法" class="headerlink" title="5、垃圾回收算法"></a>5、垃圾回收算法</h4><pre><code>1. 标记清扫（Mark-Sweep）
+    * 效率低、碎片化
+    * 分配大对象找不到连续内存引发二次清扫
+
+2. 复制（Copying）
+    * 现代商业虚拟机都采用这种方式
+    * 将内存分成两块，把存活的对象复制到另一块，整体清理前一块内存
+    * IBM研究表明大部分对象“朝生夕死”，将内寸分为一大（Eden）二小（Survivor），清理时
+      将Eden和S1存活的对象复制到S2中，清理掉Eden和S1，HotSpot默认的比例是8:1
+    * 上条提到的S2不足时，需要老年代进行分配担保，即将无法存放的对象放置老年代
+    * 两个Survivor区域的操作逻辑目的是为了始终保留一个S区域是空的
+
+3. 标记整理（Mark-Compact）
+    * 标记后，让存活的对象都向一端移动，直接清理端边界以外的内存
+
+4. 分代回收
+    * 当前商业虚拟机均采用
+    * 将内存分代，不同代内存采用不同方式，新生代有大量对象死亡，采用复制算法，而老年代
+      对象存活率高，没有额外的空间做分配担保，使用“标记清理”或“标记整理”方式
+</code></pre><h4 id="6、HotSpot算法实现"><a href="#6、HotSpot算法实现" class="headerlink" title="6、HotSpot算法实现"></a>6、HotSpot算法实现</h4><pre><code>1. 枚举根节点
+    * 在枚举根节点时，需要停顿所有Java执行线程以保证结果的准确性（Stop The World）
+    * 使用OopMap数据结构快速直接得知那些地方存在对象引用，类加载完成的时候，HotSpot把对象什么偏移量是什么类型计算出来，
+      JIT编译过程也会记录栈与寄存器哪些位置是引用，GC扫描时直接获取该信息
+2. 安全点（Safepoint）
+    * 对于具备长时间执行特征的程序，程序执行在到达安全点时才暂停，依靠指令序列重复判定（方法调用、循环跳转、异常跳转）
+    * 采用主动式中断，在执行指令中加入test执行使得线程自陷，进而中断
+3. 安全区域（Saferegion）
+    * 对于无法进入安全点的程序，如Sleep、Block中的线程，通过判定当前是否进入安全区并标识自身，此时GC时将跳过这些线程
+    * 线程离开安全区时，检查系统是否完成根节点枚举或GC过程，完成则继续执行，否则等待完成的信号
+</code></pre><h4 id="7、垃圾收集器"><a href="#7、垃圾收集器" class="headerlink" title="7、垃圾收集器"></a>7、垃圾收集器</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/GCs.png" alt=""></p>
+<ul>
+<li>垃圾收集器是搭配使用的</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>收集器</th>
+<th style="text-align:left">算法</th>
+<th style="text-align:left">用于分代</th>
+<th style="text-align:left">多线程</th>
+<th style="text-align:left">配对收集器</th>
+<th style="text-align:left">暂停所有用户线程</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>ParNew</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Parallel Scavenge</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; Parallel Old</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Serial Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial; ParNew; Parallel Scavenge;</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">( CMS 在Server模式下的备用预案)</td>
+</tr>
+<tr>
+<td>Parallel Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Parallel Scavenge</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>CMS(Concurrent Mark Sweep)</td>
+<td style="text-align:left">标记清扫</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial; ParNew</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记与重新标记停所有用户线程</td>
+</tr>
+<tr>
+<td>G1</td>
+<td style="text-align:left">标记整理（整体）<br>复制（局部）</td>
+<td style="text-align:left">新生代; 老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记、最终标记、筛选回收暂停所有用户线程</td>
+</tr>
+</tbody>
+</table>
+<h4 id="8、内存分配与回收策略"><a href="#8、内存分配与回收策略" class="headerlink" title="8、内存分配与回收策略"></a>8、内存分配与回收策略</h4><ul>
+<li>对象首先在Eden上分配，空间不足时，JVM发起Minor GC(新生代GC 对应的老年代GC称为 Major/Full GC)</li>
+<li>大对象直接进入老年代（例如大的字符串或数组）</li>
+<li>长期存活的对象将进入老年代（每个对象定义了一个Age计数器，每次Minor GC存活Age+1，超过阀值进入老年代）</li>
+<li>Survivor中相同年龄所有对象大小总和超过一半的，年龄大于该数的进入老年代，不需要阀值条件</li>
+<li>JDK 1.6U24之后，分配对象时若老年代连续空间大于新生代对象总大小或每次晋升的平均值就会发生Minor GC，否则进行Full GC, 之前版本依赖HandlePromotionFailure参数进行判断</li>
+<li>Perm区域的回收由Full GC触发</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/" data-title="Understand JVM Part I | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/22/Understand-JVM-Part-II/" title="Understand JVM Part II">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Understand JVM Part II</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/05/11/Skip-List/"  title="Skip List">
+ <strong>下一篇：</strong><br/> 
+ <span>Skip List
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/06/14/Understand-JVM-Part-I/" data-title="Understand JVM Part I" data-url="https://pingansheng.github.io/2017/06/14/Understand-JVM-Part-I/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#自动内存管理机制"><span class="toc-text">自动内存管理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java的内存区域"><span class="toc-text">Java的内存区域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、程序计数（寄存）器"><span class="toc-text">1、程序计数（寄存）器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、Java虚拟机栈"><span class="toc-text">2、Java虚拟机栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、本地方法栈"><span class="toc-text">3、本地方法栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、Java堆"><span class="toc-text">4、Java堆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、方法区"><span class="toc-text">5、方法区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6、运行时常量池"><span class="toc-text">6、运行时常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7、直接内存"><span class="toc-text">7、直接内存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java对象"><span class="toc-text">Java对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、对象的创建"><span class="toc-text">1、对象的创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、对象的内存布局"><span class="toc-text">2、对象的内存布局</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、对象的访问"><span class="toc-text">3、对象的访问</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器与内存分配"><span class="toc-text">垃圾收集器与内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、需要收集的内存"><span class="toc-text">1、需要收集的内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、寻找可回收的对象"><span class="toc-text">2、寻找可回收的对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、最后一次挣扎"><span class="toc-text">3、最后一次挣扎</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、关于方法区"><span class="toc-text">4、关于方法区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、垃圾回收算法"><span class="toc-text">5、垃圾回收算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6、HotSpot算法实现"><span class="toc-text">6、HotSpot算法实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7、垃圾收集器"><span class="toc-text">7、垃圾收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8、内存分配与回收策略"><span class="toc-text">8、内存分配与回收策略</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,748 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter08 回归（二） | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="4、异常观测值 一个全面的回归分析要覆盖对异常值的分析，包括离群点、高杠杆值点和强影响点。  4.1、离群点12345678&amp;gt; #离群点：模型预测效果不佳的观测点。它们通常有很大的、或正或负的残差。&amp;gt; #outlierTest()函数可以求得求得最大标准化残差绝对值Bonferroni（显著水平检验使用预设显著水平的1/2）调整后的p值&amp;gt; outlierTest(fit)">
+<meta name="keywords" content="R语言,回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter08 回归（二）">
+<meta property="og:url" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="4、异常观测值 一个全面的回归分析要覆盖对异常值的分析，包括离群点、高杠杆值点和强影响点。  4.1、离群点12345678&amp;gt; #离群点：模型预测效果不佳的观测点。它们通常有很大的、或正或负的残差。&amp;gt; #outlierTest()函数可以求得求得最大标准化残差绝对值Bonferroni（显著水平检验使用预设显著水平的1/2）调整后的p值&amp;gt; outlierTest(fit)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/hatValues.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/Cook_D.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/变量添加图.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/influencePlot.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/leaps.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/cp图.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/相对权重.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:04.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter08 回归（二）">
+<meta name="twitter:description" content="4、异常观测值 一个全面的回归分析要覆盖对异常值的分析，包括离群点、高杠杆值点和强影响点。  4.1、离群点12345678&amp;gt; #离群点：模型预测效果不佳的观测点。它们通常有很大的、或正或负的残差。&amp;gt; #outlierTest()函数可以求得求得最大标准化残差绝对值Bonferroni（显著水平检验使用预设显著水平的1/2）调整后的p值&amp;gt; outlierTest(fit)">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/hatValues.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/03/chapter08-回归（二）/" title="chapter08 回归（二）" itemprop="url">chapter08 回归（二）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-03T09:13:54.000Z" itemprop="datePublished"> 发表于 2017-01-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4、异常观测值"><span class="toc-text">4、异常观测值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1、离群点"><span class="toc-text">4.1、离群点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2、高杠杆值点"><span class="toc-text">4.2、高杠杆值点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3、强影响点"><span class="toc-text">4.3、强影响点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、改进措施"><span class="toc-text">5、改进措施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1、删除观测点"><span class="toc-text">5.1、删除观测点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2、变量变换"><span class="toc-text">5.2、变量变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3、增删变量"><span class="toc-text">5.3、增删变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4、尝试其他方法"><span class="toc-text">5.4、尝试其他方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、选择最佳模型"><span class="toc-text">6、选择最佳模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1、模型比较"><span class="toc-text">6.1、模型比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2、变量选择"><span class="toc-text">6.2、变量选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7、深入分析"><span class="toc-text">7、深入分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1、交叉验证"><span class="toc-text">7.1、交叉验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2、相对重要性"><span class="toc-text">7.2、相对重要性</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="4、异常观测值"><a href="#4、异常观测值" class="headerlink" title="4、异常观测值"></a>4、异常观测值</h2><ul>
+<li>一个全面的回归分析要覆盖对异常值的分析，包括离群点、高杠杆值点和强影响点。</li>
+</ul>
+<h3 id="4-1、离群点"><a href="#4-1、离群点" class="headerlink" title="4.1、离群点"></a>4.1、离群点</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#离群点：模型预测效果不佳的观测点。它们通常有很大的、或正或负的残差。</span></div><div class="line">&gt; <span class="comment">#outlierTest()函数可以求得求得最大标准化残差绝对值Bonferroni（显著水平检验使用预设显著水平的1/2）调整后的p值</span></div><div class="line">&gt; outlierTest(fit)</div><div class="line">       rstudent unadjusted p-value Bonferonni p</div><div class="line">Nevada <span class="number">3.542929</span>         <span class="number">0.00095088</span>     <span class="number">0.047544</span></div><div class="line">&gt; <span class="comment">#可以看到Nevada被判定为离群点（p=0.048）。注意，该函数只是根据单个最大（或</span></div><div class="line">&gt; <span class="comment">#正或负）残差值的显著性来判断是否有离群点。若不显著，则说明数据集中没有离群点；若显著，</span></div><div class="line">&gt; <span class="comment">#则你必须删除该离群点，然后再检验是否还有其他离群点存在。</span></div></pre></td></tr></table></figure>
+<h3 id="4-2、高杠杆值点"><a href="#4-2、高杠杆值点" class="headerlink" title="4.2、高杠杆值点"></a>4.2、高杠杆值点</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#高杠杆值点：是与其他预测变量有关的离群点，它们是由许多异常的预测变量值组合起来的，与响应变量值没有关系</span></div><div class="line"><span class="comment">#可根据帽子统计量（hat statistic）判断。对于一个给定的数据集，帽子均值为p/n，其中p 是模型估计的参数数目</span></div><div class="line"><span class="comment">#（包含截距项）， n 是样本量。一般来说，若观测点的帽子值大于帽子均值的2或3倍，即可以认定为高杠杆值点。</span></div><div class="line">hat.plot&lt;-<span class="keyword">function</span>(fit)&#123;</div><div class="line">  p&lt;-length(coefficients(fit))<span class="comment"># 输出模型参数数量，包含截距项</span></div><div class="line">  n&lt;-length(fitted(fit))<span class="comment">#预测值的数量</span></div><div class="line">  plot(hatvalues(fit),main=<span class="string">"Index Plot of Hat Values"</span>)</div><div class="line">  abline(h=c(<span class="number">2</span>,<span class="number">3</span>)*p/n,col=<span class="string">"red"</span>,lty=<span class="number">2</span>)</div><div class="line">  identify(<span class="number">1</span>:n,hatvalues(fit),names(hatvalues(fit)))</div><div class="line">&#125;</div><div class="line">hat.plot(fit)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/hatValues.png" alt=""></p>
+<h3 id="4-3、强影响点"><a href="#4-3、强影响点" class="headerlink" title="4.3、强影响点"></a>4.3、强影响点</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#强影响点：对模型参数估计值影响有些比例失衡的点，例如，若移除模型的一个观测点时模型会发生巨大的改变，</span></div><div class="line"><span class="comment">#那么你就需要检测一下数据中是否存在强影响点了。</span></div><div class="line"><span class="comment">#方法：Cook距离，或称D统计量，以及变量添加图（added variable plot）</span></div><div class="line"><span class="comment">#Cook’s D值大于4/(n-k-1)，则表明它是强影响点，其中n 为样本量大小， k 是预测变量数目。</span></div><div class="line">cutoff&lt;-<span class="number">4</span>/(nrow(states)-length(fit$coefficients)-<span class="number">2</span>)</div><div class="line">plot(fit,which = <span class="number">4</span>,cook.levels = cutoff)</div><div class="line">abline(h=cutoff,lty=<span class="number">2</span>,col=<span class="string">"red"</span>)</div><div class="line"><span class="comment">#注意，虽然该图对搜寻强影响点很有用，但我逐渐发现以1为分割点更具一般性。</span></div><div class="line"><span class="comment">#若设定D=1为判别标准，则数据集中没有点看起来像是强影响点。-作者</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/Cook_D.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#所谓变量添加图，即对于每个预测变量Xk，绘制Xk 在其他k-1个预测变量上回归的残差值相对于</span></div><div class="line"><span class="comment">#响应变量在其他k-1个预测变量上回归的残差值的关系图。 </span></div><div class="line"><span class="keyword">library</span>(car)</div><div class="line">avPlots(fit, ask=<span class="literal">FALSE</span>, onepage=<span class="literal">TRUE</span>, id.method=<span class="string">"identify"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/变量添加图.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#influencePlot 影响图</span></div><div class="line">influencePlot(fit, id.method = <span class="string">"identify"</span>, main=<span class="string">"Influence Plot"</span>,</div><div class="line">              sub=<span class="string">"Circle size is proportional to Cook's distance"</span>)</div><div class="line"></div><div class="line"><span class="comment">#纵坐标超过+2或小于2的州可被认为是离群点，水平轴超过0.2或0.3</span></div><div class="line"><span class="comment">#的州有高杠杆值（通常为预测值的组合）。圆圈大小与影响成比例，圆圈很大</span></div><div class="line"><span class="comment">#的点可能是对模型参数的估计造成的不成比例影响的强影响点</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/influencePlot.png" alt=""></p>
+<h2 id="5、改进措施"><a href="#5、改进措施" class="headerlink" title="5、改进措施"></a>5、改进措施</h2><h3 id="5-1、删除观测点"><a href="#5-1、删除观测点" class="headerlink" title="5.1、删除观测点"></a>5.1、删除观测点</h3><ul>
+<li>删除那些离群点或者强影响点</li>
+<li>谨慎！异常点可能是未知规律的表现！</li>
+</ul>
+<h3 id="5-2、变量变换"><a href="#5-2、变量变换" class="headerlink" title="5.2、变量变换"></a>5.2、变量变换</h3><p>变换一般使用Y^λ替代Y<br>powerTransform()通过λ的极大似然估计来正太化变量X^λ<br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&gt; summary(powerTransform(states$Murder))</div><div class="line">bcPower Transformation to Normality </div><div class="line"></div><div class="line">              Est.Power Std.Err. Wald Lower Bound Wald Upper Bound</div><div class="line">states$Murder    <span class="number">0.6055</span>   <span class="number">0.2639</span>           <span class="number">0.0884</span>           <span class="number">1.1227</span></div><div class="line"></div><div class="line">Likelihood ratio tests about transformation parameters</div><div class="line">                           LRT df       pval</div><div class="line">LR test, lambda = (<span class="number">0</span>) <span class="number">5.665991</span>  <span class="number">1</span> <span class="number">0.01729694</span></div><div class="line">LR test, lambda = (<span class="number">1</span>) <span class="number">2.122763</span>  <span class="number">1</span> <span class="number">0.14512456</span></div><div class="line"><span class="comment">#结果表明可以使用Murder^0.6正则化Murder，但是λ=1的假设北邮被拒绝，所有没有强有力的证据表明需要变换</span></div><div class="line">&gt; <span class="comment">#boxTidwell() 通过预测变量幂数的最大似然估计来改善线性关系</span></div><div class="line">&gt; boxTidwell(Murder~Population+Illiteracy,data=states)</div><div class="line">           Score Statistic   p-value MLE of lambda</div><div class="line">Population      -<span class="number">0.3228003</span> <span class="number">0.7468465</span>     <span class="number">0.8693882</span></div><div class="line">Illiteracy       <span class="number">0.6193814</span> <span class="number">0.5356651</span>     <span class="number">1.3581188</span></div><div class="line"></div><div class="line">iterations =  <span class="number">19</span> </div><div class="line"><span class="comment">#使用变换Population^0.87和Illiteracy^1.36能够大大改善线性关系。但是对Population</span></div><div class="line"><span class="comment">#（p=0.75）和Illiteracy（p=0.54）的计分检验又表明变量并不需要变换。</span></div></pre></td></tr></table></figure></p>
+<ul>
+<li>谨慎对待变量变换:如果你不能证明A，那就证明B，假装它就是A。（对于统计学家来说，这很滑稽好笑。）如果你变换了变量，你的解释必须基于变换后的变量，而不是初始变量。若变换得没有意义，应该避免。如，你怎样解释自杀意念的频率与抑郁程度的立方根间的关系呢？<h3 id="5-3、增删变量"><a href="#5-3、增删变量" class="headerlink" title="5.3、增删变量"></a>5.3、增删变量</h3></li>
+<li>删除变量在处理多重共线性时是一种非常重要的方法。做预测多重共线性没有影响，但是影响对变量的解释，解决通常删除共线性变量，或者使用岭回归<h3 id="5-4、尝试其他方法"><a href="#5-4、尝试其他方法" class="headerlink" title="5.4、尝试其他方法"></a>5.4、尝试其他方法</h3></li>
+</ul>
+<h2 id="6、选择最佳模型"><a href="#6、选择最佳模型" class="headerlink" title="6、选择最佳模型"></a>6、选择最佳模型</h2><h3 id="6-1、模型比较"><a href="#6-1、模型比较" class="headerlink" title="6.1、模型比较"></a>6.1、模型比较</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#anova()函数可以比较两个嵌套模型（一些项完全包含在另一个模型中）的拟合优度。</span></div><div class="line">&gt; fit1&lt;-lm(Murder~Population+Illiteracy+Income+Frost,data=states)</div><div class="line">&gt; fit2&lt;-lm(Murder~Population+Illiteracy,data=states)</div><div class="line">&gt; anova(fit2,fit1)</div><div class="line">Analysis of Variance Table</div><div class="line"></div><div class="line">Model <span class="number">1</span>: Murder ~ Population + Illiteracy</div><div class="line">Model <span class="number">2</span>: Murder ~ Population + Illiteracy + Income + Frost</div><div class="line">  Res.Df    RSS Df Sum of Sq      <span class="literal">F</span> Pr(&gt;<span class="literal">F</span>)</div><div class="line"><span class="number">1</span>     <span class="number">47</span> <span class="number">289.25</span>                           </div><div class="line"><span class="number">2</span>     <span class="number">45</span> <span class="number">289.17</span>  <span class="number">2</span>  <span class="number">0.078505</span> <span class="number">0.0061</span> <span class="number">0.9939</span></div><div class="line">&gt; <span class="comment">#函数同时还对是否应该添加Income和Frost到线性模型中进行了检验。</span></div><div class="line">&gt; <span class="comment">#检验不显著,所以可以剔除</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#AIC（Akaike Information Criterion，赤池信息准则）也可以用来比较模型，它考虑了模型的</span></div><div class="line">&gt; <span class="comment">#统计拟合度以及用来拟合的参数数目。 AIC值越小越好，说明较少的参数获得了足够的拟合度。</span></div><div class="line">&gt; fit1&lt;-lm(Murder~Population+Illiteracy+Income+Frost,data=states)</div><div class="line">&gt; fit2&lt;-lm(Murder~Population+Illiteracy,data=states)</div><div class="line">&gt; AIC(fit1,fit2)</div><div class="line">     df      AIC</div><div class="line">fit1  <span class="number">6</span> <span class="number">241.6429</span></div><div class="line">fit2  <span class="number">4</span> <span class="number">237.6565</span></div></pre></td></tr></table></figure>
+<h3 id="6-2、变量选择"><a href="#6-2、变量选择" class="headerlink" title="6.2、变量选择"></a>6.2、变量选择</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#逐步回归法：变量每次进入一个，但是每一步中，变量都会被重新评价，对模型没有贡献的变量将会被删除，</span></div><div class="line"><span class="comment">#预测变量可能会被添加、删除好几次，直到获得最优模型为止。</span></div><div class="line"><span class="keyword">library</span>(MASS)</div><div class="line">fit1&lt;-lm(Murder~Population+Illiteracy+Income+Frost,data=states)</div><div class="line">stepAIC(fit1)<span class="comment">#默认使用向后逐步回归</span></div><div class="line"></div><div class="line">Start:  AIC=<span class="number">97.75</span></div><div class="line">Murder ~ Population + Illiteracy + Income + Frost</div><div class="line"></div><div class="line">             Df Sum of Sq    RSS     AIC</div><div class="line">- Frost       <span class="number">1</span>     <span class="number">0.021</span> <span class="number">289.19</span>  <span class="number">95.753</span></div><div class="line">- Income      <span class="number">1</span>     <span class="number">0.057</span> <span class="number">289.22</span>  <span class="number">95.759</span></div><div class="line">&lt;none&gt;                    <span class="number">289.17</span>  <span class="number">97.749</span></div><div class="line">- Population  <span class="number">1</span>    <span class="number">39.238</span> <span class="number">328.41</span> <span class="number">102.111</span></div><div class="line">- Illiteracy  <span class="number">1</span>   <span class="number">144.264</span> <span class="number">433.43</span> <span class="number">115.986</span></div><div class="line"></div><div class="line">Step:  AIC=<span class="number">95.75</span></div><div class="line">Murder ~ Population + Illiteracy + Income</div><div class="line"></div><div class="line">             Df Sum of Sq    RSS     AIC</div><div class="line">- Income      <span class="number">1</span>     <span class="number">0.057</span> <span class="number">289.25</span>  <span class="number">93.763</span></div><div class="line">&lt;none&gt;                    <span class="number">289.19</span>  <span class="number">95.753</span></div><div class="line">- Population  <span class="number">1</span>    <span class="number">43.658</span> <span class="number">332.85</span> <span class="number">100.783</span></div><div class="line">- Illiteracy  <span class="number">1</span>   <span class="number">236.196</span> <span class="number">525.38</span> <span class="number">123.605</span></div><div class="line"></div><div class="line">Step:  AIC=<span class="number">93.76</span></div><div class="line">Murder ~ Population + Illiteracy</div><div class="line"></div><div class="line">             Df Sum of Sq    RSS     AIC</div><div class="line">&lt;none&gt;                    <span class="number">289.25</span>  <span class="number">93.763</span></div><div class="line">- Population  <span class="number">1</span>    <span class="number">48.517</span> <span class="number">337.76</span>  <span class="number">99.516</span></div><div class="line">- Illiteracy  <span class="number">1</span>   <span class="number">299.646</span> <span class="number">588.89</span> <span class="number">127.311</span></div><div class="line"></div><div class="line">Call:</div><div class="line">lm(formula = Murder ~ Population + Illiteracy, data = states)</div><div class="line"></div><div class="line">Coefficients:</div><div class="line">(Intercept)   Population   Illiteracy  </div><div class="line">  <span class="number">1.6515497</span>    <span class="number">0.0002242</span>    <span class="number">4.0807366</span></div></pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#全子集回归</span></div><div class="line"><span class="keyword">library</span>(leaps)</div><div class="line">leaps&lt;-regsubsets(Murder~Population+Illiteracy+Income+Frost,data=states,nbest=<span class="number">4</span>)</div><div class="line">plot(leaps, scale=<span class="string">"adjr2"</span>)</div><div class="line"><span class="keyword">library</span>(car)</div><div class="line">subsets(leaps,statistic = <span class="string">"cp"</span>, main=<span class="string">"Cp Plot for All Subsets Regression"</span>)</div><div class="line">abline(<span class="number">1</span>,<span class="number">1</span>,lty=<span class="number">2</span>,col=<span class="string">"red"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/leaps.png" alt=""></p>
+<ul>
+<li>可以看出，双变量对应的模型能够得到最多的R平方增量<br><img src="/2017/01/03/chapter08-回归（二）/cp图.png" alt=""></li>
+<li>基于Mallows Cp统计量的四个最佳模型。越好的模型离截距项和斜率均为1的直线越近。图中可以得出4个不错的模型（P-Il,P-Il-F,P-Il-In,P-Il-In-F）</li>
+</ul>
+<h2 id="7、深入分析"><a href="#7、深入分析" class="headerlink" title="7、深入分析"></a>7、深入分析</h2><h3 id="7-1、交叉验证"><a href="#7-1、交叉验证" class="headerlink" title="7.1、交叉验证"></a>7.1、交叉验证</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#交叉验证</span></div><div class="line">shrinkage&lt;-<span class="keyword">function</span>(fit,k=<span class="number">10</span>)&#123;</div><div class="line">  <span class="keyword">require</span>(bootstrap)</div><div class="line">  </div><div class="line">  theta.fit&lt;-<span class="keyword">function</span>(x,y)&#123;lsfit(x,y)&#125;</div><div class="line">  theta.predict&lt;-<span class="keyword">function</span>(fit,x)&#123;cbind(<span class="number">1</span>,x)%*%fit$coef&#125;</div><div class="line">  </div><div class="line">  x&lt;-fit$model[,<span class="number">2</span>:ncol(fit$model)]</div><div class="line">  y&lt;-fit$model[,<span class="number">1</span>]</div><div class="line">  </div><div class="line">  results&lt;-crossval(x,y,theta.fit,theta.predict,ngroup=k)</div><div class="line">  r2&lt;-cor(y,fit$fitted.values)^<span class="number">2</span></div><div class="line">  r2cv&lt;-cor(y,results$cv.fit)^<span class="number">2</span></div><div class="line">  cat(<span class="string">"Original R-square="</span>,r2,<span class="string">"\n"</span>)</div><div class="line">  cat(k,<span class="string">"Fold Cross-Validated R-square="</span>,r2cv,<span class="string">"\n"</span>)</div><div class="line">  cat(<span class="string">"Change="</span>,r2-r2cv,<span class="string">"\n"</span>)</div><div class="line">&#125;</div><div class="line">fit1&lt;-lm(Murder~Population+Income+Illiteracy+Frost,data=states)</div><div class="line"><span class="keyword">library</span>(bootstrap)</div><div class="line">shrinkage(fit1)</div><div class="line"></div><div class="line">&gt; Original R-square= <span class="number">0.5669502</span> </div><div class="line">&gt; <span class="number">10</span> Fold Cross-Validated R-square= <span class="number">0.4174945</span> </div><div class="line">&gt; Change= <span class="number">0.1494558</span> </div><div class="line"></div><div class="line">fit2&lt;-lm(Murder~Population+Illiteracy,data=states)</div><div class="line"><span class="keyword">library</span>(bootstrap)</div><div class="line">shrinkage(fit2)</div><div class="line"></div><div class="line">&gt; Original R-square= <span class="number">0.5668327</span> </div><div class="line">&gt; <span class="number">10</span> Fold Cross-Validated R-square= <span class="number">0.5193488</span> </div><div class="line">&gt; Change= <span class="number">0.04748383</span> </div><div class="line"></div><div class="line"><span class="comment">#双变量比全变量模型交叉验证后R方减少的更少，说明其泛化能力强，R平方减少得越少，预测则越精确</span></div></pre></td></tr></table></figure>
+<h3 id="7-2、相对重要性"><a href="#7-2、相对重要性" class="headerlink" title="7.2、相对重要性"></a>7.2、相对重要性</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#相对重要性</span></div><div class="line">&gt; <span class="comment">#scale将数据标准化为均值为0、标准差为1的数据集，这样用R回归即可获得标准化的回归系数。</span></div><div class="line">&gt; <span class="comment">#评价预测变量相对重要性的方法一直在涌现。最简单的莫过于比较标准化的回归系数，它表</span></div><div class="line">&gt; <span class="comment">#示当其他预测变量不变时，该预测变量一个标准差的变化可引起的响应变量的预期变化（以标准</span></div><div class="line">&gt; <span class="comment">#差单位度量）。</span></div><div class="line">&gt; zstates &lt;- as.data.frame(scale(states))</div><div class="line">&gt; zfit&lt;-lm(Murder~Population+Income+Illiteracy+Frost,data=zstates)</div><div class="line">&gt; coef(zfit)</div><div class="line">  (Intercept)    Population        Income    Illiteracy         Frost </div><div class="line">-<span class="number">2.054026e-16</span>  <span class="number">2.705095e-01</span>  <span class="number">1.072372e-02</span>  <span class="number">6.840496e-01</span>  <span class="number">8.185407e-03</span> </div><div class="line">&gt; <span class="comment">#当其他因素不变时，文盲率一个标准差的变化将增加0.68个标准差的谋杀率。</span></div><div class="line">&gt; <span class="comment">#根据标准化的回归系数，我们可认为Illiteracy是最重要的预测变量，而Frost是最不重要的。</span></div><div class="line"></div><div class="line"><span class="comment">#相对权重法：它是对所有可能子模型添加一个预测变量引起的R平方平均增加量的一个近似值</span></div><div class="line">relweights &lt;- <span class="keyword">function</span>(fit, <span class="keyword">...</span>) &#123;</div><div class="line">  R &lt;- cor(fit$model)</div><div class="line">  nvar &lt;- ncol(R)</div><div class="line">  rxx &lt;- R[<span class="number">2</span>:nvar, <span class="number">2</span>:nvar]</div><div class="line">  rxy &lt;- R[<span class="number">2</span>:nvar, <span class="number">1</span>]</div><div class="line">  svd &lt;- eigen(rxx)</div><div class="line">  evec &lt;- svd$vectors</div><div class="line">  ev &lt;- svd$values</div><div class="line">  delta &lt;- diag(sqrt(ev))</div><div class="line">  </div><div class="line">  <span class="comment"># correlations between original predictors and new orthogonal variables</span></div><div class="line">  lambda &lt;- evec %*% delta %*% t(evec)</div><div class="line">  lambdasq &lt;- lambda^<span class="number">2</span></div><div class="line">  </div><div class="line">  <span class="comment"># regression coefficients of Y on orthogonal variables</span></div><div class="line">  beta &lt;- solve(lambda) %*% rxy</div><div class="line">  rsquare &lt;- colSums(beta^<span class="number">2</span>)</div><div class="line">  rawwgt &lt;- lambdasq %*% beta^<span class="number">2</span></div><div class="line">  import &lt;- (rawwgt/rsquare) * <span class="number">100</span></div><div class="line">  lbls &lt;- names(fit$model[<span class="number">2</span>:nvar])</div><div class="line">  rownames(import) &lt;- lbls</div><div class="line">  colnames(import) &lt;- <span class="string">"Weights"</span></div><div class="line">  </div><div class="line">  <span class="comment"># plot results</span></div><div class="line">  barplot(t(import), names.arg = lbls, ylab = <span class="string">"% of R-Square"</span>, </div><div class="line">          xlab = <span class="string">"Predictor Variables"</span>, main = <span class="string">"Relative Importance of Predictor Variables"</span>, </div><div class="line">          sub = paste(<span class="string">"R-Square = "</span>, round(rsquare, digits = <span class="number">3</span>)), </div><div class="line">          <span class="keyword">...</span>)</div><div class="line">  <span class="keyword">return</span>(import)</div><div class="line">&#125;</div><div class="line"></div><div class="line">fit &lt;- lm(Murder ~ Population + Illiteracy + Income + </div><div class="line">            Frost, data = states)</div><div class="line">relweights(fit, col = <span class="string">"lightgrey"</span>)</div><div class="line"></div><div class="line">             Weights</div><div class="line">Population <span class="number">14.723401</span></div><div class="line">Illiteracy <span class="number">59.000195</span></div><div class="line">Income      <span class="number">5.488962</span></div><div class="line">Frost      <span class="number">20.787442</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/03/chapter08-回归（二）/相对权重.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/回归/">回归</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/" data-title="chapter08 回归（二） | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/04/chapter09-方差分析/" title="chapter09 方差分析">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter09 方差分析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/01/03/chapter08-回归（一）/"  title="chapter08 回归（一）">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter08 回归（一）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/01/03/chapter08-回归（二）/" data-title="chapter08 回归（二）" data-url="https://pingansheng.github.io/2017/01/03/chapter08-回归（二）/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4、异常观测值"><span class="toc-text">4、异常观测值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1、离群点"><span class="toc-text">4.1、离群点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2、高杠杆值点"><span class="toc-text">4.2、高杠杆值点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3、强影响点"><span class="toc-text">4.3、强影响点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、改进措施"><span class="toc-text">5、改进措施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1、删除观测点"><span class="toc-text">5.1、删除观测点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2、变量变换"><span class="toc-text">5.2、变量变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3、增删变量"><span class="toc-text">5.3、增删变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4、尝试其他方法"><span class="toc-text">5.4、尝试其他方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、选择最佳模型"><span class="toc-text">6、选择最佳模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1、模型比较"><span class="toc-text">6.1、模型比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2、变量选择"><span class="toc-text">6.2、变量选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7、深入分析"><span class="toc-text">7、深入分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1、交叉验证"><span class="toc-text">7.1、交叉验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2、相对重要性"><span class="toc-text">7.2、相对重要性</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

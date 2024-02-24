@@ -1,0 +1,1385 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/15/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/06/chapter05-高级数据管理/" title="chapter05 高级数据管理" itemprop="url">chapter05 高级数据管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-06T03:22:41.000Z" itemprop="datePublished"> 发表于 2017-01-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="高级数据管理"><a href="#高级数据管理" class="headerlink" title="高级数据管理"></a>高级数据管理</h1><h2 id="1、数值和字符处理函数"><a href="#1、数值和字符处理函数" class="headerlink" title="1、数值和字符处理函数"></a>1、数值和字符处理函数</h2><h3 id="（1）数学函数"><a href="#（1）数学函数" class="headerlink" title="（1）数学函数"></a>（1）数学函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs(x)</td>
+<td>绝对值</td>
+</tr>
+<tr>
+<td>sqrt(x)</td>
+<td>平方根和25^(0.5)等价</td>
+</tr>
+<tr>
+<td>ceiling(x)</td>
+<td>不小于x的最小整数，正无穷方向取整</td>
+</tr>
+<tr>
+<td>floor(x)</td>
+<td>不大于x的最大整数，负无穷方向取整</td>
+</tr>
+<tr>
+<td>trunc(x)</td>
+<td>向 0 的方向截取的x中的整数部分</td>
+</tr>
+<tr>
+<td>round(x, digits=n)</td>
+<td>将x舍入为指定位的小数</td>
+</tr>
+<tr>
+<td>signif(x, digits=n)</td>
+<td>将x舍入为指定的有效数字位数，</td>
+</tr>
+<tr>
+<td>signif(3.475, digits=2)</td>
+<td>返回值为3.5</td>
+</tr>
+<tr>
+<td>cos(x)、 sin(x) 、 tan(x)</td>
+<td>余弦、正弦和正切</td>
+</tr>
+<tr>
+<td>acos(x) 、 asin(x) 、 atan(x)</td>
+<td>反余弦、反正弦和反正切</td>
+</tr>
+<tr>
+<td>cosh(x) 、 sinh(x) 、 tanh(x)</td>
+<td>双曲余弦、双曲正弦和双曲正切</td>
+</tr>
+<tr>
+<td>acosh(x) 、 asinh(x) 、 atanh(x)</td>
+<td>反双曲余弦、反双曲正弦和反双曲正切</td>
+</tr>
+<tr>
+<td>log(x,base=n)</td>
+<td>n为底，x的对数</td>
+</tr>
+<tr>
+<td>log(x)</td>
+<td>e为底，x的对数</td>
+</tr>
+<tr>
+<td>log10(x)</td>
+<td>10为底，x的对数</td>
+</tr>
+<tr>
+<td>exp(x)</td>
+<td>e指数函数</td>
+</tr>
+</tbody>
+</table>
+<p>以上函数如果用于向量、矩阵或者数据框，则对每个元素进行运算。</p>
+<h3 id="（2）统计函数"><a href="#（2）统计函数" class="headerlink" title="（2）统计函数"></a>（2）统计函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mean(x)</td>
+<td>均值</td>
+</tr>
+<tr>
+<td>median(x)</td>
+<td>中位数</td>
+</tr>
+<tr>
+<td>sd(x)</td>
+<td>标准差</td>
+</tr>
+<tr>
+<td>var(x)</td>
+<td>方差</td>
+</tr>
+<tr>
+<td>mad(x)</td>
+<td>绝对中位差</td>
+</tr>
+<tr>
+<td>quantile(x,probs)</td>
+<td>分位数，probs一个[0,1]之间的概率数值向量</td>
+</tr>
+<tr>
+<td>range(x)</td>
+<td>求值域</td>
+</tr>
+<tr>
+<td>sum(x)</td>
+<td>求和</td>
+</tr>
+<tr>
+<td>diff(x, lag=n)</td>
+<td>滞后差分，lag为滞后几项，默认为1</td>
+</tr>
+<tr>
+<td>min(x)</td>
+<td>最小值</td>
+</tr>
+<tr>
+<td>max(x)</td>
+<td>最大值</td>
+</tr>
+<tr>
+<td>scale(x, center=TRUE, scale=TRUE)</td>
+<td>为数据对象x按列进行中心化（center=TRUE）或标准化（center=TRUE,scale=TRUE）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（3）概率函数"><a href="#（3）概率函数" class="headerlink" title="（3）概率函数"></a>（3）概率函数</h3><table>
+<thead>
+<tr>
+<th>分布</th>
+<th>函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Beta分布</td>
+<td>beta</td>
+</tr>
+<tr>
+<td>Logistic分布</td>
+<td>logis</td>
+</tr>
+<tr>
+<td>二项分布</td>
+<td>binom</td>
+</tr>
+<tr>
+<td>多项分布</td>
+<td>multinom</td>
+</tr>
+<tr>
+<td>柯西分布</td>
+<td>cauchy</td>
+</tr>
+<tr>
+<td>负二项分布</td>
+<td>nbinom</td>
+</tr>
+<tr>
+<td>（非中心）卡方分布</td>
+<td>chisq</td>
+</tr>
+<tr>
+<td>正态分布</td>
+<td>norm</td>
+</tr>
+<tr>
+<td>指数分布</td>
+<td>exp</td>
+</tr>
+<tr>
+<td>泊松分布</td>
+<td>pois</td>
+</tr>
+<tr>
+<td>F分布</td>
+<td>f</td>
+</tr>
+<tr>
+<td>Wilcoxon符号秩分布</td>
+<td>signrank</td>
+</tr>
+<tr>
+<td>Gamma分布</td>
+<td>gamma</td>
+</tr>
+<tr>
+<td>t分布</td>
+<td>t</td>
+</tr>
+<tr>
+<td>几何分布</td>
+<td>geom</td>
+</tr>
+<tr>
+<td>均匀分布</td>
+<td>unif</td>
+</tr>
+<tr>
+<td>超几何分布</td>
+<td>hyper</td>
+</tr>
+<tr>
+<td>Weibull分布</td>
+<td>weibull</td>
+</tr>
+<tr>
+<td>对数正态分布</td>
+<td>lnorm</td>
+</tr>
+<tr>
+<td>Wilcoxon秩和分布</td>
+<td>wilcox</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1）、设定随机数种子"><a href="#1）、设定随机数种子" class="headerlink" title="1）、设定随机数种子"></a>1）、设定随机数种子</h4><p>set.seed(),这样可以重现结果</p>
+<h4 id="2）、生成多元正态数据"><a href="#2）、生成多元正态数据" class="headerlink" title="2）、生成多元正态数据"></a>2）、生成多元正态数据</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(MASS)</div><div class="line"></div><div class="line">options(digits=<span class="number">3</span>)</div><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">mean=c(<span class="number">230.4</span>,<span class="number">123.2</span>,<span class="number">3.7</span>)</div><div class="line">sigma=matrix(c(<span class="number">15360.8</span>,<span class="number">6721.2</span>,-<span class="number">47.1</span>,<span class="number">6721.2</span>,<span class="number">4700.9</span>,-<span class="number">16.5</span>,-<span class="number">47.1</span>,-<span class="number">16.5</span>,<span class="number">0.3</span>),nrow=<span class="number">3</span>,ncol=<span class="number">3</span>)</div><div class="line"><span class="comment">#多元正态数据</span></div><div class="line">mydata=mvrnorm(<span class="number">50000</span>,mean,sigma)</div><div class="line">mydata=as.data.frame(mydata)</div><div class="line">names(mydata)=c(<span class="string">"x"</span>,<span class="string">"y"</span>,<span class="string">"z"</span>)</div><div class="line"></div><div class="line"><span class="comment">#三维散点图</span></div><div class="line"><span class="keyword">library</span>(scatterplot3d)</div><div class="line">scatterplot3d(mydata$x, mydata$y, mydata$z, highlight.3d=<span class="literal">TRUE</span>,col.axis=<span class="string">"blue"</span>, col.grid=<span class="string">"lightblue"</span>, main=<span class="string">"scatterplot3d - 2"</span>, pch=<span class="number">20</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter05-高级数据管理/多元正太.png" alt=""></p>
+<h3 id="（4）字符处理函数"><a href="#（4）字符处理函数" class="headerlink" title="（4）字符处理函数"></a>（4）字符处理函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nchar(x)</td>
+<td>返回字符数量</td>
+</tr>
+<tr>
+<td>substr(x,start,stop)</td>
+<td>提取货替换一个字符中的字串，substr(x,2,4)&lt;-“xxx”</td>
+</tr>
+<tr>
+<td>grep(pattern, x, ignore. case=FALSE,fixed=FALSE)</td>
+<td>在x中搜索某种模式,fixed=FALSE则表示为一个正则表达式，若fixed=TRUE则为文本，返回下标</td>
+</tr>
+<tr>
+<td>sub(pattern, replacement,x, ignore. case=FALSE,fixed=FALSE)</td>
+<td>在x中搜索某种模式,并替换为replacement,fixed=FALSE则表示为一个正则表达式，若fixed=TRUE则为文本</td>
+</tr>
+<tr>
+<td>strsplit(x, split, fixed=FALSE)</td>
+<td>拆分字符串，fix同上</td>
+</tr>
+<tr>
+<td>paste(…, sep=””)</td>
+<td>连接字符串，分隔符为sep</td>
+</tr>
+<tr>
+<td>toupper(x)</td>
+<td>to大写</td>
+</tr>
+<tr>
+<td>tolower(x)</td>
+<td>to小写</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（5）其他函数"><a href="#（5）其他函数" class="headerlink" title="（5）其他函数"></a>（5）其他函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>length(x)</td>
+<td>求长度</td>
+</tr>
+<tr>
+<td>seq（from,to,by)</td>
+<td>生成序列</td>
+</tr>
+<tr>
+<td>rep（x,n)</td>
+<td>X重复n次</td>
+</tr>
+<tr>
+<td>cut(x,n)</td>
+<td>将连续型变量x分割为有着n个水平的因子，使用选项ordered_result = TRUE以创建一个有序型因子</td>
+</tr>
+<tr>
+<td>pretty(x,n)</td>
+<td>创建美观的分割点。通过选取n+1个等间距的取整值，将一个连续型变量x分割为n个区间。绘图中常用</td>
+</tr>
+<tr>
+<td>cat(. .., file =”myfile”,append =FALSE)</td>
+<td>连接…中的对象，并将其输出到屏幕上或文件中（如果声明了一个的话）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（6）函数应用到矩阵或数据框"><a href="#（6）函数应用到矩阵或数据框" class="headerlink" title="（6）函数应用到矩阵或数据框"></a>（6）函数应用到矩阵或数据框</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">apply(x,MARGIN,FUN,…)</div><div class="line"><span class="comment">#x:数据对象</span></div><div class="line"><span class="comment">#MARGIN:1表示行，2表示列</span></div><div class="line"><span class="comment">#FUN：表示函数</span></div><div class="line"><span class="comment">#…：表示参数</span></div></pre></td></tr></table></figure>
+<p>一个数据处理问题：按照姓名排序并且对成绩评级</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#初始化数据</span></div><div class="line">options(digits = <span class="number">2</span>)</div><div class="line">Student=c(<span class="string">"J D"</span>,<span class="string">"A W"</span>,<span class="string">"B M"</span>,<span class="string">"D J"</span>,<span class="string">"J M"</span>,<span class="string">"C C"</span>,<span class="string">"R Y"</span>,<span class="string">"G K"</span>,<span class="string">"J E"</span>,<span class="string">"M R"</span>)</div><div class="line">Math=c(<span class="number">502</span>,<span class="number">600</span>,<span class="number">412</span>,<span class="number">358</span>,<span class="number">495</span>,<span class="number">512</span>,<span class="number">410</span>,<span class="number">625</span>,<span class="number">573</span>,<span class="number">522</span>)</div><div class="line">Science=c(<span class="number">95</span>,<span class="number">99</span>,<span class="number">80</span>,<span class="number">82</span>,<span class="number">75</span>,<span class="number">85</span>,<span class="number">80</span>,<span class="number">95</span>,<span class="number">89</span>,<span class="number">86</span>)</div><div class="line">English=c(<span class="number">25</span>,<span class="number">22</span>,<span class="number">18</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">28</span>,<span class="number">15</span>,<span class="number">30</span>,<span class="number">27</span>,<span class="number">18</span>)</div><div class="line">roster=data.frame(Student,Math,Science,English,stringsAsFactors = <span class="literal">FALSE</span>)</div><div class="line"></div><div class="line"><span class="comment">#归一化成绩</span></div><div class="line">z&lt;-scale(roster[,<span class="number">2</span>:<span class="number">4</span>])</div><div class="line"><span class="comment">#平均成绩</span></div><div class="line">score&lt;-apply(z,<span class="number">1</span>,mean)</div><div class="line"><span class="comment">#平均成绩加入数据框</span></div><div class="line">roster=cbind(roster,score)</div><div class="line"><span class="comment">#取成绩分位数</span></div><div class="line">y=quantile(score,c(<span class="number">.8</span>,<span class="number">.6</span>,<span class="number">.4</span>,<span class="number">.2</span>))</div><div class="line"></div><div class="line"><span class="comment">#新增级别变量并赋值</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">1</span>]]&lt;-<span class="string">"A"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">2</span>] &amp; score&lt;y[<span class="number">1</span>]]&lt;-<span class="string">"B"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">3</span>] &amp; score&lt;y[<span class="number">2</span>]]&lt;-<span class="string">"C"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">4</span>] &amp; score&lt;y[<span class="number">3</span>]]&lt;-<span class="string">"D"</span></div><div class="line">roster$grade[score&lt;y[<span class="number">4</span>]]&lt;-<span class="string">"F"</span></div><div class="line"></div><div class="line"><span class="comment">#拆分姓名列为两列</span></div><div class="line">name=strsplit(roster$Student,<span class="string">" "</span>)</div><div class="line">lastname=sapply(name, <span class="string">"["</span>,<span class="number">2</span>)</div><div class="line">firstname=sapply(name, <span class="string">"["</span>,<span class="number">1</span>)</div><div class="line"><span class="comment">#重新加入姓名两列至数据框</span></div><div class="line">roster&lt;-cbind(firstname,lastname,roster[,-<span class="number">1</span>])</div><div class="line"><span class="comment">#按照姓名两列排序</span></div><div class="line">roster=roster[order(lastname,firstname),]</div></pre></td></tr></table></figure>
+<h2 id="2、控制流"><a href="#2、控制流" class="headerlink" title="2、控制流"></a>2、控制流</h2><h3 id="（1）重复和循环"><a href="#（1）重复和循环" class="headerlink" title="（1）重复和循环"></a>（1）重复和循环</h3><ul>
+<li>低效费时，尽量使用内建函数与apply函数</li>
+</ul>
+<p>1)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#for:</span></div><div class="line"><span class="keyword">for</span> (var <span class="keyword">in</span> seq) statement</div><div class="line">		</div><div class="line"><span class="comment">#eg. </span></div><div class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:<span class="number">10</span>) print(<span class="string">"Hello world"</span>)</div></pre></td></tr></table></figure>
+<p>2)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#while：</span></div><div class="line"><span class="keyword">while</span>(cond) statement</div><div class="line"></div><div class="line"><span class="comment">#eg.</span></div><div class="line">i=<span class="number">0</span>;</div><div class="line"><span class="keyword">while</span>(i&lt;<span class="number">10</span>)</div><div class="line">&#123;</div><div class="line">  print(<span class="string">"x"</span>);i=i+<span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="（2）条件执行"><a href="#（2）条件执行" class="headerlink" title="（2）条件执行"></a>（2）条件执行</h3><p>1)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#if-else结构</span></div><div class="line"><span class="keyword">if</span>(!is.character(date)) &#123;date2&lt;-as.factor(date)&#125; <span class="keyword">else</span> &#123;print(<span class="string">"Done"</span>)&#125;</div></pre></td></tr></table></figure>
+<p>2) </p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#switch结构</span></div><div class="line">feeling&lt;-c(<span class="string">"sad"</span>,<span class="string">"afraid"</span>)</div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> feeling)</div><div class="line">print(</div><div class="line">  <span class="keyword">switch</span>(i,</div><div class="line">         happy=<span class="string">"Happy"</span>,</div><div class="line">         sad=<span class="string">"Sad"</span>,</div><div class="line">         afraid=<span class="string">"afraid"</span>)</div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="3、用户自编函数"><a href="#3、用户自编函数" class="headerlink" title="3、用户自编函数"></a>3、用户自编函数</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#函数：</span></div><div class="line">mystats&lt;-<span class="keyword">function</span>(x,parametric=<span class="literal">TRUE</span>,print=<span class="literal">FALSE</span>)&#123;</div><div class="line">  <span class="keyword">if</span>(parametric)&#123;</div><div class="line">    center&lt;-mean(x);spread&lt;-sd(x)</div><div class="line">    centerStr&lt;- paste(<span class="string">"Mean="</span>,center,<span class="string">"\n"</span>,<span class="string">"SD="</span>,spread,<span class="string">"\n"</span>)</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    center&lt;-median(x);spread&lt;-mad(x)</div><div class="line">    centerStr&lt;- paste(<span class="string">"Median="</span>,center,<span class="string">"\n"</span>,<span class="string">"MAD="</span>,spread,<span class="string">"\n"</span>)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">if</span>(print)&#123;</div><div class="line">    cat(centerStr)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> (list(center=center,spread=spread))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#使用：</span></div><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">x&lt;-rnorm(<span class="number">500</span>)</div><div class="line">y=mystats(x,parametric = <span class="literal">TRUE</span>,print = <span class="literal">FALSE</span>)</div><div class="line"></div><div class="line"><span class="comment">#函数：</span></div><div class="line">mydate&lt;-<span class="keyword">function</span>(type=<span class="string">"long"</span>)&#123;</div><div class="line">  <span class="keyword">switch</span>(type,</div><div class="line">         long=format(Sys.time(),<span class="string">"%A %B %d %Y"</span>),</div><div class="line">         short=format(Sys.time(),<span class="string">"%m-%d-%y"</span>),</div><div class="line">         cat(type,<span class="string">"is not a recognized type\n"</span>)</div><div class="line">         )</div><div class="line">&#125;</div><div class="line"><span class="comment">#使用：</span></div><div class="line">mydate(<span class="string">"short"</span>)</div></pre></td></tr></table></figure>
+<h2 id="4、整合与重构"><a href="#4、整合与重构" class="headerlink" title="4、整合与重构"></a>4、整合与重构</h2><h3 id="（1）转置"><a href="#（1）转置" class="headerlink" title="（1）转置"></a>（1）转置</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cars&lt;-mtcars[<span class="number">1</span>:<span class="number">5</span>,<span class="number">1</span>:<span class="number">4</span>]</div><div class="line">t(cars)</div></pre></td></tr></table></figure>
+<h3 id="（2）聚合函数"><a href="#（2）聚合函数" class="headerlink" title="（2）聚合函数"></a>（2）聚合函数</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#整合</span></div><div class="line">options(digits = <span class="number">3</span>)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">aggdata=aggregate(mtcars,  by =list(气缸=cyl,档位=gear),FUN=mean,na.rm=<span class="literal">TRUE</span>)</div><div class="line">aggdata</div><div class="line"></div><div class="line"><span class="comment">#将所有数据按照气缸与档位进行分组，求均值</span></div><div class="line">        气缸 档位  mpg cyl disp  hp drat   wt qsec  vs   am gear carb</div><div class="line">    <span class="number">1</span>    <span class="number">4</span>    <span class="number">3</span> <span class="number">21.5</span>   <span class="number">4</span>  <span class="number">120</span>  <span class="number">97</span> <span class="number">3.70</span> <span class="number">2.46</span> <span class="number">20.0</span> <span class="number">1.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">1.00</span></div><div class="line">    <span class="number">2</span>    <span class="number">6</span>    <span class="number">3</span> <span class="number">19.8</span>   <span class="number">6</span>  <span class="number">242</span> <span class="number">108</span> <span class="number">2.92</span> <span class="number">3.34</span> <span class="number">19.8</span> <span class="number">1.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">1.00</span></div><div class="line">    <span class="number">3</span>    <span class="number">8</span>    <span class="number">3</span> <span class="number">15.1</span>   <span class="number">8</span>  <span class="number">358</span> <span class="number">194</span> <span class="number">3.12</span> <span class="number">4.10</span> <span class="number">17.1</span> <span class="number">0.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">3.08</span></div><div class="line">    <span class="number">4</span>    <span class="number">4</span>    <span class="number">4</span> <span class="number">26.9</span>   <span class="number">4</span>  <span class="number">103</span>  <span class="number">76</span> <span class="number">4.11</span> <span class="number">2.38</span> <span class="number">19.6</span> <span class="number">1.0</span> <span class="number">0.75</span>    <span class="number">4</span> <span class="number">1.50</span></div><div class="line">    <span class="number">5</span>    <span class="number">6</span>    <span class="number">4</span> <span class="number">19.8</span>   <span class="number">6</span>  <span class="number">164</span> <span class="number">116</span> <span class="number">3.91</span> <span class="number">3.09</span> <span class="number">17.7</span> <span class="number">0.5</span> <span class="number">0.50</span>    <span class="number">4</span> <span class="number">4.00</span></div><div class="line">    <span class="number">6</span>    <span class="number">4</span>    <span class="number">5</span> <span class="number">28.2</span>   <span class="number">4</span>  <span class="number">108</span> <span class="number">102</span> <span class="number">4.10</span> <span class="number">1.83</span> <span class="number">16.8</span> <span class="number">0.5</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">2.00</span></div><div class="line">    <span class="number">7</span>    <span class="number">6</span>    <span class="number">5</span> <span class="number">19.7</span>   <span class="number">6</span>  <span class="number">145</span> <span class="number">175</span> <span class="number">3.62</span> <span class="number">2.77</span> <span class="number">15.5</span> <span class="number">0.0</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">6.00</span></div><div class="line">    <span class="number">8</span>    <span class="number">8</span>    <span class="number">5</span> <span class="number">15.4</span>   <span class="number">8</span>  <span class="number">326</span> <span class="number">300</span> <span class="number">3.88</span> <span class="number">3.37</span> <span class="number">14.6</span> <span class="number">0.0</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">6.00</span></div></pre></td></tr></table></figure>
+<h3 id="（3）reshape包"><a href="#（3）reshape包" class="headerlink" title="（3）reshape包"></a>（3）reshape包</h3><h4 id="1）融合"><a href="#1）融合" class="headerlink" title="1）融合"></a>1）融合</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#测试数据</span></div><div class="line">id=c(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</div><div class="line">time=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</div><div class="line">x1=c(<span class="number">5</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">2</span>)</div><div class="line">x2=c(<span class="number">6</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">4</span>)</div><div class="line"></div><div class="line">textData=data.frame(id,time,x1,x2,stringsAsFactors = <span class="literal">FALSE</span>)</div><div class="line">		</div><div class="line"><span class="keyword">library</span>(reshape)</div><div class="line"></div><div class="line">md&lt;-melt(textData, id=(c(<span class="string">"id"</span>,<span class="string">"time"</span>)))</div><div class="line"></div><div class="line">           id time x1 x2</div><div class="line">        <span class="number">1</span>  <span class="number">1</span>    <span class="number">1</span>  <span class="number">5</span>  <span class="number">6</span></div><div class="line">        <span class="number">2</span>  <span class="number">1</span>    <span class="number">2</span>  <span class="number">3</span>  <span class="number">5</span></div><div class="line">        <span class="number">3</span>  <span class="number">2</span>    <span class="number">1</span>  <span class="number">6</span>  <span class="number">1</span></div><div class="line">        <span class="number">4</span>  <span class="number">2</span>    <span class="number">2</span>  <span class="number">2</span>  <span class="number">4</span></div><div class="line"><span class="comment">#转换为</span></div><div class="line">           id time variable value</div><div class="line">        <span class="number">1</span>  <span class="number">1</span>    <span class="number">1</span>       x1     <span class="number">5</span></div><div class="line">        <span class="number">2</span>  <span class="number">1</span>    <span class="number">2</span>       x1     <span class="number">3</span></div><div class="line">        <span class="number">3</span>  <span class="number">2</span>    <span class="number">1</span>       x1     <span class="number">6</span></div><div class="line">        <span class="number">4</span>  <span class="number">2</span>    <span class="number">2</span>       x1     <span class="number">2</span></div><div class="line">        <span class="number">5</span>  <span class="number">1</span>    <span class="number">1</span>       x2     <span class="number">6</span></div><div class="line">        <span class="number">6</span>  <span class="number">1</span>    <span class="number">2</span>       x2     <span class="number">5</span></div><div class="line">        <span class="number">7</span>  <span class="number">2</span>    <span class="number">1</span>       x2     <span class="number">1</span></div><div class="line">        <span class="number">8</span>  <span class="number">2</span>    <span class="number">2</span>       x2     <span class="number">4</span></div></pre></td></tr></table></figure>
+<h4 id="2）重铸"><a href="#2）重铸" class="headerlink" title="2）重铸"></a>2）重铸</h4><p><code>cast(md, formula,FUN) #md为已经融合的数据</code></p>
+<p><code>formula: rowvar1 + rowvar2 +…~ colvar1 + colvar2 +…</code></p>
+<p>在这一公式中， rowvar1 + rowvar2 + …定义了要划掉的变量集合，以确定各行的内容，</p>
+<p>而colvar1 + colvar2 + …则定义了要划掉的、确定各列内容的变量集合。</p>
+<p>参见图中的示例。</p>
+<p><img src="/2017/01/06/chapter05-高级数据管理/rebuild.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R高级数据管理/">R高级数据管理</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/06/chapter05-高级数据管理/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/06/chapter05-高级数据管理/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/06/chapter04-基本数据管理/" title="chapter04 基本数据管理" itemprop="url">chapter04 基本数据管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-06T02:24:53.000Z" itemprop="datePublished"> 发表于 2017-01-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="基本数据管理"><a href="#基本数据管理" class="headerlink" title="基本数据管理"></a>基本数据管理</h1><h2 id="1、创建新变量"><a href="#1、创建新变量" class="headerlink" title="1、创建新变量"></a>1、创建新变量</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#方法1</span></div><div class="line">mydata&lt;-data.frame(x1=c(<span class="number">2</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">4</span>),x2=c(<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">8</span>))</div><div class="line">mydata$sumx&lt;-mydata$x1+mydata$x2</div><div class="line">mydata$meanx&lt;-(mydata$x1+mydata$x2)/<span class="number">2</span></div><div class="line"></div><div class="line"><span class="comment">#方法2</span></div><div class="line"><span class="keyword">attach</span>(mydata)</div><div class="line">mydata$sumx&lt;-x1+x2</div><div class="line">mydata$meanx&lt;-(x1+x2)/<span class="number">2</span></div><div class="line"><span class="keyword">detach</span>(mydata)</div><div class="line"></div><div class="line"><span class="comment">#方法3：推荐</span></div><div class="line">mydata&lt;-transform(mydata,sumx=x1+x2,meanx=(x1+x2)/<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<h2 id="2、变量重编码"><a href="#2、变量重编码" class="headerlink" title="2、变量重编码"></a>2、变量重编码</h2><p>需要使用逻辑运算符：<br><img src="/2017/01/06/chapter04-基本数据管理/caculateFlag.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#示例数据：</span></div><div class="line">manager&lt;-c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</div><div class="line">date&lt;- c(<span class="string">"10/24/08"</span>,<span class="string">"10/28/08"</span>,<span class="string">"10/1/08"</span>,<span class="string">"10/12/08"</span>,<span class="string">"5/1/09"</span>)</div><div class="line">country&lt;- c(<span class="string">"US"</span>,<span class="string">"US"</span>,<span class="string">"UK"</span>,<span class="string">"UK"</span>,<span class="string">"UK"</span>)</div><div class="line">gender&lt;-c(<span class="string">"M"</span>,<span class="string">"F"</span>,<span class="string">"F"</span>,<span class="string">"M"</span>,<span class="string">"F"</span>)</div><div class="line">age&lt;-c(<span class="number">32</span>,<span class="number">45</span>,<span class="number">25</span>,<span class="number">39</span>,<span class="number">99</span>)</div><div class="line">q1&lt;-c(<span class="number">5</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">2</span>)</div><div class="line">q2&lt;-c(<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">2</span>)</div><div class="line">q3&lt;-c(<span class="number">5</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">1</span>)</div><div class="line">q4&lt;-c(<span class="number">5</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="literal">NA</span>,<span class="number">2</span>)</div><div class="line">q5&lt;-c(<span class="number">5</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="literal">NA</span>,<span class="number">1</span>)</div><div class="line">leadership&lt;-data.frame(manager,date,country,gender,age,q1,q2,q3,q4,q5,stringsAsFactors = <span class="literal">FALSE</span>)</div><div class="line"></div><div class="line">  manager     date country gender age q1 q2 q3 q4 q5</div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">3</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>      UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span></div><div class="line"><span class="number">4</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>      UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line"><span class="number">5</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>      UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span></div></pre></td></tr></table></figure>
+<p>（1）将年龄99重编码为缺失值</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">leadership$age[leadership$age == <span class="number">99</span>] &lt;-<span class="literal">NA</span></div><div class="line"><span class="comment">#variable[condition] &lt;- expression将仅在condition的值为TRUE时执行赋值</span></div></pre></td></tr></table></figure>
+<p>（2）创建agecat变量</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">leadership$agecat[leadership$age&gt;<span class="number">75</span>] &lt;-<span class="string">"Elder"</span></div><div class="line">leadership$agecat[leadership$age&gt;=<span class="number">55</span> &amp; leadership$age&lt;=<span class="number">75</span>] &lt;-<span class="string">"Middle Aged"</span></div><div class="line">leadership$agecat[leadership$age&lt;<span class="number">55</span>] &lt;-<span class="string">"Young"</span></div><div class="line"><span class="comment">#更紧凑的写法：within类似于with不过可以修改数据</span></div><div class="line">leadership&lt;-within(leadership,&#123;</div><div class="line">                    agecat &lt;- <span class="literal">NA</span></div><div class="line">                    agecat[leadership$age&gt;<span class="number">75</span>] &lt;-<span class="string">"Elder"</span></div><div class="line">                    agecat[leadership$age&gt;=<span class="number">55</span> &amp; leadership$age&lt;=<span class="number">75</span>] &lt;-<span class="string">"Middle Aged"</span></div><div class="line">                    agecat[leadership$age&lt;<span class="number">55</span>] &lt;-<span class="string">"Young"</span>&#125;)</div></pre></td></tr></table></figure>
+<h2 id="3、变量的重命名"><a href="#3、变量的重命名" class="headerlink" title="3、变量的重命名"></a>3、变量的重命名</h2><p>（1）交互方式：<code>fix(leadership)</code></p>
+<p>（2）编程方式：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#(需要安装包library(reshape))</span></div><div class="line">rename(dataframe,c(oldname=<span class="string">"newname"</span>, oldname=<span class="string">"newname"</span>,…))</div><div class="line">names(leadership)[<span class="number">1</span>] &lt;- <span class="string">"managerID"</span></div><div class="line">names(leadership)[<span class="number">6</span>:<span class="number">10</span>]&lt;- c(<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>)</div></pre></td></tr></table></figure>
+<h2 id="4、缺失值处理"><a href="#4、缺失值处理" class="headerlink" title="4、缺失值处理"></a>4、缺失值处理</h2><p>（1）识别：is.na(y),不可使用逻辑测试yvar==NA，永远为false，<font style="color:red">R中NA为关键字表示缺失值</font></p>
+<p>（2）重编码为缺失值：见2</p>
+<p>（3）分析中排除缺失值：<br>    诸多函数中含有排除缺失值的参数，</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">x&lt;-c(<span class="number">1</span>,<span class="number">2</span>,<span class="literal">NA</span>,<span class="number">3</span>)</div><div class="line">y&lt;-sum(x)<span class="comment">#y=NA</span></div><div class="line">y&lt;-sum(x,na.rm = <span class="literal">TRUE</span>)</div><div class="line"><span class="comment">#另一种方式行删除：na.omit(leadership),删除含有缺失值的行，更复杂的方式见后续。</span></div></pre></td></tr></table></figure>
+<h2 id="5、日期值"><a href="#5、日期值" class="headerlink" title="5、日期值"></a>5、日期值</h2><p>（1）字符型变量转化为数值形式的日期变量，<code>as.Date(x,&quot;input_format&quot;)</code></p>
+<ul>
+<li>%d 数字表示的日期（0~31） 01~31</li>
+<li>%a 缩写的星期名 Mon</li>
+<li>%A 非缩写星期名 Monday</li>
+<li>%m 月份（00~12） 00~12</li>
+<li>%b 缩写的月份 Jan</li>
+<li>%B 非缩写月份 January</li>
+<li>%y 两位数的年份 07</li>
+<li>%Y 四位数的年份 2007</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">myformat=<span class="string">"%m/%d/%y"</span></div><div class="line">leadership$date&lt;-as.Date(leadership$date,myformat)<span class="comment">#此处确保myformat形式与date形式相同</span></div><div class="line">Sys.Date()<span class="comment">#获取当前日期</span></div><div class="line">date()<span class="comment">#获取当前日期与时间</span></div></pre></td></tr></table></figure>
+<p>（2）输出为特定格式的日期</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">today&lt;-Sys.Date()</div><div class="line">format(today, format=<span class="string">"%B%d%Y"</span>)</div><div class="line">format(today, format=<span class="string">"%A"</span>)</div><div class="line"><span class="comment">#两个日期之间可以进行算术运算：</span></div><div class="line">startdate &lt;- as.Date(<span class="string">"2004-02-13"</span>)</div><div class="line">enddate &lt;- as.Date(<span class="string">"2011-01-22"</span>)</div><div class="line">days &lt;- enddate-startdate</div><div class="line"><span class="comment">#也可以使用difftime计算时间间隔，以星期，天，时，分，秒表示</span></div><div class="line"><span class="comment">#("auto", "secs", "mins", "hours", "days", "weeks")</span></div><div class="line">startdate &lt;- as.Date(<span class="string">"2004-02-13"</span>)</div><div class="line">enddate &lt;- as.Date(<span class="string">"2011-01-22"</span>)</div><div class="line">difftime(startdate,enddate,units=<span class="string">"weeks"</span>)</div></pre></td></tr></table></figure>
+<p>（3）日期转换为字符型变量<br><code>strDates &lt;- as.character(dates)</code></p>
+<p>（4）更近一步</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">help(as.Date)</div><div class="line">help(strftime)</div><div class="line">help(ISOdatetime)</div><div class="line"><span class="comment">#两个包：lubridate，fCalendar，包含大量日期处理函数</span></div></pre></td></tr></table></figure>
+<h2 id="6、类型判断"><a href="#6、类型判断" class="headerlink" title="6、类型判断"></a>6、类型判断</h2><table>
+<thead>
+<tr>
+<th>判 断</th>
+<th>转 换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>is.numeric()</td>
+<td>as.numeric()</td>
+</tr>
+<tr>
+<td>is.character()</td>
+<td>as.character()</td>
+</tr>
+<tr>
+<td>is.vector()</td>
+<td>as.vector()</td>
+</tr>
+<tr>
+<td>is.matrix()</td>
+<td>as.matrix()</td>
+</tr>
+<tr>
+<td>is.data.frame()</td>
+<td>as.data.frame()</td>
+</tr>
+<tr>
+<td>is.factor()</td>
+<td>as.factor()</td>
+</tr>
+<tr>
+<td>is.logical()</td>
+<td>as.logical()</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7、数据排序"><a href="#7、数据排序" class="headerlink" title="7、数据排序"></a>7、数据排序</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">attach</span>(leadership)</div><div class="line"><span class="comment">#排序后的数据重新赋值，按照性别年龄排序，默认为升序，排序字段前加’-’为降序</span></div><div class="line">newdata=leadership[order(gender,age),]</div><div class="line"><span class="comment">#降序方式 newdata=leadership[order(gender,-age),]</span></div><div class="line">&gt; newdata</div><div class="line">  manager     date country gender age q1 q2 q3 q4 q5</div><div class="line"><span class="number">3</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>      UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span></div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">5</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>      UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span></div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">4</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>      UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line"><span class="keyword">detach</span>(leadership)</div></pre></td></tr></table></figure>
+<h2 id="8、数据集合并"><a href="#8、数据集合并" class="headerlink" title="8、数据集合并"></a>8、数据集合并</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#增加列</span></div><div class="line">&gt; newdata</div><div class="line">  manager     date country gender age q1 q2 q3 q4 q5</div><div class="line"><span class="number">3</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>      UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span></div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">5</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>      UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span></div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">4</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>      UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line">&gt; newcol=data.frame(meta=c(<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>),manager=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>),country=c(<span class="string">"US"</span>,<span class="string">"US"</span>,<span class="string">"US"</span>,<span class="string">"US"</span>,<span class="string">"US"</span>))</div><div class="line">&gt; newcol</div><div class="line">  meta manager country</div><div class="line"><span class="number">1</span>   <span class="number">11</span>       <span class="number">1</span>      US</div><div class="line"><span class="number">2</span>   <span class="number">12</span>       <span class="number">2</span>      US</div><div class="line"><span class="number">3</span>   <span class="number">13</span>       <span class="number">3</span>      US</div><div class="line"><span class="number">4</span>   <span class="number">14</span>       <span class="number">4</span>      US</div><div class="line"><span class="number">5</span>   <span class="number">15</span>       <span class="number">5</span>      US</div><div class="line">&gt; <span class="comment">#按照by=中的列合并数据框，结果为inner join,取交集</span></div><div class="line">&gt; total=merge(newdata,newcol,by=c(<span class="string">"manager"</span>,<span class="string">"country"</span>))</div><div class="line">&gt; total</div><div class="line">  manager country     date gender age q1 q2 q3 q4 q5 meta</div><div class="line"><span class="number">1</span>       <span class="number">1</span>      US <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">11</span></div><div class="line"><span class="number">2</span>       <span class="number">2</span>      US <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">12</span></div><div class="line">&gt; <span class="comment">#直接合并不进行列字段匹配，需要行数一致</span></div><div class="line">&gt; total=merge(newdata,newcol,by=c(<span class="string">"manager"</span>))</div><div class="line">&gt; total</div><div class="line">  manager     date country.x gender age q1 q2 q3 q4 q5 meta country.y</div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>        US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">11</span>        US</div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>        US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">12</span>        US</div><div class="line"><span class="number">3</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>        UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span>   <span class="number">13</span>        US</div><div class="line"><span class="number">4</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>        UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span>   <span class="number">14</span>        US</div><div class="line"><span class="number">5</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>        UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span>   <span class="number">15</span>        US</div><div class="line">&gt; total=cbind(total,newcol)</div><div class="line">&gt; total</div><div class="line">  manager     date country.x gender age q1 q2 q3 q4 q5 meta country.y meta manager country</div><div class="line"><span class="number">1</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>        US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">11</span>        US   <span class="number">11</span>       <span class="number">1</span>      US</div><div class="line"><span class="number">2</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>        US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span>   <span class="number">12</span>        US   <span class="number">12</span>       <span class="number">2</span>      US</div><div class="line"><span class="number">3</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>        UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span>   <span class="number">13</span>        US   <span class="number">13</span>       <span class="number">3</span>      US</div><div class="line"><span class="number">4</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>        UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span>   <span class="number">14</span>        US   <span class="number">14</span>       <span class="number">4</span>      US</div><div class="line"><span class="number">5</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>        UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span>   <span class="number">15</span>        US   <span class="number">15</span>       <span class="number">5</span>      US</div><div class="line">&gt; <span class="comment">#追加行，顺序不需要一致，单变量必须相同，如变量不同，需平衡变量（删除多余变量，补充变量为NA）使得列一致</span></div><div class="line">&gt; total=rbind(newdata,newdata)</div><div class="line">&gt; total</div><div class="line">   manager     date country gender age q1 q2 q3 q4 q5</div><div class="line"><span class="number">3</span>        <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>      UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span></div><div class="line"><span class="number">2</span>        <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">5</span>        <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>      UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span></div><div class="line"><span class="number">1</span>        <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">4</span>        <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>      UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line"><span class="number">31</span>       <span class="number">3</span>  <span class="number">10</span>/<span class="number">1</span>/<span class="number">08</span>      UK      <span class="literal">F</span>  <span class="number">25</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">2</span></div><div class="line"><span class="number">21</span>       <span class="number">2</span> <span class="number">10</span>/<span class="number">28</span>/<span class="number">08</span>      US      <span class="literal">F</span>  <span class="number">45</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">2</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">51</span>       <span class="number">5</span>   <span class="number">5</span>/<span class="number">1</span>/<span class="number">09</span>      UK      <span class="literal">F</span>  <span class="number">99</span>  <span class="number">2</span>  <span class="number">2</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">1</span></div><div class="line"><span class="number">11</span>       <span class="number">1</span> <span class="number">10</span>/<span class="number">24</span>/<span class="number">08</span>      US      M  <span class="number">32</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">5</span>  <span class="number">5</span></div><div class="line"><span class="number">41</span>       <span class="number">4</span> <span class="number">10</span>/<span class="number">12</span>/<span class="number">08</span>      UK      M  <span class="number">39</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">4</span> <span class="literal">NA</span> <span class="literal">NA</span></div></pre></td></tr></table></figure>
+<h2 id="9、数据集取子集"><a href="#9、数据集取子集" class="headerlink" title="9、数据集取子集"></a>9、数据集取子集</h2><p>（1）选入（保留）变量</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dataframe[row indices, column indices]</div><div class="line"><span class="comment">#行标记选择空表示所有行</span></div><div class="line">newdata=leadership[,c(<span class="number">6</span>:<span class="number">10</span>)]</div></pre></td></tr></table></figure>
+<p>（2）剔除变量</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#方式1：</span></div><div class="line">myvars=names(leadership) %<span class="keyword">in</span>% c(<span class="string">"q3"</span>,<span class="string">"q4"</span>)<span class="comment">#形成一个布尔数组</span></div><div class="line">newdata=leadership[!myvars]<span class="comment">#只保留布尔数组中为TRUE的列</span></div><div class="line"><span class="comment">#方式2：</span></div><div class="line">newdata=leadership[c(-<span class="number">8</span>,-<span class="number">9</span>)]<span class="comment">#需要知道序号</span></div><div class="line"><span class="comment">#方式3：</span></div><div class="line">newdata$gender=newdata$age=<span class="literal">NULL</span> <span class="comment">#直接删除某几列</span></div></pre></td></tr></table></figure>
+<p>（3）选择行</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">dataframe[<span class="number">1</span>:<span class="number">3</span>,]</div><div class="line"><span class="comment">#条件选择</span></div><div class="line">leadership[which(leadership$gender==<span class="string">"M"</span> &amp; leadership$age &gt; <span class="number">30</span>)]</div><div class="line">	</div><div class="line"><span class="keyword">attach</span>(leadership)</div><div class="line">leadership[which(gender==<span class="string">"M"</span> &amp; age &gt; <span class="number">30</span>)]</div><div class="line"><span class="keyword">detach</span>(leadership)</div><div class="line">	</div><div class="line"><span class="comment">#实例：</span></div><div class="line">leadership$date=as.Date(leadership$date,<span class="string">"%m/%d/%y"</span>)</div><div class="line">startdate=as.Date(<span class="string">"2009-01-01"</span>)</div><div class="line">enddate=as.Date(<span class="string">"2009-10-31"</span>)</div><div class="line">newdata=leadership[which(leadership$date &gt;= startdate &amp; leadership$date &lt;= enddate),]</div></pre></td></tr></table></figure>
+<p>（4）subset()函数</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">newdata&lt;- subset(leadership, age &gt;= <span class="number">35</span>| age&lt;<span class="number">24</span>,select = c(q1,q2,q3,q4))</div><div class="line">newdata&lt;- subset(leadership, gender==<span class="string">"M"</span> &amp; age&gt;<span class="number">25</span>, select=gender:q4)</div></pre></td></tr></table></figure>
+<p>（5）随机抽样<br>    <code>sample(抽取的母集合，抽取数量，是否放回抽样)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysample &lt;- leadership[sample(<span class="number">1</span>:nrow(leadership),<span class="number">3</span>,replace=<span class="literal">FALSE</span>),]</div></pre></td></tr></table></figure>
+<h2 id="10、SQL语句操作数据框"><a href="#10、SQL语句操作数据框" class="headerlink" title="10、SQL语句操作数据框"></a>10、SQL语句操作数据框</h2><p><code>install.packages(&quot;sqldf&quot;)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">newdf &lt;- sqldf(<span class="string">"select AVG(mpg),am from mtcars where carb=1 group by am"</span>,row.names=<span class="literal">TRUE</span>)</div><div class="line"><span class="comment">#row.names=TRUE表示是否沿用原来的行名称</span></div></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R基本数据管理/">R基本数据管理</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/06/chapter04-基本数据管理/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/06/chapter04-基本数据管理/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/05/chapter03-图形初步/" title="chapter03 图形初步" itemprop="url">chapter03 图形初步</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-05T05:04:43.000Z" itemprop="datePublished"> 发表于 2017-01-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="图形初步"><a href="#图形初步" class="headerlink" title="图形初步"></a>图形初步</h1><h2 id="1、基本图形"><a href="#1、基本图形" class="headerlink" title="1、基本图形"></a>1、基本图形</h2><p>plot(o_data,type=”b”,main=”主标题”,sub=”子标题”,xlab=”年龄”,ylab=”周长”)</p>
+<p><img src="/2017/01/05/chapter03-图形初步/o_data.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/plotFirst.png" alt=""></p>
+<h2 id="2、符号与线条"><a href="#2、符号与线条" class="headerlink" title="2、符号与线条"></a>2、符号与线条</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>指定绘制点时使用的符号</td>
+</tr>
+<tr>
+<td>cex</td>
+<td>指定符号的大小。cex是一个数值，表示绘图符号相对于默认大小的缩放倍数。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等</td>
+</tr>
+<tr>
+<td>lty</td>
+<td>指定线条类型</td>
+</tr>
+<tr>
+<td>lwd</td>
+<td>指定线条宽度。 lwd是以默认值的相对大小来表示的（默认值为1）。例如， lwd=2将生成一条两倍于默认宽度的线条</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2017/01/05/chapter03-图形初步/plotFlag1.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/plotFlag2.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">plot(o_data,type=<span class="string">"b"</span>, pch=<span class="string">"8"</span>, cex=<span class="number">1</span>, lty=<span class="number">6</span>, lwd=<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotFlagEg.png" alt=""></p>
+<h2 id="3、颜色"><a href="#3、颜色" class="headerlink" title="3、颜色"></a>3、颜色</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col</td>
+<td>默认的绘图颜色。某些函数（如lines和pie）可以接受一个含有颜色值的向量并自动循环使用。 例如， 如果设定col=c(“red”, “blue”)并需要绘制三条线，则第一条线将为红色，第二条线为蓝色，第三条线又将为红色</td>
+</tr>
+<tr>
+<td>col.axis</td>
+<td>坐标轴刻度文字的颜色</td>
+</tr>
+<tr>
+<td>col.lab</td>
+<td>坐标轴标签（名称）的颜色</td>
+</tr>
+<tr>
+<td>col.main</td>
+<td>标题颜色</td>
+</tr>
+<tr>
+<td>col.sub</td>
+<td>副标题颜色</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>图形的前景色</td>
+</tr>
+<tr>
+<td>bg</td>
+<td>图形的背景色</td>
+</tr>
+</tbody>
+</table>
+<p>在R中，可以通过颜色下标、颜色名称、十六进制的颜色值、 RGB值或HSV值来指定颜色。举例来说， col=1、 col=”white”、 col=”#FFFFFF”、 col=rgb(1,1,1)和col=hsv(0,0,1)都是表示白色的等价方式。</p>
+<p><img src="/2017/01/05/chapter03-图形初步/rColor.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/rColorSort.png" alt=""></p>
+<p><code>rainbow(n)</code> 生成n种连续的彩虹色<br><code>gran(0:n/n)</code> 生成N阶灰度色<br><img src="/2017/01/05/chapter03-图形初步/rainColor.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/grey.png" alt=""></p>
+<h2 id="4、文本属性"><a href="#4、文本属性" class="headerlink" title="4、文本属性"></a>4、文本属性</h2><p>用于指定文本大小的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cex</td>
+<td>表示相对于默认大小缩放倍数的数值。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等</td>
+</tr>
+<tr>
+<td>cex.axis</td>
+<td>坐标轴刻度文字的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.lab</td>
+<td>坐标轴标签（名称）的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.main</td>
+<td>标题的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.sub</td>
+<td>副标题的缩放倍数。类似于cex</td>
+</tr>
+</tbody>
+</table>
+<p>用于指定字体族、字号和字样的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>font</td>
+<td>整数。用于指定绘图使用的字体样式。 1=常规， 2=粗体， 3=斜体， 4=粗斜体，5=符号字体（以Adobe符号编码表示）</td>
+</tr>
+<tr>
+<td>font.axis</td>
+<td>坐标轴刻度文字的字体样式</td>
+</tr>
+<tr>
+<td>font.lab</td>
+<td>坐标轴标签（名称）的字体样式</td>
+</tr>
+<tr>
+<td>font.main</td>
+<td>标题的字体样式</td>
+</tr>
+<tr>
+<td>font.sub</td>
+<td>副标题的字体样式</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>字体磅值（1磅约为1/72英寸）。文本的最终大小为 ps*cex</td>
+</tr>
+<tr>
+<td>family</td>
+<td>绘制文本时使用的字体族。标准的取值为serif （衬线）、 sans （无衬线）和mono（等宽）</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2017/01/05/chapter03-图形初步/textPro.png" alt=""></p>
+<p>在Windows中，可以通过函数windowsFont()来创建字体簇这类映射。在Mac上，请改用quartzFonts()。<br><img src="/2017/01/05/chapter03-图形初步/font.png" alt=""><br>使用时为<code>par(family=A)</code></p>
+<p>默认在Windows系统中，等宽字体映射为TT Courier New，衬线字体映射为TT Times New Roman，无衬线字体则映射为TT Arial（TT代表True Type）</p>
+<p>若使用pdf输出图形，可以使用<code>names(pdfFonts())</code>找出那些字体可用，然后使用<code>pdf(file=&quot;myplot.pdf&quot;, family=&quot;fontname&quot;)</code></p>
+<h2 id="5、图形尺寸"><a href="#5、图形尺寸" class="headerlink" title="5、图形尺寸"></a>5、图形尺寸</h2><p>用于控制图形尺寸和边界大小的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pin</td>
+<td>以英寸表示的图形尺寸（宽和高）</td>
+</tr>
+<tr>
+<td>mai</td>
+<td>以数值向量表示的边界大小，顺序为“下、左、上、右”，单位为英寸</td>
+</tr>
+<tr>
+<td>mar</td>
+<td>以数值向量表示的边界大小，顺序为“下、左、上、右”，单位为英分(1/12英寸)。默认值为c(5, 4, 4, 2) + 0.1</td>
+</tr>
+</tbody>
+</table>
+<p><code>par(pin=c(4,3),mar=c(5,0.5,5,0.5))</code></p>
+<h2 id="6、自定义文本坐标轴和图例"><a href="#6、自定义文本坐标轴和图例" class="headerlink" title="6、自定义文本坐标轴和图例"></a>6、自定义文本坐标轴和图例</h2><p><code>par()</code>或者<code>plot()</code>中添加<code>ann=FALSE</code>来移除默认的标题和标签</p>
+<p><img src="/2017/01/05/chapter03-图形初步/userdefinedXY.png" alt=""></p>
+<h3 id="1、自定义坐标轴"><a href="#1、自定义坐标轴" class="headerlink" title="1、自定义坐标轴"></a>1、自定义坐标轴</h3><p><code>axis(side,at=,labels=,pos=,lty=,col=,las=,tck=,…)</code></p>
+<p>使用自定义坐标轴应当禁用自动坐标轴：<code>axes=FALSE</code></p>
+<ul>
+<li>将禁用全部坐标轴（包括坐标轴框架线，除非你添加了参数frame.plot=TRUE）。参数xaxt=”n”和yaxt=”n”将分别禁用X轴或Y轴（会留下框架线，只是去除了刻度）。</li>
+</ul>
+<p>坐标轴选项</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>side</td>
+<td>一个整数，表示在图形的哪边绘制坐标轴（1=下， 2=左， 3=上， 4=右）</td>
+</tr>
+<tr>
+<td>at</td>
+<td>一个数值型向量，表示需要绘制刻度线的位置</td>
+</tr>
+<tr>
+<td>labels</td>
+<td>一个字符型向量，表示置于刻度线旁边的文字标签（如果为NULL，则将直接使用at中的值）</td>
+</tr>
+<tr>
+<td>pos</td>
+<td>坐标轴线绘制位置的坐标（即与另一条坐标轴相交位置的值）</td>
+</tr>
+<tr>
+<td>lty</td>
+<td>线条类型</td>
+</tr>
+<tr>
+<td>col</td>
+<td>线条和刻度线颜色</td>
+</tr>
+<tr>
+<td>las</td>
+<td>标签是否平行于（=0）或垂直于（=2）坐标轴</td>
+</tr>
+<tr>
+<td>tck</td>
+<td>刻度线的长度，以相对于绘图区域大小的分数表示（负值表示在图形外侧，正值表示在图形内侧， 0表示禁用刻度， 1表示绘制网格线）；默认值为-0.01</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>)</div><div class="line">par(mar=c(<span class="number">5</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">8</span>)+<span class="number">0.1</span>)</div><div class="line">plot(x,y,type=<span class="string">"b"</span>,pch=<span class="number">21</span>,col=<span class="string">"red"</span>,yaxt=<span class="string">"n"</span>,lty=<span class="number">3</span>,ann=<span class="literal">FALSE</span>)</div><div class="line"><span class="comment">#yaxt=”n”表示不绘制Y轴刻度</span></div><div class="line">lines(x,z,type=<span class="string">"b"</span>,pch=<span class="number">22</span>,col=<span class="string">"blue"</span>,lty=<span class="number">2</span>)</div><div class="line">axis(<span class="number">2</span>,at=x,labels=x,col.axis=<span class="string">"red"</span>,las=<span class="number">2</span>)</div><div class="line">axis(<span class="number">4</span>,at=z,labels=round(z,digits=<span class="number">2</span>),col.axis=<span class="string">"blue"</span>,las=<span class="number">2</span>,cex.axis=<span class="number">0.7</span>,tck=-<span class="number">.01</span>)</div><div class="line">mtext(<span class="string">"y=10/x"</span>,side=<span class="number">4</span>,line=<span class="number">3</span>,cex.lab=<span class="number">1</span>,las=<span class="number">2</span>,col=<span class="string">"blue"</span>)</div><div class="line">title(<span class="string">"Axes"</span>,xlab=<span class="string">"X values"</span>, ylab=<span class="string">"Y=X"</span>)</div><div class="line">par(opar)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/userdefinedXYEg.png" alt=""></p>
+<h3 id="2、次要刻度线"><a href="#2、次要刻度线" class="headerlink" title="2、次要刻度线"></a>2、次要刻度线</h3><p>使用包Hmisc 中的minor.tick()函数。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">minor.tick(nx=n,ny=n,tick.ratio=n)</div><div class="line">//nx、ny: X、Y轴两条主刻度线之间需要的区间个数</div><div class="line">//tick.ratio: 次要刻度线相对于主刻度线的大小比例</div></pre></td></tr></table></figure>
+<h3 id="3、参考线"><a href="#3、参考线" class="headerlink" title="3、参考线"></a>3、参考线</h3><p><code>abline()</code>为图形添加参考线:<br><code>abline(h=yvalues,v=xvalues)</code>,其中也可以指定其他参数</p>
+<h3 id="4、图例"><a href="#4、图例" class="headerlink" title="4、图例"></a>4、图例</h3><p><code>legend(location,title,legend,…)</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>location</td>
+<td>有许多方式可以指定图例的位置。你可以直接给定图例左上角的x、 y坐标，也可以执行locator(1)，然后通过鼠标单击给出图例的位置，还可以使用关键字bottom、 bottomleft、left、 topleft、 top、 topright、 right、 bottomright或center放置图例。如果你使用了以上某个关键字，那么可以同时使用参数inset=指定图例向图形内侧移动的小（以绘图区域大小的分数表示）</td>
+</tr>
+<tr>
+<td>title</td>
+<td>图例标题的字符串（可选）</td>
+</tr>
+<tr>
+<td>legend</td>
+<td>图例标签组成的字符型向量</td>
+</tr>
+<tr>
+<td>…</td>
+<td>其他选项。如果图例标示的是颜色不同的线条，需要指定col=加上颜色值组成的向量。如果图例标示的是符号不同的点，则需指定pch=加上符号的代码组成的向量。如果图例标示的是不同的线条宽度或线条类型，请使用lwd=或lty=加上宽度值或类型值组成的向量。要为图例创建颜色填充的盒形（常见于条形图、箱线图或饼图），需要使用参数fill=加上颜色值组成的向量</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">dose&lt;-c(<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>,<span class="number">45</span>,<span class="number">60</span>);</div><div class="line">dA&lt;-c(<span class="number">16</span>,<span class="number">20</span>,<span class="number">27</span>,<span class="number">40</span>,<span class="number">60</span>);</div><div class="line">dB&lt;-c(<span class="number">15</span>,<span class="number">18</span>,<span class="number">25</span>,<span class="number">31</span>,<span class="number">40</span>);</div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>);</div><div class="line">par(lwd=<span class="number">2</span>,cex=<span class="number">1.5</span>,font.lab=<span class="number">2</span>);</div><div class="line">plot(dose,dA,type=<span class="string">"b"</span>,pch=<span class="number">15</span>,lty=<span class="number">1</span>,col=<span class="string">"red"</span>,ylim=c(<span class="number">0</span>,<span class="number">60</span>),main=<span class="string">"Drug A vs. Drug B"</span>,xlab=<span class="string">"Drug Dosage"</span>, ylab=<span class="string">"Drug REsponse"</span>);</div><div class="line">lines(dose,dB,type=<span class="string">"b"</span>,pch=<span class="number">17</span>,lty=<span class="number">2</span>,col=<span class="string">"blue"</span>);</div><div class="line">abline(h=c(<span class="number">30</span>),lwd=<span class="number">1.5</span>,lty=<span class="number">2</span>,col=<span class="string">"gray"</span>);</div><div class="line">minor.tick(nx=<span class="number">3</span>,ny=<span class="number">3</span>,tick.ratio=<span class="number">0.5</span>);</div><div class="line">legend(<span class="string">"topleft"</span>,inset=<span class="number">.05</span>,title=<span class="string">"Drug Type"</span>,c(<span class="string">"A"</span>,<span class="string">"B"</span>),lty=c(<span class="number">1</span>,<span class="number">2</span>),pch=c(<span class="number">15</span>,<span class="number">17</span>),col=c(<span class="string">"red"</span>,<span class="string">"blue"</span>));</div><div class="line"><span class="comment">#inset表示图例距离主图边框的距离百分比，当位置是用关键字表示时</span></div><div class="line">par(opar)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/LegendXYEg.png" alt=""></p>
+<h3 id="5、文本标注"><a href="#5、文本标注" class="headerlink" title="5、文本标注"></a>5、文本标注</h3><p>向绘图区域内部添加文本（同时可以绘制点）：<code>text(location, &quot;text to place&quot;, pos,…)</code><br>向图形四个边界之一添加文本：<code>mtext(&quot;text to place&quot;, side, line=n,…)</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>location</td>
+<td>文本的位置参数。可为一对x,y坐标，也可通过指定location为locator(1)使用鼠标交互式地确定摆放位置</td>
+</tr>
+<tr>
+<td>pos</td>
+<td>文本相对于位置参数的方位。1=下，2=左，3=上，4=右。如果指定了pos，就可以同时指定参数offset=作为偏移量，以相对于单个字符宽度的比例表示</td>
+</tr>
+<tr>
+<td>side</td>
+<td>指定用来放置文本的边。 1=下， 2=左， 3=上， 4=右。你可以指定参数line=来内移或外移文本，随着值的增加，文本将外移。也可使用adj=0将文本向左下对齐，或使用adj=1右上对齐</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">plot(dA,dose,pch=<span class="number">18</span>,col=<span class="string">"blue"</span>)</div><div class="line">text(<span class="number">40</span>,<span class="number">33</span>,family=<span class="string">"serif"</span>,<span class="string">"TEST"</span>)</div><div class="line">text(dA,dose,row.names(dA),cex=<span class="number">0.6</span>,pos=<span class="number">4</span>)</div><div class="line"><span class="comment">#从某个数据框的行名称中读取文本</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/textXY.png" alt=""></p>
+<h3 id="6、数学标注"><a href="#6、数学标注" class="headerlink" title="6、数学标注"></a>6、数学标注</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#在（1,1.9）点输出公式，hat(x)表示x拔</span></div><div class="line">text(<span class="number">1</span>,<span class="number">1.9</span>,expression (hat(x)))</div><div class="line"><span class="comment">#expression中语句会解释为数学公式</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/mathFlag.png" alt=""></p>
+<h2 id="7、-图形组合"><a href="#7、-图形组合" class="headerlink" title="7、 图形组合"></a>7、 图形组合</h2><ul>
+<li><p><code>par</code>参数<code>mfrow=c(nrows,ncols)</code>来创建图形矩阵，<code>mfrow</code>表示按行排列，<code>nfcol</code>表示按列排列。</p>
+</li>
+<li><p><code>layout()</code>函数可控制更多参数</p>
+</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#图形组合</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>)</div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line">plot(wt,mpg,main=<span class="string">"wt vs. mpg"</span>)</div><div class="line">plot(wt,disp,main=<span class="string">"wt vs. disp"</span>)</div><div class="line">hist(wt,main=<span class="string">"histogram of wt"</span>)</div><div class="line">boxplot(wt, main=<span class="string">"Boxplot of wt"</span>)</div><div class="line">par(opar)</div><div class="line"><span class="keyword">detach</span>(mtcars)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotUnit1.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#图形组合layout()</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">layout(matrix(c(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>),<span class="number">2</span>,<span class="number">2</span>,byrow=<span class="literal">TRUE</span>),widths=c(<span class="number">3</span>,<span class="number">1</span>),heights=c(<span class="number">1</span>,<span class="number">2</span>))</div><div class="line">hist(wt)</div><div class="line">hist(mpg)</div><div class="line">hist(disp)</div><div class="line"><span class="keyword">detach</span>(mtcars)</div><div class="line"><span class="comment">#矩阵表示每个图排列的位置，1123表示第一行的两个位置均排列第一个图片，第二个图片在左下角位置，第三个图片在右下角位置，widths表示一行内不同图片的宽度比例，height为不同行的图高度比例</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotUnit2.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R图形初步/">R图形初步</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/05/chapter03-图形初步/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/05/chapter03-图形初步/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/14/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/16/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

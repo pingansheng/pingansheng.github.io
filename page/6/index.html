@@ -1,0 +1,801 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/6/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/23/chapter13-广义线性模型/" title="chapter13-广义线性模型" itemprop="url">chapter13-广义线性模型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-23T05:42:07.000Z" itemprop="datePublished"> 发表于 2017-11-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="广义线性模型"><a href="#广义线性模型" class="headerlink" title="广义线性模型"></a>广义线性模型</h1><h2 id="1、广义线性模型和glm函数、logistics回归"><a href="#1、广义线性模型和glm函数、logistics回归" class="headerlink" title="1、广义线性模型和glm函数、logistics回归"></a>1、广义线性模型和glm函数、logistics回归</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#使用glm函数进行处理，可以分析多种分布，二分，多值，数值等，此处不限制因变量Y为服从正态分布</span></div><div class="line">&gt; <span class="comment">#Logistic回归</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(AER)</div><div class="line">&gt; data(<span class="string">"Affairs"</span>,package = <span class="string">"AER"</span>)</div><div class="line">&gt; summary(Affairs)</div><div class="line">    affairs          gender         age         yearsmarried    children  religiousness  </div><div class="line"> Min.   : <span class="number">0.000</span>   female:<span class="number">315</span>   Min.   :<span class="number">17.50</span>   Min.   : <span class="number">0.125</span>   no :<span class="number">171</span>   Min.   :<span class="number">1.000</span>  </div><div class="line"> 1st Qu.: <span class="number">0.000</span>   male  :<span class="number">286</span>   1st Qu.:<span class="number">27.00</span>   1st Qu.: <span class="number">4.000</span>   yes:<span class="number">430</span>   1st Qu.:<span class="number">2.000</span>  </div><div class="line"> Median : <span class="number">0.000</span>                Median :<span class="number">32.00</span>   Median : <span class="number">7.000</span>             Median :<span class="number">3.000</span>  </div><div class="line"> Mean   : <span class="number">1.456</span>                Mean   :<span class="number">32.49</span>   Mean   : <span class="number">8.178</span>             Mean   :<span class="number">3.116</span>  </div><div class="line"> 3rd Qu.: <span class="number">0.000</span>                3rd Qu.:<span class="number">37.00</span>   3rd Qu.:<span class="number">15.000</span>             3rd Qu.:<span class="number">4.000</span>  </div><div class="line"> Max.   :<span class="number">12.000</span>                Max.   :<span class="number">57.00</span>   Max.   :<span class="number">15.000</span>             Max.   :<span class="number">5.000</span>  </div><div class="line">   education       occupation        rating     </div><div class="line"> Min.   : <span class="number">9.00</span>   Min.   :<span class="number">1.000</span>   Min.   :<span class="number">1.000</span>  </div><div class="line"> 1st Qu.:<span class="number">14.00</span>   1st Qu.:<span class="number">3.000</span>   1st Qu.:<span class="number">3.000</span>  </div><div class="line"> Median :<span class="number">16.00</span>   Median :<span class="number">5.000</span>   Median :<span class="number">4.000</span>  </div><div class="line"> Mean   :<span class="number">16.17</span>   Mean   :<span class="number">4.195</span>   Mean   :<span class="number">3.932</span>  </div><div class="line"> 3rd Qu.:<span class="number">18.00</span>   3rd Qu.:<span class="number">6.000</span>   3rd Qu.:<span class="number">5.000</span>  </div><div class="line"> Max.   :<span class="number">20.00</span>   Max.   :<span class="number">7.000</span>   Max.   :<span class="number">5.000</span>  </div><div class="line">&gt; Affairs$ynAffair[Affairs$affairs &gt; <span class="number">0</span> ] &lt;- <span class="number">1</span></div><div class="line">&gt; Affairs$ynAffair[Affairs$affairs == <span class="number">0</span> ] &lt;- <span class="number">0</span></div><div class="line">&gt; </div><div class="line">&gt; Affairs$ynAffair &lt;- factor(Affairs$ynAffair, levels = c(<span class="number">0</span>,<span class="number">1</span>), labels = c(<span class="string">"No"</span>, <span class="string">"Yes"</span>))</div><div class="line">&gt; </div><div class="line">&gt; table (Affairs$ynAffair)</div><div class="line"></div><div class="line"> No Yes </div><div class="line"><span class="number">451</span> <span class="number">150</span> </div><div class="line">&gt; </div><div class="line">&gt; fit.full &lt;- glm(ynAffair ~ gender + age + yearsmarried + children + religiousness + education + occupation + rating, data=Affairs,family = binomial())</div><div class="line">&gt; summary(fit.full)</div><div class="line"></div><div class="line">Call:</div><div class="line">glm(formula = ynAffair ~ gender + age + yearsmarried + children + </div><div class="line">    religiousness + education + occupation + rating, family = binomial(), </div><div class="line">    data = Affairs)</div><div class="line"></div><div class="line">Deviance Residuals: </div><div class="line">    Min       1Q   Median       3Q      Max  </div><div class="line">-<span class="number">1.5713</span>  -<span class="number">0.7499</span>  -<span class="number">0.5690</span>  -<span class="number">0.2539</span>   <span class="number">2.5191</span>  </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">              Estimate Std. Error z value Pr(&gt;|z|)    </div><div class="line">(Intercept)    <span class="number">1.37726</span>    <span class="number">0.88776</span>   <span class="number">1.551</span> <span class="number">0.120807</span>    </div><div class="line">gendermale     <span class="number">0.28029</span>    <span class="number">0.23909</span>   <span class="number">1.172</span> <span class="number">0.241083</span>    </div><div class="line">age           -<span class="number">0.04426</span>    <span class="number">0.01825</span>  -<span class="number">2.425</span> <span class="number">0.015301</span> *  </div><div class="line">yearsmarried   <span class="number">0.09477</span>    <span class="number">0.03221</span>   <span class="number">2.942</span> <span class="number">0.003262</span> ** </div><div class="line">childrenyes    <span class="number">0.39767</span>    <span class="number">0.29151</span>   <span class="number">1.364</span> <span class="number">0.172508</span>    </div><div class="line">religiousness -<span class="number">0.32472</span>    <span class="number">0.08975</span>  -<span class="number">3.618</span> <span class="number">0.000297</span> ***</div><div class="line">education      <span class="number">0.02105</span>    <span class="number">0.05051</span>   <span class="number">0.417</span> <span class="number">0.676851</span>    </div><div class="line">occupation     <span class="number">0.03092</span>    <span class="number">0.07178</span>   <span class="number">0.431</span> <span class="number">0.666630</span>    </div><div class="line">rating        -<span class="number">0.46845</span>    <span class="number">0.09091</span>  -<span class="number">5.153</span> <span class="number">2.56e-07</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">(Dispersion parameter <span class="keyword">for</span> binomial family taken to be <span class="number">1</span>)</div><div class="line"></div><div class="line">    Null deviance: <span class="number">675.38</span>  on <span class="number">600</span>  degrees of freedom</div><div class="line">Residual deviance: <span class="number">609.51</span>  on <span class="number">592</span>  degrees of freedom</div><div class="line">AIC: <span class="number">627.51</span></div><div class="line"></div><div class="line">Number of Fisher Scoring iterations: <span class="number">4</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#去除不显著的因素后再次进行建模</span></div><div class="line">&gt; fit.some &lt;- glm(ynAffair ~  age + yearsmarried +  religiousness +  rating, data=Affairs,family = binomial())</div><div class="line">&gt; summary(fit.some)</div><div class="line"></div><div class="line">Call:</div><div class="line">glm(formula = ynAffair ~ age + yearsmarried + religiousness + </div><div class="line">    rating, family = binomial(), data = Affairs)</div><div class="line"></div><div class="line">Deviance Residuals: </div><div class="line">    Min       1Q   Median       3Q      Max  </div><div class="line">-<span class="number">1.6278</span>  -<span class="number">0.7550</span>  -<span class="number">0.5701</span>  -<span class="number">0.2624</span>   <span class="number">2.3998</span>  </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">              Estimate Std. Error z value Pr(&gt;|z|)    </div><div class="line">(Intercept)    <span class="number">1.93083</span>    <span class="number">0.61032</span>   <span class="number">3.164</span> <span class="number">0.001558</span> ** </div><div class="line">age           -<span class="number">0.03527</span>    <span class="number">0.01736</span>  -<span class="number">2.032</span> <span class="number">0.042127</span> *  </div><div class="line">yearsmarried   <span class="number">0.10062</span>    <span class="number">0.02921</span>   <span class="number">3.445</span> <span class="number">0.000571</span> ***</div><div class="line">religiousness -<span class="number">0.32902</span>    <span class="number">0.08945</span>  -<span class="number">3.678</span> <span class="number">0.000235</span> ***</div><div class="line">rating        -<span class="number">0.46136</span>    <span class="number">0.08884</span>  -<span class="number">5.193</span> <span class="number">2.06e-07</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">(Dispersion parameter <span class="keyword">for</span> binomial family taken to be <span class="number">1</span>)</div><div class="line"></div><div class="line">    Null deviance: <span class="number">675.38</span>  on <span class="number">600</span>  degrees of freedom</div><div class="line">Residual deviance: <span class="number">615.36</span>  on <span class="number">596</span>  degrees of freedom</div><div class="line">AIC: <span class="number">625.36</span></div><div class="line"></div><div class="line">Number of Fisher Scoring iterations: <span class="number">4</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#新模型的每个回归系数都非常显著（p&lt;0.05）。由于两模型嵌套（fit.some是fit.full</span></div><div class="line">&gt; <span class="comment">#的一个子集），你可以使用anova()函数对它们进行比较，对于广义线性回归，可用卡方检验。</span></div><div class="line">&gt; </div><div class="line">&gt; anova(fit.some, fit.full, test = <span class="string">"Chisq"</span>)</div><div class="line">Analysis of Deviance Table</div><div class="line"></div><div class="line">Model <span class="number">1</span>: ynAffair ~ age + yearsmarried + religiousness + rating</div><div class="line">Model <span class="number">2</span>: ynAffair ~ gender + age + yearsmarried + children + religiousness + </div><div class="line">    education + occupation + rating</div><div class="line">  Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)</div><div class="line"><span class="number">1</span>       <span class="number">596</span>     <span class="number">615.36</span>                     </div><div class="line"><span class="number">2</span>       <span class="number">592</span>     <span class="number">609.51</span>  <span class="number">4</span>   <span class="number">5.8474</span>   <span class="number">0.2108</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#卡方值不显著，得知两种模型的解释度是一样的</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#回归系数</span></div><div class="line">&gt; coef(fit.some)</div><div class="line">  (Intercept)           age  yearsmarried religiousness        rating </div><div class="line">   <span class="number">1.93083017</span>   -<span class="number">0.03527112</span>    <span class="number">0.10062274</span>   -<span class="number">0.32902386</span>   -<span class="number">0.46136144</span> </div><div class="line">&gt; <span class="comment">#在Logistic回归中，响应变量是Y=1的对数优势比（log）。回归系数含义是当其他预测变量不</span></div><div class="line">&gt; <span class="comment">#变时，一单位预测变量的变化可引起的响应变量对数优势比的变化。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#由于对数优势比解释性差，你可对结果进行指数化：</span></div><div class="line">&gt; exp(coef(fit.some))</div><div class="line">  (Intercept)           age  yearsmarried religiousness        rating </div><div class="line">    <span class="number">6.8952321</span>     <span class="number">0.9653437</span>     <span class="number">1.1058594</span>     <span class="number">0.7196258</span>     <span class="number">0.6304248</span> </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#可以看到婚龄增加一年，婚外情的优势比将乘以1.106（保持年龄、宗教信仰和婚姻评定不</span></div><div class="line">&gt; <span class="comment">#变）；相反，年龄增加一岁，婚外情的的优势比则乘以0.965。因此，随着婚龄的增加和年龄、宗</span></div><div class="line">&gt; <span class="comment">#教信仰与婚姻评分的降低，婚外情优势比将上升。因为预测变量不能等于0，截距项在此处没有</span></div><div class="line">&gt; <span class="comment">#什么特定含义。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#还可使用confint()函数获取系数的置信区间。例如， exp(confint(fit.reduced))</span></div><div class="line">&gt; <span class="comment">#可在优势比尺度上得到系数95%的置信区间。</span></div><div class="line">&gt; exp(confint(fit.some))</div><div class="line">Waiting <span class="keyword">for</span> profiling to be done...</div><div class="line">                  <span class="number">2.5</span> %     <span class="number">97.5</span> %</div><div class="line">(Intercept)   <span class="number">2.1255764</span> <span class="number">23.3506030</span></div><div class="line">age           <span class="number">0.9323342</span>  <span class="number">0.9981470</span></div><div class="line">yearsmarried  <span class="number">1.0448584</span>  <span class="number">1.1718250</span></div><div class="line">religiousness <span class="number">0.6026782</span>  <span class="number">0.8562807</span></div><div class="line">rating        <span class="number">0.5286586</span>  <span class="number">0.7493370</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#以概率的方式思考比使用优势比更直观。使用predict()函数，你</span></div><div class="line">&gt; <span class="comment">#可观察某个预测变量在各个水平时对结果概率的影响。</span></div><div class="line">&gt; </div><div class="line">&gt; testData &lt;- data.frame(rating=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>), age=mean(Affairs$age), yearsmarried=mean(Affairs$yearsmarried),</div><div class="line">+                        religiousness=mean(Affairs$religiousness))</div><div class="line">&gt; </div><div class="line">&gt; testData$prob &lt;- predict(fit.some, newdata = testData, type=<span class="string">"response"</span>)</div><div class="line">&gt; </div><div class="line">&gt; testData</div><div class="line">  rating      age yearsmarried religiousness      prob</div><div class="line"><span class="number">1</span>      <span class="number">1</span> <span class="number">32.48752</span>     <span class="number">8.177696</span>      <span class="number">3.116473</span> <span class="number">0.5302296</span></div><div class="line"><span class="number">2</span>      <span class="number">2</span> <span class="number">32.48752</span>     <span class="number">8.177696</span>      <span class="number">3.116473</span> <span class="number">0.4157377</span></div><div class="line"><span class="number">3</span>      <span class="number">3</span> <span class="number">32.48752</span>     <span class="number">8.177696</span>      <span class="number">3.116473</span> <span class="number">0.3096712</span></div><div class="line"><span class="number">4</span>      <span class="number">4</span> <span class="number">32.48752</span>     <span class="number">8.177696</span>      <span class="number">3.116473</span> <span class="number">0.2204547</span></div><div class="line"><span class="number">5</span>      <span class="number">5</span> <span class="number">32.48752</span>     <span class="number">8.177696</span>      <span class="number">3.116473</span> <span class="number">0.1513079</span></div><div class="line">&gt; <span class="comment">#其他不变情况下 评级从1到5 婚外情概率从0.53降低至0.15</span></div><div class="line">&gt; </div><div class="line">&gt; testData2 &lt;- data.frame(age=seq(<span class="number">17</span>,<span class="number">57</span>,<span class="number">10</span>), rating=mean(Affairs$rating), yearsmarried=mean(Affairs$yearsmarried),</div><div class="line">+                        religiousness=mean(Affairs$religiousness))</div><div class="line">&gt; </div><div class="line">&gt; testData2$prob &lt;- predict(fit.some, newdata = testData2, type=<span class="string">"response"</span>)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#对比图 评级影响更大 更剧烈</span></div><div class="line">&gt; plot(testData$prob)</div><div class="line">&gt; lines(testData2$prob)</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/23/chapter13-广义线性模型/compare.png" alt=""></p>
+<h2 id="2、logistics的过度离势"><a href="#2、logistics的过度离势" class="headerlink" title="2、logistics的过度离势"></a>2、logistics的过度离势</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#过度离势</span></div><div class="line">&gt; <span class="comment">#过度离势，即观测到的响应变量的方差大于期望的二项分布的方差。过度离势会导致奇异的</span></div><div class="line">&gt; <span class="comment">#标准误检验和不精确的显著性检验</span></div><div class="line">&gt; <span class="comment">#出现过度离势时，仍可使用glm()函数拟合Logistic回归，但此时需要将二项分布改为类二</span></div><div class="line">&gt; <span class="comment">#项分布（quasibinomial distribution）。</span></div><div class="line">&gt; <span class="comment">#检测过度离势的一种方法是比较二项分布模型的残差偏差与残差自由度，比值大于1很多表示存在过度离势</span></div><div class="line">&gt; <span class="comment">#婚外情中 模型中 Residual deviance: 615.36  on 596  degrees of freedom</span></div><div class="line">&gt; <span class="comment">#残差615.36 和 残差自由度596 比值为1.03， 不存在过度离势</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#也可使用检验法</span></div><div class="line">&gt; <span class="comment">#为此，你需要拟合模型两次，第一次使用family =</span></div><div class="line">&gt; <span class="comment">#  "binomial"，第二次使用family = "quasibinomial"。假设第一次glm()返回对象记为fit.1，</span></div><div class="line">&gt; <span class="comment">#第二次返回对象记为fit.2，那么：</span></div><div class="line">&gt; fit.1 &lt;- glm(ynAffair ~  age + yearsmarried +  religiousness +  rating, data=Affairs,family = binomial())</div><div class="line">&gt; </div><div class="line">&gt; fit.2 &lt;- glm(ynAffair ~  age + yearsmarried +  religiousness +  rating, data=Affairs,family = quasibinomial())</div><div class="line">&gt; </div><div class="line">&gt; pchisq(summary(fit.2)$dispersion * fit.1$df.residual, fit.1$df.residual, lower = <span class="literal">F</span>)</div><div class="line">[<span class="number">1</span>] <span class="number">0.340122</span></div><div class="line">&gt; <span class="comment">#p值（0.34）显然不显著（p &gt; 0.05），这更增强了我们认为不存在过度离势的信心。</span></div><div class="line">&gt; </div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<h2 id="3、logistics的扩展"><a href="#3、logistics的扩展" class="headerlink" title="3、logistics的扩展"></a>3、logistics的扩展</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#扩展</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#稳健Logistic回归 robust包中的glmRob()函数可用来拟合稳健的广义线性模型，包</span></div><div class="line">&gt; <span class="comment">#括稳健Logistic回归。当拟合Logistic回归模型数据出现离群点和强影响点时，稳健Logistic</span></div><div class="line">&gt; <span class="comment">#回归便可派上用场。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多项分布回归 若响应变量包含两个以上的无序类别（比如，已婚/寡居/离婚），便可使</span></div><div class="line">&gt; <span class="comment">#用mlogit包中的mlogit()函数拟合多项Logistic回归。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#序数Logistic回归 若响应变量是一组有序的类别（比如，信用风险为差/良/好），便可</span></div><div class="line">&gt; <span class="comment">#使用rms包中的lrm()函数拟合序数Logistic回归。</span></div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<h2 id="4、泊松回归"><a href="#4、泊松回归" class="headerlink" title="4、泊松回归"></a>4、泊松回归</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#泊松回归</span></div><div class="line">&gt; <span class="comment">#当通过一系列连续型和/或类别型预测变量来预测计数型结果变量时，泊松回归是一个非常</span></div><div class="line">&gt; <span class="comment">#有用的工具。</span></div><div class="line">&gt; </div><div class="line">&gt; data(breslow.dat, package=<span class="string">"robust"</span>)</div><div class="line">&gt; </div><div class="line">&gt; names(breslow.dat)</div><div class="line"> [<span class="number">1</span>] <span class="string">"ID"</span>    <span class="string">"Y1"</span>    <span class="string">"Y2"</span>    <span class="string">"Y3"</span>    <span class="string">"Y4"</span>    <span class="string">"Base"</span>  <span class="string">"Age"</span>   <span class="string">"Trt"</span>   <span class="string">"Ysum"</span>  <span class="string">"sumY"</span>  <span class="string">"Age10"</span></div><div class="line">[<span class="number">12</span>] <span class="string">"Base4"</span></div><div class="line">&gt; </div><div class="line">&gt; summary(breslow.dat[c(<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">10</span>)])</div><div class="line">      Base             Age               Trt          sumY       </div><div class="line"> Min.   :  <span class="number">6.00</span>   Min.   :<span class="number">18.00</span>   placebo  :<span class="number">28</span>   Min.   :  <span class="number">0.00</span>  </div><div class="line"> 1st Qu.: <span class="number">12.00</span>   1st Qu.:<span class="number">23.00</span>   progabide:<span class="number">31</span>   1st Qu.: <span class="number">11.50</span>  </div><div class="line"> Median : <span class="number">22.00</span>   Median :<span class="number">28.00</span>                  Median : <span class="number">16.00</span>  </div><div class="line"> Mean   : <span class="number">31.22</span>   Mean   :<span class="number">28.34</span>                  Mean   : <span class="number">33.05</span>  </div><div class="line"> 3rd Qu.: <span class="number">41.00</span>   3rd Qu.:<span class="number">32.00</span>                  3rd Qu.: <span class="number">36.00</span>  </div><div class="line"> Max.   :<span class="number">151.00</span>   Max.   :<span class="number">42.00</span>                  Max.   :<span class="number">302.00</span>  </div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; opar &lt;- par(no.readonly = <span class="literal">TRUE</span>)</div><div class="line">&gt; </div><div class="line">&gt; par(mfrow=c(<span class="number">1</span>,<span class="number">2</span>))</div><div class="line">&gt; <span class="keyword">attach</span>(breslow.dat)</div><div class="line">The following objects are masked from breslow.dat (pos = <span class="number">4</span>):</div><div class="line"></div><div class="line">    Age, Age10, Base, Base4, ID, sumY, Trt, Y1, Y2, Y3, Y4, Ysum</div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; hist(sumY, breaks = <span class="number">20</span>, xlab=<span class="string">"Serzure Count"</span>, main=<span class="string">"Distribution of Serzures"</span>)</div><div class="line">&gt; boxplot(sumY ~ Trt, xlab=<span class="string">"Treatment"</span>, main=<span class="string">"Group Comparisons"</span>)</div><div class="line">&gt; par(opar)</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/23/chapter13-广义线性模型/compare.png" alt=""><br><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment"># 拟合泊松回归</span></div><div class="line">&gt; fit &lt;- glm(sumY ~ Base + Age +Trt, data = breslow.dat, family = poisson())</div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">glm(formula = sumY ~ Base + Age + Trt, family = poisson(), data = breslow.dat)</div><div class="line"></div><div class="line">Deviance Residuals: </div><div class="line">    Min       1Q   Median       3Q      Max  </div><div class="line">-<span class="number">6.0569</span>  -<span class="number">2.0433</span>  -<span class="number">0.9397</span>   <span class="number">0.7929</span>  <span class="number">11.0061</span>  </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">               Estimate Std. Error z value Pr(&gt;|z|)    </div><div class="line">(Intercept)   <span class="number">1.9488259</span>  <span class="number">0.1356191</span>  <span class="number">14.370</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">Base          <span class="number">0.0226517</span>  <span class="number">0.0005093</span>  <span class="number">44.476</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">Age           <span class="number">0.0227401</span>  <span class="number">0.0040240</span>   <span class="number">5.651</span> <span class="number">1.59e-08</span> ***</div><div class="line">Trtprogabide -<span class="number">0.1527009</span>  <span class="number">0.0478051</span>  -<span class="number">3.194</span>   <span class="number">0.0014</span> ** </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">(Dispersion parameter <span class="keyword">for</span> poisson family taken to be <span class="number">1</span>)</div><div class="line"></div><div class="line">    Null deviance: <span class="number">2122.73</span>  on <span class="number">58</span>  degrees of freedom</div><div class="line">Residual deviance:  <span class="number">559.44</span>  on <span class="number">55</span>  degrees of freedom</div><div class="line">AIC: <span class="number">850.71</span></div><div class="line"></div><div class="line">Number of Fisher Scoring iterations: <span class="number">5</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#泊松回归的因变量以条件均值的对数形式ln(λ)来建模，年龄的回归参数为0.0227，表明</span></div><div class="line">&gt; <span class="comment">#保持其他预测变量不变，年龄增加一岁，癫痫发病数的对数均值将相应增加0.03。</span></div><div class="line">&gt; <span class="comment">#指数化系数用于方便观察</span></div><div class="line">&gt; exp(coef(fit))</div><div class="line"> (Intercept)         Base          Age Trtprogabide </div><div class="line">   <span class="number">7.0204403</span>    <span class="number">1.0229102</span>    <span class="number">1.0230007</span>    <span class="number">0.8583864</span> </div><div class="line">&gt; <span class="comment">#保持其他变量不变，年龄增加一岁，期望的癫痫发病数将乘以1.023。</span></div><div class="line">&gt; <span class="comment">#与Logistic回归中的指数化参数相似，泊松模型中的指数化参数对响应</span></div><div class="line">&gt; <span class="comment">#变量的影响都是成倍增加的，而不是线性相加。</span></div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="5、泊松回归的过度离势"><a href="#5、泊松回归的过度离势" class="headerlink" title="5、泊松回归的过度离势"></a>5、泊松回归的过度离势</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#泊松分布的过度离势</span></div><div class="line">&gt; <span class="comment">#泊松分布的方差和均值相等。当响应变量观测的方差比依据泊松分布预测的方差大时，泊松</span></div><div class="line">&gt; <span class="comment">#回归可能发生过度离势。</span></div><div class="line">&gt; <span class="comment">#与Logistic回归类似，此处如果残差偏差与残差自由度的比例远远大于1，那么表明存在过度</span></div><div class="line">&gt; <span class="comment">#离势。559.44/55 &gt;&gt;1</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#qcc包的一个方法可用于检测泊松模型的过度离势</span></div><div class="line">&gt; <span class="keyword">library</span>(qcc)</div><div class="line">&gt; qcc.overdispersion.test(breslow.dat$sumY, type=<span class="string">"poisson"</span>)</div><div class="line">                   </div><div class="line">Overdispersion test Obs.Var/Theor.Var Statistic p-value</div><div class="line">       poisson data          <span class="number">62.87013</span>  <span class="number">3646.468</span>       <span class="number">0</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#显著性检验的p值果然小于0.05，进一步表明确实存在过度离势</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#此时仍可使用glm进行拟合</span></div><div class="line">&gt; fit.od &lt;- glm(sumY ~ Base + Age +Trt, data = breslow.dat, family = quasipoisson())</div><div class="line">&gt; summary(fit.od)</div><div class="line"></div><div class="line">Call:</div><div class="line">glm(formula = sumY ~ Base + Age + Trt, family = quasipoisson(), </div><div class="line">    data = breslow.dat)</div><div class="line"></div><div class="line">Deviance Residuals: </div><div class="line">    Min       1Q   Median       3Q      Max  </div><div class="line">-<span class="number">6.0569</span>  -<span class="number">2.0433</span>  -<span class="number">0.9397</span>   <span class="number">0.7929</span>  <span class="number">11.0061</span>  </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">              Estimate Std. Error t value Pr(&gt;|t|)    </div><div class="line">(Intercept)   <span class="number">1.948826</span>   <span class="number">0.465091</span>   <span class="number">4.190</span> <span class="number">0.000102</span> ***</div><div class="line">Base          <span class="number">0.022652</span>   <span class="number">0.001747</span>  <span class="number">12.969</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">Age           <span class="number">0.022740</span>   <span class="number">0.013800</span>   <span class="number">1.648</span> <span class="number">0.105085</span>    </div><div class="line">Trtprogabide -<span class="number">0.152701</span>   <span class="number">0.163943</span>  -<span class="number">0.931</span> <span class="number">0.355702</span>    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">(Dispersion parameter <span class="keyword">for</span> quasipoisson family taken to be <span class="number">11.76075</span>)</div><div class="line"></div><div class="line">    Null deviance: <span class="number">2122.73</span>  on <span class="number">58</span>  degrees of freedom</div><div class="line">Residual deviance:  <span class="number">559.44</span>  on <span class="number">55</span>  degrees of freedom</div><div class="line">AIC: <span class="literal">NA</span></div><div class="line"></div><div class="line">Number of Fisher Scoring iterations: <span class="number">5</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#注意，使用类泊松（quasi-Poisson）方法所得的参数估计与泊松方法相同，但标准误变大</span></div><div class="line">&gt; <span class="comment">#了许多。此处，标准误越大将会导致Trt（和Age）的p值越大于0.05。当考虑过度离势，并控</span></div><div class="line">&gt; <span class="comment">#制基础癫痫数和年龄时，并没有充足的证据表明药物治疗相对于使用安慰剂能显著降低癫痫发</span></div><div class="line">&gt; <span class="comment">#病次数</span></div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/广义线性模型/">广义线性模型</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/11/23/chapter13-广义线性模型/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/11/23/chapter13-广义线性模型/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/21/chapter12-重抽样与自助法/" title="chapter12-重抽样与自助法" itemprop="url">chapter12-重抽样与自助法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-21T03:26:58.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="重抽样与自助法"><a href="#重抽样与自助法" class="headerlink" title="重抽样与自助法"></a>重抽样与自助法</h1><h2 id="1、置换检验"><a href="#1、置换检验" class="headerlink" title="1、置换检验"></a>1、置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#置换方法并不是将统计量与理论分布进行比较，而是将其与置换观测数据后获得的经验分布进行比较，</span></div><div class="line">&gt; <span class="comment">#根据统计量值的极端性判断是否有足够理由拒绝零假设。比如判断两组处理数据的内在差异性</span></div><div class="line">&gt; <span class="comment">#将所有观测组数据混合后重新随机拆分至所有组合计算统计量如（t值），所有统计量升序排列，根据第一个统计量</span></div><div class="line">&gt; <span class="comment">#（如t0）进行判断</span></div><div class="line">&gt; <span class="comment">#置换检验真正发挥功用的地方是处理非正态数据（如分布偏倚很大）、存在离群点、</span></div><div class="line">&gt; <span class="comment">#样本很小或无法做参数检验等情况。不过，如果初始样本对感兴趣的总体情况代表性很差，即使</span></div><div class="line">&gt; <span class="comment">#是置换检验也无法提高推断效果。</span></div><div class="line">&gt; <span class="comment">#置换检验主要用于生成检验零假设的p值，它有助于回答“效应是否存在”这样的问题。</span></div></pre></td></tr></table></figure>
+<h2 id="2、使用coin包进行置换检验"><a href="#2、使用coin包进行置换检验" class="headerlink" title="2、使用coin包进行置换检验"></a>2、使用coin包进行置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#独立2样本检验和K样本检验</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; score &lt;- c(<span class="number">40</span>,<span class="number">57</span>,<span class="number">45</span>,<span class="number">55</span>,<span class="number">58</span>,<span class="number">57</span>,<span class="number">64</span>,<span class="number">55</span>,<span class="number">62</span>,<span class="number">65</span>)</div><div class="line">&gt; treatment &lt;- factor(c(rep(<span class="string">"A"</span>,<span class="number">5</span>), rep(<span class="string">"B"</span>,<span class="number">5</span>)))</div><div class="line">&gt; mydata &lt;- data.frame(treatment, score)</div><div class="line">&gt; t.test(score~treatment, data=mydata,  var.equal = <span class="literal">TRUE</span>)</div><div class="line"></div><div class="line">	Two Sample t-test</div><div class="line"></div><div class="line">data:  score by treatment</div><div class="line">t = -<span class="number">2.345</span>, df = <span class="number">8</span>, p-value = <span class="number">0.04705</span></div><div class="line">alternative hypothesis: true difference <span class="keyword">in</span> means is not equal to <span class="number">0</span></div><div class="line"><span class="number">95</span> percent confidence interval:</div><div class="line"> -<span class="number">19.0405455</span>  -<span class="number">0.1594545</span></div><div class="line">sample estimates:</div><div class="line">mean <span class="keyword">in</span> group A mean <span class="keyword">in</span> group B </div><div class="line">           <span class="number">51.0</span>            <span class="number">60.6</span> </div><div class="line"></div><div class="line">&gt; <span class="comment">#distribution = "exact"，那么在零假设条件下，分布的计算是精确的（即依据所有</span></div><div class="line">&gt; <span class="comment">#可能的排列组合）,当前仅可用于两样本问题</span></div><div class="line">&gt; oneway_test(score~treatment, data=mydata,  distribution=<span class="string">'exact'</span>)</div><div class="line"></div><div class="line">	Exact Two-Sample Fisher-Pitman Permutation Test</div><div class="line"></div><div class="line">data:  score by treatment (A, B)</div><div class="line">Z = -<span class="number">1.9147</span>, p-value = <span class="number">0.07143</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#测试美国南部与非南部的监禁概率</span></div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; UScrime &lt;- transform(UScrime, So = factor(So))</div><div class="line">&gt; wilcox_test(Prob ~ So, data=UScrime, distribution=<span class="string">"exact"</span>)</div><div class="line"></div><div class="line">	Exact Wilcoxon-Mann-Whitney Test</div><div class="line"></div><div class="line">data:  Prob by So (<span class="number">0</span>, <span class="number">1</span>)</div><div class="line">Z = -<span class="number">3.7493</span>, p-value = <span class="number">8.488e-05</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#监禁在南部可能更多</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#K样本问题, 五种治疗方案的差异性,参考分布得自于数据9999次的置换</span></div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; oneway_test(response ~ trt, data = cholesterol, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative K-Sample Fisher-Pitman Permutation Test</div><div class="line"></div><div class="line">data:  response by trt (1time, 2times, 4times, drugD, drugE)</div><div class="line">chi-squared = <span class="number">36.381</span>, p-value &lt; <span class="number">2.2e-16</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#列联表中的独立性</span></div><div class="line">&gt; <span class="comment">#检验两类别型变量的独立性</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; <span class="keyword">library</span>(vcd)</div><div class="line">&gt; <span class="comment">#转换治疗效果变量为分类因子，有序因子coin会生产一个线性与线性的趋势检验，而不是卡方检验</span></div><div class="line">&gt; Arthritis &lt;- transform(Arthritis, Improved=as.factor(as.numeric(Improved)))</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; chisq_test(Treatment ~ Improved, data=Arthritis, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative Pearson Chi-Squared Test</div><div class="line"></div><div class="line">data:  Treatment by Improved (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div><div class="line">chi-squared = <span class="number">13.055</span>, p-value = <span class="number">0.0018</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#两数值型变量的独立性置换检验，文盲率与谋杀率</span></div><div class="line">&gt; <span class="comment">#转换为数据框，x77是一个矩阵</span></div><div class="line">&gt; states &lt;- as.data.frame(state.x77)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; spearman_test(Illiteracy~Murder, data=states, distribution=approximate(B=<span class="number">9999</span>))</div><div class="line"></div><div class="line">	Approximative Spearman Correlation Test</div><div class="line"></div><div class="line">data:  Illiteracy by Murder</div><div class="line">Z = <span class="number">4.7065</span>, p-value &lt; <span class="number">2.2e-16</span></div><div class="line">alternative hypothesis: true rho is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#两样本和K样本相关性检验</span></div><div class="line">&gt; <span class="keyword">library</span>(coin)</div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; wilcoxsign_test(U1~U2, data=UScrime, distribution=<span class="string">"exact"</span>)</div><div class="line"></div><div class="line">	Exact Wilcoxon-Pratt Signed-Rank Test</div><div class="line"></div><div class="line">data:  y by x (pos, neg) </div><div class="line">	 stratified by block</div><div class="line">Z = <span class="number">5.9691</span>, p-value = <span class="number">1.421e-14</span></div><div class="line">alternative hypothesis: true mu is not equal to <span class="number">0</span></div></pre></td></tr></table></figure>
+<h2 id="3、ImPerm包置换检验"><a href="#3、ImPerm包置换检验" class="headerlink" title="3、ImPerm包置换检验"></a>3、ImPerm包置换检验</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#ImPerm包 提供线性模型的置换方法，回归和方差分析</span></div><div class="line">&gt; <span class="comment">#简单回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; fit&lt;-lmp(weight~height, data=women, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = weight ~ height, data = women, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">    Min      1Q  Median      3Q     Max </div><div class="line">-<span class="number">1.7333</span> -<span class="number">1.1333</span> -<span class="number">0.3833</span>  <span class="number">0.7417</span>  <span class="number">3.1167</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">       Estimate Iter Pr(Prob)    </div><div class="line">height     <span class="number">3.45</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">1.525</span> on <span class="number">13</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.991</span>,	Adjusted R-squared: <span class="number">0.9903</span> </div><div class="line"><span class="literal">F</span>-statistic:  <span class="number">1433</span> on <span class="number">1</span> and <span class="number">13</span> DF,  p-value: <span class="number">1.091e-14</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多项式回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit&lt;-lmp(weight ~ height + I(height^<span class="number">2</span>), data = women, perm = <span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = weight ~ height + I(height^<span class="number">2</span>), data = women, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">      Min        1Q    Median        3Q       Max </div><div class="line">-<span class="number">0.509405</span> -<span class="number">0.296105</span> -<span class="number">0.009405</span>  <span class="number">0.286151</span>  <span class="number">0.597059</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Iter Pr(Prob)    </div><div class="line">height      -<span class="number">7.34832</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">I(height^<span class="number">2</span>)  <span class="number">0.08306</span> <span class="number">5000</span>   &lt;<span class="number">2e-16</span> ***</div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">0.3841</span> on <span class="number">12</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.9995</span>,	Adjusted R-squared: <span class="number">0.9994</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">1.139e+04</span> on <span class="number">2</span> and <span class="number">12</span> DF,  p-value: &lt; <span class="number">2.2e-16</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多元回归</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; states &lt;- as.data.frame(state.x77)</div><div class="line">&gt; fit &lt;- lmp(Murder ~ Population + Illiteracy + Income + Frost, data=states, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line"></div><div class="line">Call:</div><div class="line">lmp(formula = Murder ~ Population + Illiteracy + Income + Frost, </div><div class="line">    data = states, perm = <span class="string">"Prob"</span>)</div><div class="line"></div><div class="line">Residuals:</div><div class="line">     Min       1Q   Median       3Q      Max </div><div class="line">-<span class="number">4.79597</span> -<span class="number">1.64946</span> -<span class="number">0.08112</span>  <span class="number">1.48150</span>  <span class="number">7.62104</span> </div><div class="line"></div><div class="line">Coefficients:</div><div class="line">            Estimate Iter Pr(Prob)    </div><div class="line">Population <span class="number">2.237e-04</span>   <span class="number">51</span>   <span class="number">1.0000</span>    </div><div class="line">Illiteracy <span class="number">4.143e+00</span> <span class="number">5000</span>   <span class="number">0.0004</span> ***</div><div class="line">Income     <span class="number">6.442e-05</span>   <span class="number">51</span>   <span class="number">1.0000</span>    </div><div class="line">Frost      <span class="number">5.813e-04</span>   <span class="number">51</span>   <span class="number">0.8627</span>    </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">Residual standard error: <span class="number">2.535</span> on <span class="number">45</span> degrees of freedom</div><div class="line">Multiple R-Squared: <span class="number">0.567</span>,	Adjusted R-squared: <span class="number">0.5285</span> </div><div class="line"><span class="literal">F</span>-statistic: <span class="number">14.73</span> on <span class="number">4</span> and <span class="number">45</span> DF,  p-value: <span class="number">9.133e-08</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#单因素方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; <span class="keyword">library</span>(multcomp)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(response~trt, data=cholesterol, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS "</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter  Pr(Prob)    </div><div class="line">trt          <span class="number">4</span>  <span class="number">1351.37</span>    <span class="number">337.84</span> <span class="number">5000</span> &lt; <span class="number">2.2e-16</span> ***</div><div class="line">Residuals   <span class="number">45</span>   <span class="number">468.75</span>     <span class="number">10.42</span>                   </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#单因素协方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(weight ~ gesttime + dose, data=litter, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter Pr(Prob)    </div><div class="line">gesttime     <span class="number">1</span>   <span class="number">161.49</span>   <span class="number">161.493</span> <span class="number">5000</span>   <span class="number">0.0006</span> ***</div><div class="line">dose         <span class="number">3</span>   <span class="number">137.12</span>    <span class="number">45.708</span> <span class="number">5000</span>   <span class="number">0.0392</span> *  </div><div class="line">Residuals   <span class="number">69</span>  <span class="number">1151.27</span>    <span class="number">16.685</span>                  </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#双因素方差分析</span></div><div class="line">&gt; <span class="keyword">library</span>(lmPerm)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; fit &lt;- aovp(len ~ supp * dose, data=ToothGrowth, perm=<span class="string">"Prob"</span>)</div><div class="line">[<span class="number">1</span>] <span class="string">"Settings:  unique SS : numeric variables centered"</span></div><div class="line">&gt; summary(fit)</div><div class="line">Component <span class="number">1</span> :</div><div class="line">            Df R Sum Sq R Mean Sq Iter Pr(Prob)    </div><div class="line">supp         <span class="number">1</span>   <span class="number">205.35</span>    <span class="number">205.35</span> <span class="number">5000</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">dose         <span class="number">1</span>  <span class="number">2224.30</span>   <span class="number">2224.30</span> <span class="number">5000</span>  &lt; <span class="number">2e-16</span> ***</div><div class="line">supp:dose    <span class="number">1</span>    <span class="number">88.92</span>     <span class="number">88.92</span> <span class="number">2032</span>  <span class="number">0.04724</span> *  </div><div class="line">Residuals   <span class="number">56</span>   <span class="number">933.63</span>     <span class="number">16.67</span>                  </div><div class="line">---</div><div class="line">Signif. codes:  <span class="number">0</span> ‘***’ <span class="number">0.001</span> ‘**’ <span class="number">0.01</span> ‘*’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="4、自助法"><a href="#4、自助法" class="headerlink" title="4、自助法"></a>4、自助法</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#boot包中的自助法，即通过一个函数重复执行多次取得统计量的序列分布</span></div><div class="line">&gt; <span class="comment">#对单个统计量使用自助法</span></div><div class="line">&gt; rsq &lt;- <span class="keyword">function</span>(formula, data, indicates) &#123;</div><div class="line">+     d &lt;- data[indicates,]</div><div class="line">+     fit &lt;- lm(formula, data=d)</div><div class="line">+     <span class="keyword">return</span>(summary(fit)$r.square)</div><div class="line">+ &#125;</div><div class="line">&gt; <span class="keyword">library</span>(boot)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; results &lt;- boot(data=mtcars, statistic = rsq, R=<span class="number">1000</span>, formula=mpg~wt+disp)</div><div class="line">&gt; </div><div class="line">&gt; print(results)</div><div class="line"></div><div class="line">ORDINARY NONPARAMETRIC BOOTSTRAP</div><div class="line"></div><div class="line"></div><div class="line">Call:</div><div class="line">boot(data = mtcars, statistic = rsq, R = <span class="number">1000</span>, formula = mpg ~ </div><div class="line">    wt + disp)</div><div class="line"></div><div class="line"></div><div class="line">Bootstrap Statistics :</div><div class="line">     original    bias    std. error</div><div class="line">t1* <span class="number">0.7809306</span> <span class="number">0.0133367</span>  <span class="number">0.05068926</span></div><div class="line">&gt; plot(results)</div><div class="line"><span class="comment">#置信区间都不包含R平方值0，所以拒绝零假设</span></div><div class="line">&gt; boot.ci(results, type=c(<span class="string">"perc"</span>, <span class="string">"bca"</span>))</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = c(<span class="string">"perc"</span>, <span class="string">"bca"</span>))</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level     Percentile            BCa          </div><div class="line"><span class="number">95</span>%   ( <span class="number">0.6838</span>,  <span class="number">0.8833</span> )   ( <span class="number">0.6344</span>,  <span class="number">0.8549</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div><div class="line">Some BCa intervals may be unstable</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/21/chapter12-重抽样与自助法/自助法.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#多个统计量自助法</span></div><div class="line">&gt; bs &lt;- <span class="keyword">function</span>(formula, data, indices) &#123;</div><div class="line">+   d &lt;- data[indices,]</div><div class="line">+   fit &lt;- lm(formula, data=d)</div><div class="line">+   <span class="keyword">return</span>(coef(fit))</div><div class="line">+ &#125;</div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(boot)</div><div class="line">&gt; set.seed(<span class="number">1234</span>)</div><div class="line">&gt; results &lt;- boot(data=mtcars, statistic = bs, R=<span class="number">1000</span>, formula=mpg~wt+disp)</div><div class="line">&gt; </div><div class="line">&gt; print(results)</div><div class="line"></div><div class="line">ORDINARY NONPARAMETRIC BOOTSTRAP</div><div class="line"></div><div class="line"></div><div class="line">Call:</div><div class="line">boot(data = mtcars, statistic = bs, R = <span class="number">1000</span>, formula = mpg ~ </div><div class="line">    wt + disp)</div><div class="line"></div><div class="line"></div><div class="line">Bootstrap Statistics :</div><div class="line">       original        bias    std. error</div><div class="line">t1* <span class="number">34.96055404</span>  <span class="number">0.1378732942</span> <span class="number">2.485756673</span></div><div class="line">t2* -<span class="number">3.35082533</span> -<span class="number">0.0539040965</span> <span class="number">1.170427539</span></div><div class="line">t3* -<span class="number">0.01772474</span> -<span class="number">0.0001208075</span> <span class="number">0.008786803</span></div><div class="line">&gt; <span class="comment">#查看车重的抽样结果</span></div><div class="line">&gt; plot(results, index=<span class="number">2</span>)</div><div class="line">&gt; <span class="comment">#查看车重的95置信区间</span></div><div class="line">&gt; boot.ci(results, type= <span class="string">"bca"</span>, index=<span class="number">2</span>)</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = <span class="string">"bca"</span>, index = <span class="number">2</span>)</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level       BCa          </div><div class="line"><span class="number">95</span>%   (-<span class="number">5.655</span>, -<span class="number">1.194</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div><div class="line">&gt; <span class="comment">#查看排量的95置信区间</span></div><div class="line">&gt; boot.ci(results, type= <span class="string">"bca"</span>, index=<span class="number">3</span>)</div><div class="line">BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</div><div class="line">Based on <span class="number">1000</span> bootstrap replicates</div><div class="line"></div><div class="line">CALL : </div><div class="line">boot.ci(boot.out = results, type = <span class="string">"bca"</span>, index = <span class="number">3</span>)</div><div class="line"></div><div class="line">Intervals : </div><div class="line">Level       BCa          </div><div class="line"><span class="number">95</span>%   (-<span class="number">0.0331</span>,  <span class="number">0.0010</span> )  </div><div class="line">Calculations and Intervals on Original Scale</div></pre></td></tr></table></figure>
+<p><img src="/2017/11/21/chapter12-重抽样与自助法/自助法2.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/重抽样与自助法/">重抽样与自助法</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/11/21/chapter12-重抽样与自助法/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/11/21/chapter12-重抽样与自助法/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/03/Understand-JVM-Part-IV/" title="Understand JVM Part IV" itemprop="url">Understand JVM Part IV</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-03T08:00:30.000Z" itemprop="datePublished"> 发表于 2017-07-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="内存模型与并发"><a href="#内存模型与并发" class="headerlink" title="内存模型与并发"></a>内存模型与并发</h1><h2 id="1-内存模型"><a href="#1-内存模型" class="headerlink" title="1 内存模型"></a>1 内存模型</h2><h3 id="1-1-硬件层面的缓存一致性"><a href="#1-1-硬件层面的缓存一致性" class="headerlink" title="1.1 硬件层面的缓存一致性"></a>1.1 硬件层面的缓存一致性</h3><ul>
+<li>CPU核心、高速缓存与主内存之间通过缓存一致性协议保持数据的版本问题<h3 id="1-2-Java内存模型"><a href="#1-2-Java内存模型" class="headerlink" title="1.2 Java内存模型"></a>1.2 Java内存模型</h3><h4 id="1-2-1-Java内存模型概述"><a href="#1-2-1-Java内存模型概述" class="headerlink" title="1.2.1 Java内存模型概述"></a>1.2.1 Java内存模型概述</h4></li>
+<li>每个线程拥有自己的工作内存，不同线程间的工作内存不可见，线程所有操作都操作工作内存</li>
+<li>工作内存与主内存之间的数据同步通过定义的一些原子操作实现（lock、unlock、read、load、use、assign（赋值）、store、write）（1.5之后不再使用这种方式描述内存模型，使用先行发生原则）<h4 id="1-2-2-volatile变量"><a href="#1-2-2-volatile变量" class="headerlink" title="1.2.2 volatile变量"></a>1.2.2 volatile变量</h4></li>
+<li>volatile只保证可见性，并非线程安全，多线程仍然会出现不安全的</li>
+<li>运算结果不依赖当前volatile变量或不需要与其他变量共同参与不变约束时，推荐使用volatile</li>
+<li>volatile禁止指令重排序，线程内表现为串行<h4 id="1-2-3-long与double"><a href="#1-2-3-long与double" class="headerlink" title="1.2.3 long与double"></a>1.2.3 long与double</h4></li>
+<li>Java内存模型不保证64位数据类型的load、store、read、write 4个操作的原子性，long与double的非原子性协定，但现在的虚拟机已经实现原子性<h4 id="1-2-4-原子性、可见性与有序性"><a href="#1-2-4-原子性、可见性与有序性" class="headerlink" title="1.2.4 原子性、可见性与有序性"></a>1.2.4 原子性、可见性与有序性</h4></li>
+<li>原子性：字节码monitorenter与monitorexit实现（管程）</li>
+<li>可见性：新值同步主存，读取从主存刷新方式实现，另外，volatile保证新值立即同步主存，读取时立即从内存刷新，synchronized块中，对一个变量执行unlock之前必须刷回主存，final保证一单初始化完成，其他线程立即可见</li>
+<li>有序性：线程内观察，所有操作有序，观察其他线程，所有操作无序（线程内表现为串行语义；指令重排序与工作内存与主存的差异）</li>
+</ul>
+<h4 id="1-2-5-先行发生原则"><a href="#1-2-5-先行发生原则" class="headerlink" title="1.2.5 先行发生原则"></a>1.2.5 先行发生原则</h4><ul>
+<li>Java内存模型中存在天然的先后操作顺序，无需同步措施，如果两个操作不属于这些规则，则不保证顺序性</li>
+<li>先行发生原则：<ul>
+<li>程序次序：     最终按照代码顺序执行</li>
+<li>管程锁定：     unlock操作先于同一个锁的后一个lock操作（时间的先后）</li>
+<li>volatile变量：对一个volatile变量的写先于后面的读（时间的先后）</li>
+<li>线程启动：     Thread的start先于线程的每一个动作</li>
+<li>线程终止：     线程中的左右操作都先于对该线程的终止检测</li>
+<li>线程中断：     对线程interrupt()方法的调用先于被中断线程的代码检测到中断事件的发生</li>
+<li>对象终结：     一个对象的初始化完成先于finalize()方法</li>
+<li>传递性：      A先于B，B先于C，A先于C</li>
+</ul>
+</li>
+<li>一个操作<code>时间上的先发生</code>不代表该操作<code>先行发生</code></li>
+</ul>
+<h3 id="1-3-Java与线程"><a href="#1-3-Java与线程" class="headerlink" title="1.3 Java与线程"></a>1.3 Java与线程</h3><h4 id="1-3-1-线程的实现"><a href="#1-3-1-线程的实现" class="headerlink" title="1.3.1 线程的实现"></a>1.3.1 线程的实现</h4><ul>
+<li>使用内核线程实现：程序使用轻量级进程LWP（内核线程的高级接口）进行线程映射，每个轻量级进程对应一个内核线程，这种1:1的关系成为一对一的线程模型，线程的所有操作需要进行系统调用，需要用户态和内核态进行切换，轻量级进程需要消耗一定的内核资源，一个系统支持的轻量级进程数量是有限的</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/1v1.png" alt=""></p>
+<ul>
+<li>使用用户线程实现：系统内核不能感知用户线程的存在，其建立、同步、销毁和调度全在用户态完成，不需要内核的帮助，这种进程与用户线程的1:N的关系成为一对多的线程模型，难以实现，逐步放弃</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/userThread.jpg" alt=""></p>
+<ul>
+<li>使用用户线程+LWP：以上两种结合推理</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/multThread.jpg" alt=""></p>
+<ul>
+<li>Java实现：Windows与Linux使用一对一线程模型实现，Windows与Linux提供的线程模型就是一对一的</li>
+</ul>
+<h4 id="1-3-2-线程调度"><a href="#1-3-2-线程调度" class="headerlink" title="1.3.2 线程调度"></a>1.3.2 线程调度</h4><ul>
+<li>协同式调度（协程）：线程主动通知系统切换线程，如Lua的协程，缺点执行时间不可控制，某个线程可能一直不通知</li>
+<li>抢占式调度：每个线程由系统来分配执行时间，Java采用，Java提供了10中线程的优先级来代表次序，但是Java的优先级不一定靠谱，有的OS提供的线程优先级不一致，如windows提供7种，无法与之一一对应，此外优先级可能被OS的各种优化与功能改变</li>
+</ul>
+<h4 id="1-3-3-状态转换"><a href="#1-3-3-状态转换" class="headerlink" title="1.3.3 状态转换"></a>1.3.3 状态转换</h4><p><a href="http://peterping.top/2016/11/01/The-Art-of-Java-Concurrency-Programming-I/#4-1线程" target="_blank" rel="noopener">参见</a></p>
+<h2 id="2-线程安全与锁优化"><a href="#2-线程安全与锁优化" class="headerlink" title="2 线程安全与锁优化"></a>2 线程安全与锁优化</h2><h3 id="2-1-线程安全"><a href="#2-1-线程安全" class="headerlink" title="2.1 线程安全"></a>2.1 线程安全</h3><ul>
+<li>多线程访问一个对象，不用考虑线程的调度与交替运行，也不需要进行额外的同步，调用这个对象的行为产生正确的结果<h4 id="2-1-1-Java的线程安全"><a href="#2-1-1-Java的线程安全" class="headerlink" title="2.1.1 Java的线程安全"></a>2.1.1 Java的线程安全</h4></li>
+<li>Java的安全性：<ul>
+<li>不可变</li>
+<li>绝对线程安全</li>
+<li>相对线程安全（单独的操作是线程安全的，但是对于特定的顺序连续调用，需要额外的同步手段，如Vector的读取与删除同时进行）</li>
+<li>线程兼容（对象不是线程安全，可以使用同步手段达到线程安全）</li>
+<li>线程对立（无法在多线程环境运行，Threadsuspend()、Thread.resume()可能引发死锁）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-1-2-Java的线程安全的实现方法"><a href="#2-1-2-Java的线程安全的实现方法" class="headerlink" title="2.1.2 Java的线程安全的实现方法"></a>2.1.2 Java的线程安全的实现方法</h4><ul>
+<li><p>互斥同步：<code>synchronized</code>关键字实现，字节码指令对应<code>monitorenter</code>与<code>monitorexit</code>,这两个字节码需要一个<code>reference</code>类型参数，如果Java代码未指定，则为对象实例或Class对象，进入该指令时，首先要获取对象的锁，如果当前线程已经获取则将计数器+1，线程可重入，不会锁死自己，由于该语句会导致线程状态切换，线程需要进入核心态，消耗较大</p>
+<ul>
+<li>也可以使用<code>ReentrantLock</code>，性能更好, 但1.6之后<code>synchronized</code>关键字的吞吐量已经大幅提高，推荐使用原生<code>synchronized</code>关键字（1.8 ConcurrentHashMap源码已经使用<code>synchronized</code>来实现，Doug lea已经认可了<code>synchronized</code>的性能）</li>
+</ul>
+</li>
+<li><p>非阻塞同步：CAS指令，需要硬件指令集支持（比较和更新需要原子操作），需要三个参数，内存位置，预期值，新值，Java中使用Unsafe类提供该操作</p>
+<ul>
+<li>CAS指令会有ABA问题，可以使用<code>AtomicStampedReference</code>来控制变量的版本，更推荐使用互斥同步解决，因为一般ABA不影响并发的正确性。</li>
+<li>该类只支持<code>Bootstrap ClassLoader</code>加载，用户程序默认无法使用，只可以通过反射：<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 一个简单的示例</div><div class="line"> * Date: 2017/6/13</div><div class="line"> * Time: 17:04</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasSample</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> casVar;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> CASVAR_OFFSET;</div><div class="line">    <span class="keyword">static</span> Unsafe unsafe;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Field field = Unsafe.class.getDeclaredField(<span class="string">"theUnsafe"</span>);</div><div class="line">            field.setAccessible(<span class="keyword">true</span>);</div><div class="line">            unsafe = (Unsafe) field.get(<span class="keyword">null</span>);</div><div class="line">            Class&lt;?&gt; k = CasSample.class;</div><div class="line"></div><div class="line">            <span class="comment">//取偏移量 实例变量使用objectFieldOffset，类静态变量使用staticFieldOffset</span></div><div class="line">            CASVAR_OFFSET = unsafe.objectFieldOffset(k.getField(<span class="string">"casVar"</span>));</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        CasSample casSample = <span class="keyword">new</span> CasSample();</div><div class="line">        casSample.casVar = <span class="number">1</span>;</div><div class="line">        casSample.CAS_Swap();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CAS_Swap</span><span class="params">()</span> </span>&#123;</div><div class="line">        unsafe.compareAndSwapInt(<span class="keyword">this</span>, CASVAR_OFFSET, <span class="number">1</span>, <span class="number">2</span>);</div><div class="line">        System.out.println(<span class="string">"cas"</span> + casVar);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-锁优化"><a href="#2-2-锁优化" class="headerlink" title="2.2 锁优化"></a>2.2 锁优化</h3><ul>
+<li>JVM层面的优化<h4 id="2-2-1-自旋锁与自适应锁"><a href="#2-2-1-自旋锁与自适应锁" class="headerlink" title="2.2.1 自旋锁与自适应锁"></a>2.2.1 自旋锁与自适应锁</h4></li>
+<li>自旋锁：互斥同步线程阻塞不先不进入内核态挂起，而是让线程执行一个自旋，期待循环之后别的线程就可以释放锁了，自旋占用CPU时间，不可无限制自旋，自旋次数默认10</li>
+<li>自适应锁：自旋的时间不固定了，由前一次在同一个锁上的自旋时间以及锁拥有着的状态决定，比如上次自旋成功获得了锁A，当前持有锁的线程正在运行，虚拟机判断本次自旋获取到锁的可能性很大，进而自旋100次</li>
+</ul>
+<h4 id="2-2-2-锁消除"><a href="#2-2-2-锁消除" class="headerlink" title="2.2.2 锁消除"></a>2.2.2 锁消除</h4><ul>
+<li>自动判断当前代码块内是否会出现共享数据竞争，如果没有竞争，则将该段的同步措施去除。</li>
+</ul>
+<h4 id="2-2-3-锁粗化"><a href="#2-2-3-锁粗化" class="headerlink" title="2.2.3 锁粗化"></a>2.2.3 锁粗化</h4><ul>
+<li>锁的使用通常要求锁的范围越小越好，但是若一系列的操作对同一个对象频繁的加锁解锁，比如出现在循环体内，那么这种加锁导致不必要的性能损耗，虚拟机探测到后会将同步措施放在整个操作序列的外部。</li>
+</ul>
+<h4 id="2-2-4-轻量级锁"><a href="#2-2-4-轻量级锁" class="headerlink" title="2.2.4 轻量级锁"></a>2.2.4 轻量级锁</h4><ul>
+<li><p>假设是对于绝大部分锁，整个同步周期内不存在竞争，根据对象头中的信息来表示对象的锁信息，<a href="http://peterping.top/2017/06/14/Understand-JVM-Part-I/#2、对象的内存布局" target="_blank" rel="noopener">参考</a></p>
+</li>
+<li><p>如果对象没有被锁定，即锁标志位为<code>01</code>，则JVM在栈帧中创建一个锁记录的空间（Lock Record）,存储当前对象的Mark Word备份，CAS更新对象的Mark Word为Lock Record的指针，若成功，则表示该线程获得了锁，且锁标志位变为<code>00</code>，此时对象处于轻量级锁定状态、</p>
+</li>
+<li><p>如果上述CAS失败，JVM检查该对象的Mark Word是否指向当前线程的栈帧，如果是则表示该线程已经获得锁，直接进入同步块执行，若失败，则锁膨胀为重量级锁，锁标志位变为<code>10</code>，Mark Word中存储重量级锁的指针（互斥量），后续等待线程进入阻塞状态</p>
+</li>
+<li><p>解锁依然使用CAS，若Mark Word依然指向线程的锁记录，则CAS替换回来那份拷贝，成功则完毕，失败则表示锁定期间有其他线程尝试获取改锁（此时Mark Word指向的是互斥量），释放锁同时唤醒被挂起的线程 </p>
+</li>
+</ul>
+<h4 id="2-2-5-偏向锁"><a href="#2-2-5-偏向锁" class="headerlink" title="2.2.5 偏向锁"></a>2.2.5 偏向锁</h4><ul>
+<li>据统计，在实际情况下，大部分的锁对象永远只被一个线程占用，轻量级锁在每次monitorenter和monitorexit的时候（非重入），都会进行一次cas操作，为了进一步减少cas操作，偏向锁（biased locking）诞生了。是否启用偏向锁由Mark Word中的一位表示，位于锁标记位前，可偏向为<code>1</code></li>
+<li>锁对象第一次被线程获取，CAS将线程ID设置在Mark Word中，成功则该线程进入同步块时，不再进行任何同步操作</li>
+<li>另外一个线程获取锁时：<ol>
+<li>看一眼持有锁的线程是否还活着，如果已经死了，那将对象设置为无锁状态就可以了</li>
+<li>如果这个线程还活着，那需要遍历持有这个锁的线程的栈帧中的所有lock record，如果所有lock record都不指向锁对象，那么这个线程实际上不持有这个对象锁。同1，将对象设置为无锁状态即可</li>
+<li>如果这个线程正在占用这个锁对象，那么需要修改线程中的锁记录与对象头，将它们都修改为轻量级锁状态，然后正常走轻量级锁的流程即可，是否偏向锁标记位为<code>0</code></li>
+</ol>
+</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/07/03/Understand-JVM-Part-IV/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/07/03/Understand-JVM-Part-IV/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

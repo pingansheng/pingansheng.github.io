@@ -1,0 +1,754 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/2/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/06/05/负载均衡的实现方式/" title="负载均衡的实现方式" itemprop="url">负载均衡的实现方式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-05T09:57:02.000Z" itemprop="datePublished"> 发表于 2018-06-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="总结下负载均衡的常用方案及适用场景"><a href="#总结下负载均衡的常用方案及适用场景" class="headerlink" title="总结下负载均衡的常用方案及适用场景"></a>总结下负载均衡的常用方案及适用场景</h1><h2 id="轮询调度"><a href="#轮询调度" class="headerlink" title="轮询调度"></a>轮询调度</h2><p>以轮询的方式依次请求调度不同的服务器；实现时，一般为服务器带上权重；这样有两个好处：</p>
+<p>针对服务器的性能差异可分配不同的负载；<br>当需要将某个结点剔除时，只需要将其权重设置为0即可；<br>优点：实现简单、高效；易水平扩展；</p>
+<p>缺点：请求到目的结点的不确定，造成其无法适用于有写的场景（缓存，数据库写）</p>
+<p>应用场景：数据库或应用服务层中只有读的场景；</p>
+<h2 id="随机方式"><a href="#随机方式" class="headerlink" title="随机方式"></a>随机方式</h2><p>请求随机分布到各个结点；在数据足够大的场景能达到一个均衡分布；</p>
+<p>优点：实现简单、易水平扩展；</p>
+<p>缺点：同Round Robin，无法用于有写的场景；</p>
+<p>应用场景：数据库负载均衡，也是只有读的场景；</p>
+<h2 id="哈希："><a href="#哈希：" class="headerlink" title="哈希："></a>哈希：</h2><p>根据key来计算需要落在的结点上，可以保证一个同一个键一定落在相同的服务器上；</p>
+<p>优点：相同key一定落在同一个结点上，这样就可用于有写有读的缓存场景；</p>
+<p>缺点：在某个结点故障后，会导致哈希键重新分布，造成命中率大幅度下降；</p>
+<p>解决：一致性哈希 or 使用keepalived保证任何一个结点的高可用性，故障后会有其它结点顶上来；</p>
+<p>应用场景：缓存，有读有写；</p>
+<h2 id="一致性哈希："><a href="#一致性哈希：" class="headerlink" title="一致性哈希："></a>一致性哈希：</h2><p>在服务器一个结点出现故障时，受影响的只有这个结点上的key，最大程度的保证命中率；</p>
+<p>如twemproxy中的ketama方案；</p>
+<p>生产实现中还可以规划指定子key哈希，从而保证局部相似特征的键能分布在同一个服务器上；</p>
+<p>优点：结点故障后命中率下降有限；</p>
+<p>应用场景：缓存；</p>
+<h2 id="根据键的范围来负载："><a href="#根据键的范围来负载：" class="headerlink" title="根据键的范围来负载："></a>根据键的范围来负载：</h2><p>根据键的范围来负载，前1亿个键都存放到第一个服务器，1~2亿在第二个结点；</p>
+<p>优点：水平扩展容易，存储不够用时，加服务器存放后续新增数据；</p>
+<p>缺点：负载不均；数据库的分布不均衡；（数据有冷热区分，一般最近注册的用户更加活跃，这样造成后续的服务器非常繁忙，而前期的结点空闲很多）</p>
+<p>适用场景：数据库分片负载均衡；</p>
+<h2 id="根据键对服务器结点数取模来负载："><a href="#根据键对服务器结点数取模来负载：" class="headerlink" title="根据键对服务器结点数取模来负载："></a>根据键对服务器结点数取模来负载：</h2><p>根据键对服务器结点数取模来负载；比如有4台服务器，key取模为0的落在第一个结点，1落在第二个结点上。</p>
+<p>优点：数据冷热分布均衡，数据库结点负载均衡分布；</p>
+<p>缺点：水平扩展较难；</p>
+<p>适用场景：数据库分片负载均衡；</p>
+<h2 id="纯动态结点负载均衡："><a href="#纯动态结点负载均衡：" class="headerlink" title="纯动态结点负载均衡："></a>纯动态结点负载均衡：</h2><p>根据CPU、IO、网络的处理能力来决策接下来的请求如何调度；</p>
+<p>优点：充分利用服务器的资源，保证个结点上负载处理均衡；</p>
+<p>缺点：实现起来复杂，真实使用较少；</p>
+<h2 id="不用主动负载均衡："><a href="#不用主动负载均衡：" class="headerlink" title="不用主动负载均衡："></a>不用主动负载均衡：</h2><p>使用消息队列转为异步模型，将负载均衡的问题消灭</p>
+<p>负载均衡是一种推模型，一直向你发数据，那么，将所有的用户请求发到消息队列中，所有的下游结点谁空闲，谁上来取数据处理；转为拉模型之后，消息了负载的问题；</p>
+<p>优点：通过消息队列的缓冲，保护后端系统，请求剧增时不会冲垮后端服务器；</p>
+<p>水平扩展容易，加入新结点后，直接取queue即可；</p>
+<p>缺点：不具有实时性；</p>
+<p>应用场景：不需要实时返回的场景；</p>
+<p>比如，12036下订单后，立刻返回提示信息：您的订单进去排队了…等处理完毕后，再异步通知；</p>
+<p>转：<a href="https://www.cnblogs.com/data2value/p/6107653.html" target="_blank" rel="noopener">https://www.cnblogs.com/data2value/p/6107653.html</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/分布式设计/">分布式设计</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/负载均衡/">负载均衡</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/06/05/负载均衡的实现方式/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/06/05/负载均衡的实现方式/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/06/05/分布式锁的实现方式与对比/" title="分布式锁的实现方式与对比" itemprop="url">分布式锁的实现方式与对比</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-05T09:38:27.000Z" itemprop="datePublished"> 发表于 2018-06-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>from: <a href="https://www.pomelolee.com/1787.html" target="_blank" rel="noopener">https://www.pomelolee.com/1787.html</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着互联网的发展，各种高并发、海量处理的场景越来越多。为了实现高可用、可扩展的系统，常常使用分布式，这样避免了单点故障和普通计算机cpu、内存等瓶颈。</p>
+<p>但是分布式系统也带来了数据一致性的问题，比如用户抢购秒杀商品多台机器共同执行出现超卖等。有些同学容易将分布式锁与线程安全混淆，线程安全是指的线程间的协同。如果是多个进程间的协同需要用到分布式锁，本文总结了几种常见的分布式锁。</p>
+<h2 id="基于数据库"><a href="#基于数据库" class="headerlink" title="基于数据库"></a>基于数据库</h2><h3 id="悲观锁—事务"><a href="#悲观锁—事务" class="headerlink" title="悲观锁—事务"></a>悲观锁—事务</h3><p>比如用户抢购秒杀商品的场景，多台机器都接收到了抢购的请求，可以将获取库存、判断有货、用户付款、扣减库存等多个数据库操作放到一个事务，这样当一台机器与数据库建立链接请求了抢购商品这个事务，另外的机器只能等这个机器将请求完成才能操作数据库。在实际应用场景中，常常库存与交易是两个独立的系统，这时的事务是一个分布式事务，需要用到两段式、三段式提交。</p>
+<p>优点：是比较安全的一种实现方法。</p>
+<p>缺点：在高并发的场景下开销是不能容忍的。容易出现数据库死锁等情况。</p>
+<h3 id="乐观锁—基于版本号"><a href="#乐观锁—基于版本号" class="headerlink" title="乐观锁—基于版本号"></a>乐观锁—基于版本号</h3><p>乐观锁常常用于分布式系统对数据库某张特定表执行update操作。考虑线上选座的场景，用户A和B同时选择了某场次电影的一个座位，都去将座位的状态设置为已售。</p>
+<p>设想这样的执行序列：<br>1、用户A判断该座位为未售状态；<br>2、用户B判断该座位为未售状态；<br>3、用户A执行update座位为已售；<br>4、用户B执行update座位为已售。</p>
+<p>这样会出现同一个座位售出两次的情况，解决方案是在这张数据库表中增加一个版本号的字段。执行操作前读取当前数据库表中的版本号，在执行update语句时将版本号放在where语句中，如果更新了记录则说明成功，如果没有更新记录，则说明此次update失败。</p>
+<p>加了乐观锁的执行序列：<br>1、用户A查询该座位，得到该座位是未售状态，版本号是5；<br>2、用户B查询该座位，得到该座位是未售状态，版本号是5；<br>3、用户A执行update语句将座位状态更新为已售，版本号更新为6；<br>4、用户B执行update语句时此时这个座位的记录版本号为6，没有版本号为5的这个座位的记录，执行失败。</p>
+<p>优点：乐观锁的性能高于悲观锁，并不容易出现死锁。</p>
+<p>缺点：乐观锁只能对一张表的数据进行加锁，如果是需要对多张表的数据操作加分布式锁，基于版本号的乐观锁是办不到的。</p>
+<h2 id="基于memcached"><a href="#基于memcached" class="headerlink" title="基于memcached"></a>基于memcached</h2><p>memcached可以基于add命令加锁。memcached的add指令是指如果有这个key，add命令则失败，如果没有这个key，则add命令成功。并且memcached支持设置过期时间的add原子操作。并发add同一个key也只有一个会成功。</p>
+<p>基于memcached的add指令加分布式锁的思路为：定义一个key为分布式锁的key，如果add一个带过期时间的key成功则执行相应的业务操作，执行完判断锁是否过期，如果锁过期则不删除锁，如果锁没过期则删除锁。带过期时间是防止出现机器宕机，一直不能释放锁。</p>
+<p>很多人基于memcached实现的分布式锁没有判断锁是否过期，执行完相应的业务操作直接删除锁会出现以下问题。</p>
+<p>设想这样的执行序列：<br>1、机器A成功add一个带过期时间的key；<br>2、机器A在执行业务操作时出现较长时间的停顿，比如出现了较长时间的GC pause；<br>3、机器A还未在较长的停顿中恢复出来，锁已经过期，机器B成功add一个带过期时间的锁；<br>4、此时机器A从较长的停顿中恢复出来，执行完相应业务操作，删除了机器Badd的锁；<br>5、此时机器B的业务操作是在没有锁保护的情况下执行的。</p>
+<p>但是memcached并没有提供一个判断key是否存在的操作，需要依赖于加锁的时候的时钟与执行完业务操作的时钟相减获得执行时间，将执行时间与锁的过期时间进行对比。或者将锁key对应的value设置为当前时间加上过期时间的时钟，执行完相应的业务操作获取锁key的值与当前时钟进行对比。</p>
+<p>注：过期时间一定要长于业务操作的执行时间。</p>
+<p>优点：性能高于基于数据库的实现方式。</p>
+<h2 id="基于redis"><a href="#基于redis" class="headerlink" title="基于redis"></a>基于redis</h2><p>redis提供了setNx原子操作。基于redis的分布式锁也是基于这个操作实现的，setNx是指如果有这个key就set失败，如果没有这个key则set成功，但是setNx不能设置超时时间。</p>
+<p>基于redis组成的分布式锁解决方案为：<br>1、setNx一个锁key，相应的value为当前时间加上过期时间的时钟；<br>2、如果setNx成功，或者当前时钟大于此时key对应的时钟则加锁成功，否则加锁失败退出；<br>3、加锁成功执行相应的业务操作（处理共享数据源）；<br>4、释放锁时判断当前时钟是否小于锁key的value，如果当前时钟小于锁key对应的value则执行删除锁key的操作。</p>
+<p>注：这对于单点的redis能很好地实现分布式锁，如果redis集群，会出现master宕机的情况。如果master宕机，此时锁key还没有同步到slave节点上，会出现机器B从新的master上获取到了一个重复的锁。</p>
+<p>设想以下执行序列：<br>1、机器AsetNx了一个锁key，value为当前时间加上过期时间，master更新了锁key的值；<br>2、此时master宕机，选举出新的master，新的master正同步数据；<br>3、新的master不含锁key，机器BsetNx了一个锁key，value为当前时间加上过期时间；</p>
+<p>这样机器A和机器B都获得了一个相同的锁；解决这个问题的办法可以在第3步进行优化，内存中存储了锁key的value，在执行访问共享数据源前再判断内存存储的锁key的value与此时redis中锁key的value是否相等如果相等则说明获得了锁，如果不相等则说明在之前有其他的机器修改了锁key，加锁失败。同时在第4步不仅仅判断当前时钟是否小于锁key的value，也可以进一步判断存储的value值与此时的value值是否相等，如果相等再进行删除。</p>
+<p>此时的执行序列：<br>1、机器AsetNx了一个锁key，value为当前时间加上过期时间，master更新了锁key的值；<br>2、此时，master宕机，选举出新的master，新的master正同步数据；<br>3、机器BsetNx了一个锁key，value为此时的时间加上过期时间；<br>4、当机器A再次判断内存存储的锁与此时的锁key的值不一样时，机器A加锁失败；<br>5、当机器B再次判断内存存储的锁与此时的锁key的值一样，机器B加锁成功。</p>
+<p>注：如果是为了效率而使用分布式锁，例如：部署多台定时作业的机器，在同一时间只希望一台机器执行一个定时作业，在这种场景下是允许偶尔的失败的，可以使用单点的redis分布式锁；如果是为了正确性而使用分布式锁，最好使用再次检查的redis分布式锁，再次检查的redis分布式锁虽然性能下降了，但是正确率更高。</p>
+<h2 id="基于zookeeper"><a href="#基于zookeeper" class="headerlink" title="基于zookeeper"></a>基于zookeeper</h2><p>基于zookeeper的分布式锁大致思路为：<br>1、客户端尝试创建ephemeral类型的znode节点/lock；<br>2、如果客户端创建成功则加锁成功，可以执行访问共享数据源的操作，如果客户端创建失败，则证明有别的客户端加锁成功，此次加锁失败；<br>3、如果加锁成功当客户端执行完访问共享数据源的操作，则删除znode节点/lock。</p>
+<p>基于zookeeper实现分布式锁不需要设置过期时间，因为ephemeral类型的节点，当客户端与zookeeper创建的session在一定时间（session的过期时间内）没有收到心跳，则认为session过期，会删除客户端创建的所有ephemeral节点。</p>
+<p>但是这样会出现两个机器共同持有锁的情况。设想以下执行序列。<br>1、机器A创建了znode节点/lock；<br>2、机器A执行相应操作，进入了较长时间的GC pause；<br>3、机器A与zookeeper的session过期，相应的/lock节点被删除；<br>4、机器B创建了znode节点/lock；<br>5、机器A从较长的停顿中恢复；<br>6、此时机器A与机器B都认为自己获得了锁。</p>
+<p>与基于redis的分布式锁，基于zookeeper的锁可以增加watch机制，当机器创建节点/lock失败的时候可以进入等待，当/lock节点被删除的时候zookeeper利用watch机制通知机器。但是这种增加watch机制的方式只能针对较小客户端集群，如果较多客户端集群都在等待/lock节点被删除，当/lock节点被删除时，zookeeper要通知较多机器，对zookeeper造成较大的性能影响。这就是所谓的羊群效应。</p>
+<p>优化的大致思路为：<br>1、客户端调用创建名为“lock/number<em>lock</em>”类型为EPHEMERAL_SEQUENTIAL的节点；<br>2、客户端获取lock节点下所有的子节点；<br>3、判断自己是否是序号最小的节点的，如果是最小的节点则加锁成功，如果不是序号最小的节点，则在比自己小的并且最接近的节点注册监听；<br>4、当被关注的节点删除后，再次获取lock节点下的所有子节点，判断是否是最小序号，如果是最小序号则加锁成功；</p>
+<p>优化后的思路，虽然能一定程度避免羊群效应，但是也不能避免两个机器共同持有锁的情况。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/分布式设计/">分布式设计</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/分布式锁策略/">分布式锁策略</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/06/05/分布式锁的实现方式与对比/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/06/05/分布式锁的实现方式与对比/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/02/26/python3的100个实例005/" title="python3的100个实例005" itemprop="url">python3的100个实例005</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2018-02-26T10:04:46.000Z" itemprop="datePublished"> 发表于 2018-02-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="python的100个实例005-与时间有关的一切"><a href="#python的100个实例005-与时间有关的一切" class="headerlink" title="python的100个实例005-与时间有关的一切"></a>python的100个实例005-与时间有关的一切</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Python有关时间的操作</span></div><div class="line"><span class="comment">#datetime是模块，datetime模块包含一个datetime类，</span></div><div class="line"><span class="comment"># 通过from datetime import datetime导入的是datetime这个类。</span></div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta, timezone</div><div class="line"></div><div class="line">print(datetime.now())</div><div class="line">mydate = datetime(<span class="number">2018</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">00</span>)</div><div class="line">print(mydate)</div><div class="line"><span class="comment">#Python的timestamp是一个浮点数。如果有小数位，小数位表示毫秒数。</span></div><div class="line">print(mydate.timestamp())</div><div class="line"></div><div class="line">mytimeStamp = <span class="number">1519637291.0</span></div><div class="line">print(datetime.fromtimestamp(mytimeStamp)) <span class="comment">#localtime </span></div><div class="line">print(datetime.utcfromtimestamp(mytimeStamp)) <span class="comment">#utctime </span></div><div class="line"></div><div class="line">cday = datetime.strptime(<span class="string">'2015-6-1 18:19:59'</span>, <span class="string">'%Y-%m-%d %H:%M:%S'</span>)</div><div class="line"></div><div class="line">print(cday)</div><div class="line"></div><div class="line">print(datetime.now().strftime(<span class="string">'%a, %b %d %H:%M'</span>))</div><div class="line"></div><div class="line"><span class="comment"># 日期相加减 参数只有timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)</span></div><div class="line">date = datetime(<span class="number">2018</span>, <span class="number">11</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">00</span>)</div><div class="line">print(date + timedelta(hours=<span class="number">10</span>)) <span class="comment"># +10个小时</span></div><div class="line">print(date - timedelta(days=<span class="number">1</span>)) <span class="comment"># 减1天</span></div><div class="line">print(date + timedelta(days=<span class="number">1</span>, hours=<span class="number">2</span>)) <span class="comment"># 加1天2小时</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#转换时区</span></div><div class="line">tz_utc_8 = timezone(timedelta(hours=<span class="number">8</span>)) <span class="comment"># 创建时区UTC+8:00</span></div><div class="line">print(datetime.now().replace(tzinfo=tz_utc_8))</div><div class="line"></div><div class="line"><span class="comment">#获取一个时间正确的时区，并强制设置为该时区</span></div><div class="line">bj_dt = datetime.now().replace(tzinfo=tz_utc_8)</div><div class="line">print(<span class="string">"基准时区"</span>, bj_dt)</div><div class="line"></div><div class="line">bj_dt = bj_dt.astimezone(timezone(timedelta(hours=<span class="number">8</span>)))</div><div class="line">print(<span class="string">"北京时区"</span>, bj_dt)</div><div class="line"></div><div class="line">tokyo_dt = bj_dt.astimezone(timezone(timedelta(hours=<span class="number">9</span>)))</div><div class="line">print(<span class="string">"东京时区"</span>, tokyo_dt)</div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/python/">python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/python/">python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/02/26/python3的100个实例005/#comments" class="ds-thread-count comments-count-link" data-thread-key="2018/02/26/python3的100个实例005/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

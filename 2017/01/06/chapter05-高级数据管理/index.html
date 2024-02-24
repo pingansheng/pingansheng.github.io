@@ -1,0 +1,1037 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter05 高级数据管理 | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="高级数据管理1、数值和字符处理函数（1）数学函数   函数 含义     abs(x) 绝对值   sqrt(x) 平方根和25^(0.5)等价   ceiling(x) 不小于x的最小整数，正无穷方向取整   floor(x) 不大于x的最大整数，负无穷方向取整   trunc(x) 向 0 的方向截取的x中的整数部分   round(x, digits=n) 将x舍入为指定位的小数   sig">
+<meta name="keywords" content="R语言,R高级数据管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter05 高级数据管理">
+<meta property="og:url" content="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="高级数据管理1、数值和字符处理函数（1）数学函数   函数 含义     abs(x) 绝对值   sqrt(x) 平方根和25^(0.5)等价   ceiling(x) 不小于x的最小整数，正无穷方向取整   floor(x) 不大于x的最大整数，负无穷方向取整   trunc(x) 向 0 的方向截取的x中的整数部分   round(x, digits=n) 将x舍入为指定位的小数   sig">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/多元正太.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/rebuild.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:06.614Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter05 高级数据管理">
+<meta name="twitter:description" content="高级数据管理1、数值和字符处理函数（1）数学函数   函数 含义     abs(x) 绝对值   sqrt(x) 平方根和25^(0.5)等价   ceiling(x) 不小于x的最小整数，正无穷方向取整   floor(x) 不大于x的最大整数，负无穷方向取整   trunc(x) 向 0 的方向截取的x中的整数部分   round(x, digits=n) 将x舍入为指定位的小数   sig">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/多元正太.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/06/chapter05-高级数据管理/" title="chapter05 高级数据管理" itemprop="url">chapter05 高级数据管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-06T03:22:41.000Z" itemprop="datePublished"> 发表于 2017-01-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#高级数据管理"><span class="toc-text">高级数据管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、数值和字符处理函数"><span class="toc-text">1、数值和字符处理函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）数学函数"><span class="toc-text">（1）数学函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）统计函数"><span class="toc-text">（2）统计函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）概率函数"><span class="toc-text">（3）概率函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）、设定随机数种子"><span class="toc-text">1）、设定随机数种子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）、生成多元正态数据"><span class="toc-text">2）、生成多元正态数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（4）字符处理函数"><span class="toc-text">（4）字符处理函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（5）其他函数"><span class="toc-text">（5）其他函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（6）函数应用到矩阵或数据框"><span class="toc-text">（6）函数应用到矩阵或数据框</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、控制流"><span class="toc-text">2、控制流</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）重复和循环"><span class="toc-text">（1）重复和循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）条件执行"><span class="toc-text">（2）条件执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、用户自编函数"><span class="toc-text">3、用户自编函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、整合与重构"><span class="toc-text">4、整合与重构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）转置"><span class="toc-text">（1）转置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）聚合函数"><span class="toc-text">（2）聚合函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）reshape包"><span class="toc-text">（3）reshape包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）融合"><span class="toc-text">1）融合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）重铸"><span class="toc-text">2）重铸</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="高级数据管理"><a href="#高级数据管理" class="headerlink" title="高级数据管理"></a>高级数据管理</h1><h2 id="1、数值和字符处理函数"><a href="#1、数值和字符处理函数" class="headerlink" title="1、数值和字符处理函数"></a>1、数值和字符处理函数</h2><h3 id="（1）数学函数"><a href="#（1）数学函数" class="headerlink" title="（1）数学函数"></a>（1）数学函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs(x)</td>
+<td>绝对值</td>
+</tr>
+<tr>
+<td>sqrt(x)</td>
+<td>平方根和25^(0.5)等价</td>
+</tr>
+<tr>
+<td>ceiling(x)</td>
+<td>不小于x的最小整数，正无穷方向取整</td>
+</tr>
+<tr>
+<td>floor(x)</td>
+<td>不大于x的最大整数，负无穷方向取整</td>
+</tr>
+<tr>
+<td>trunc(x)</td>
+<td>向 0 的方向截取的x中的整数部分</td>
+</tr>
+<tr>
+<td>round(x, digits=n)</td>
+<td>将x舍入为指定位的小数</td>
+</tr>
+<tr>
+<td>signif(x, digits=n)</td>
+<td>将x舍入为指定的有效数字位数，</td>
+</tr>
+<tr>
+<td>signif(3.475, digits=2)</td>
+<td>返回值为3.5</td>
+</tr>
+<tr>
+<td>cos(x)、 sin(x) 、 tan(x)</td>
+<td>余弦、正弦和正切</td>
+</tr>
+<tr>
+<td>acos(x) 、 asin(x) 、 atan(x)</td>
+<td>反余弦、反正弦和反正切</td>
+</tr>
+<tr>
+<td>cosh(x) 、 sinh(x) 、 tanh(x)</td>
+<td>双曲余弦、双曲正弦和双曲正切</td>
+</tr>
+<tr>
+<td>acosh(x) 、 asinh(x) 、 atanh(x)</td>
+<td>反双曲余弦、反双曲正弦和反双曲正切</td>
+</tr>
+<tr>
+<td>log(x,base=n)</td>
+<td>n为底，x的对数</td>
+</tr>
+<tr>
+<td>log(x)</td>
+<td>e为底，x的对数</td>
+</tr>
+<tr>
+<td>log10(x)</td>
+<td>10为底，x的对数</td>
+</tr>
+<tr>
+<td>exp(x)</td>
+<td>e指数函数</td>
+</tr>
+</tbody>
+</table>
+<p>以上函数如果用于向量、矩阵或者数据框，则对每个元素进行运算。</p>
+<h3 id="（2）统计函数"><a href="#（2）统计函数" class="headerlink" title="（2）统计函数"></a>（2）统计函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mean(x)</td>
+<td>均值</td>
+</tr>
+<tr>
+<td>median(x)</td>
+<td>中位数</td>
+</tr>
+<tr>
+<td>sd(x)</td>
+<td>标准差</td>
+</tr>
+<tr>
+<td>var(x)</td>
+<td>方差</td>
+</tr>
+<tr>
+<td>mad(x)</td>
+<td>绝对中位差</td>
+</tr>
+<tr>
+<td>quantile(x,probs)</td>
+<td>分位数，probs一个[0,1]之间的概率数值向量</td>
+</tr>
+<tr>
+<td>range(x)</td>
+<td>求值域</td>
+</tr>
+<tr>
+<td>sum(x)</td>
+<td>求和</td>
+</tr>
+<tr>
+<td>diff(x, lag=n)</td>
+<td>滞后差分，lag为滞后几项，默认为1</td>
+</tr>
+<tr>
+<td>min(x)</td>
+<td>最小值</td>
+</tr>
+<tr>
+<td>max(x)</td>
+<td>最大值</td>
+</tr>
+<tr>
+<td>scale(x, center=TRUE, scale=TRUE)</td>
+<td>为数据对象x按列进行中心化（center=TRUE）或标准化（center=TRUE,scale=TRUE）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（3）概率函数"><a href="#（3）概率函数" class="headerlink" title="（3）概率函数"></a>（3）概率函数</h3><table>
+<thead>
+<tr>
+<th>分布</th>
+<th>函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Beta分布</td>
+<td>beta</td>
+</tr>
+<tr>
+<td>Logistic分布</td>
+<td>logis</td>
+</tr>
+<tr>
+<td>二项分布</td>
+<td>binom</td>
+</tr>
+<tr>
+<td>多项分布</td>
+<td>multinom</td>
+</tr>
+<tr>
+<td>柯西分布</td>
+<td>cauchy</td>
+</tr>
+<tr>
+<td>负二项分布</td>
+<td>nbinom</td>
+</tr>
+<tr>
+<td>（非中心）卡方分布</td>
+<td>chisq</td>
+</tr>
+<tr>
+<td>正态分布</td>
+<td>norm</td>
+</tr>
+<tr>
+<td>指数分布</td>
+<td>exp</td>
+</tr>
+<tr>
+<td>泊松分布</td>
+<td>pois</td>
+</tr>
+<tr>
+<td>F分布</td>
+<td>f</td>
+</tr>
+<tr>
+<td>Wilcoxon符号秩分布</td>
+<td>signrank</td>
+</tr>
+<tr>
+<td>Gamma分布</td>
+<td>gamma</td>
+</tr>
+<tr>
+<td>t分布</td>
+<td>t</td>
+</tr>
+<tr>
+<td>几何分布</td>
+<td>geom</td>
+</tr>
+<tr>
+<td>均匀分布</td>
+<td>unif</td>
+</tr>
+<tr>
+<td>超几何分布</td>
+<td>hyper</td>
+</tr>
+<tr>
+<td>Weibull分布</td>
+<td>weibull</td>
+</tr>
+<tr>
+<td>对数正态分布</td>
+<td>lnorm</td>
+</tr>
+<tr>
+<td>Wilcoxon秩和分布</td>
+<td>wilcox</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1）、设定随机数种子"><a href="#1）、设定随机数种子" class="headerlink" title="1）、设定随机数种子"></a>1）、设定随机数种子</h4><p>set.seed(),这样可以重现结果</p>
+<h4 id="2）、生成多元正态数据"><a href="#2）、生成多元正态数据" class="headerlink" title="2）、生成多元正态数据"></a>2）、生成多元正态数据</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(MASS)</div><div class="line"></div><div class="line">options(digits=<span class="number">3</span>)</div><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">mean=c(<span class="number">230.4</span>,<span class="number">123.2</span>,<span class="number">3.7</span>)</div><div class="line">sigma=matrix(c(<span class="number">15360.8</span>,<span class="number">6721.2</span>,-<span class="number">47.1</span>,<span class="number">6721.2</span>,<span class="number">4700.9</span>,-<span class="number">16.5</span>,-<span class="number">47.1</span>,-<span class="number">16.5</span>,<span class="number">0.3</span>),nrow=<span class="number">3</span>,ncol=<span class="number">3</span>)</div><div class="line"><span class="comment">#多元正态数据</span></div><div class="line">mydata=mvrnorm(<span class="number">50000</span>,mean,sigma)</div><div class="line">mydata=as.data.frame(mydata)</div><div class="line">names(mydata)=c(<span class="string">"x"</span>,<span class="string">"y"</span>,<span class="string">"z"</span>)</div><div class="line"></div><div class="line"><span class="comment">#三维散点图</span></div><div class="line"><span class="keyword">library</span>(scatterplot3d)</div><div class="line">scatterplot3d(mydata$x, mydata$y, mydata$z, highlight.3d=<span class="literal">TRUE</span>,col.axis=<span class="string">"blue"</span>, col.grid=<span class="string">"lightblue"</span>, main=<span class="string">"scatterplot3d - 2"</span>, pch=<span class="number">20</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter05-高级数据管理/多元正太.png" alt=""></p>
+<h3 id="（4）字符处理函数"><a href="#（4）字符处理函数" class="headerlink" title="（4）字符处理函数"></a>（4）字符处理函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nchar(x)</td>
+<td>返回字符数量</td>
+</tr>
+<tr>
+<td>substr(x,start,stop)</td>
+<td>提取货替换一个字符中的字串，substr(x,2,4)&lt;-“xxx”</td>
+</tr>
+<tr>
+<td>grep(pattern, x, ignore. case=FALSE,fixed=FALSE)</td>
+<td>在x中搜索某种模式,fixed=FALSE则表示为一个正则表达式，若fixed=TRUE则为文本，返回下标</td>
+</tr>
+<tr>
+<td>sub(pattern, replacement,x, ignore. case=FALSE,fixed=FALSE)</td>
+<td>在x中搜索某种模式,并替换为replacement,fixed=FALSE则表示为一个正则表达式，若fixed=TRUE则为文本</td>
+</tr>
+<tr>
+<td>strsplit(x, split, fixed=FALSE)</td>
+<td>拆分字符串，fix同上</td>
+</tr>
+<tr>
+<td>paste(…, sep=””)</td>
+<td>连接字符串，分隔符为sep</td>
+</tr>
+<tr>
+<td>toupper(x)</td>
+<td>to大写</td>
+</tr>
+<tr>
+<td>tolower(x)</td>
+<td>to小写</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（5）其他函数"><a href="#（5）其他函数" class="headerlink" title="（5）其他函数"></a>（5）其他函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>length(x)</td>
+<td>求长度</td>
+</tr>
+<tr>
+<td>seq（from,to,by)</td>
+<td>生成序列</td>
+</tr>
+<tr>
+<td>rep（x,n)</td>
+<td>X重复n次</td>
+</tr>
+<tr>
+<td>cut(x,n)</td>
+<td>将连续型变量x分割为有着n个水平的因子，使用选项ordered_result = TRUE以创建一个有序型因子</td>
+</tr>
+<tr>
+<td>pretty(x,n)</td>
+<td>创建美观的分割点。通过选取n+1个等间距的取整值，将一个连续型变量x分割为n个区间。绘图中常用</td>
+</tr>
+<tr>
+<td>cat(. .., file =”myfile”,append =FALSE)</td>
+<td>连接…中的对象，并将其输出到屏幕上或文件中（如果声明了一个的话）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="（6）函数应用到矩阵或数据框"><a href="#（6）函数应用到矩阵或数据框" class="headerlink" title="（6）函数应用到矩阵或数据框"></a>（6）函数应用到矩阵或数据框</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">apply(x,MARGIN,FUN,…)</div><div class="line"><span class="comment">#x:数据对象</span></div><div class="line"><span class="comment">#MARGIN:1表示行，2表示列</span></div><div class="line"><span class="comment">#FUN：表示函数</span></div><div class="line"><span class="comment">#…：表示参数</span></div></pre></td></tr></table></figure>
+<p>一个数据处理问题：按照姓名排序并且对成绩评级</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#初始化数据</span></div><div class="line">options(digits = <span class="number">2</span>)</div><div class="line">Student=c(<span class="string">"J D"</span>,<span class="string">"A W"</span>,<span class="string">"B M"</span>,<span class="string">"D J"</span>,<span class="string">"J M"</span>,<span class="string">"C C"</span>,<span class="string">"R Y"</span>,<span class="string">"G K"</span>,<span class="string">"J E"</span>,<span class="string">"M R"</span>)</div><div class="line">Math=c(<span class="number">502</span>,<span class="number">600</span>,<span class="number">412</span>,<span class="number">358</span>,<span class="number">495</span>,<span class="number">512</span>,<span class="number">410</span>,<span class="number">625</span>,<span class="number">573</span>,<span class="number">522</span>)</div><div class="line">Science=c(<span class="number">95</span>,<span class="number">99</span>,<span class="number">80</span>,<span class="number">82</span>,<span class="number">75</span>,<span class="number">85</span>,<span class="number">80</span>,<span class="number">95</span>,<span class="number">89</span>,<span class="number">86</span>)</div><div class="line">English=c(<span class="number">25</span>,<span class="number">22</span>,<span class="number">18</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">28</span>,<span class="number">15</span>,<span class="number">30</span>,<span class="number">27</span>,<span class="number">18</span>)</div><div class="line">roster=data.frame(Student,Math,Science,English,stringsAsFactors = <span class="literal">FALSE</span>)</div><div class="line"></div><div class="line"><span class="comment">#归一化成绩</span></div><div class="line">z&lt;-scale(roster[,<span class="number">2</span>:<span class="number">4</span>])</div><div class="line"><span class="comment">#平均成绩</span></div><div class="line">score&lt;-apply(z,<span class="number">1</span>,mean)</div><div class="line"><span class="comment">#平均成绩加入数据框</span></div><div class="line">roster=cbind(roster,score)</div><div class="line"><span class="comment">#取成绩分位数</span></div><div class="line">y=quantile(score,c(<span class="number">.8</span>,<span class="number">.6</span>,<span class="number">.4</span>,<span class="number">.2</span>))</div><div class="line"></div><div class="line"><span class="comment">#新增级别变量并赋值</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">1</span>]]&lt;-<span class="string">"A"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">2</span>] &amp; score&lt;y[<span class="number">1</span>]]&lt;-<span class="string">"B"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">3</span>] &amp; score&lt;y[<span class="number">2</span>]]&lt;-<span class="string">"C"</span></div><div class="line">roster$grade[score&gt;=y[<span class="number">4</span>] &amp; score&lt;y[<span class="number">3</span>]]&lt;-<span class="string">"D"</span></div><div class="line">roster$grade[score&lt;y[<span class="number">4</span>]]&lt;-<span class="string">"F"</span></div><div class="line"></div><div class="line"><span class="comment">#拆分姓名列为两列</span></div><div class="line">name=strsplit(roster$Student,<span class="string">" "</span>)</div><div class="line">lastname=sapply(name, <span class="string">"["</span>,<span class="number">2</span>)</div><div class="line">firstname=sapply(name, <span class="string">"["</span>,<span class="number">1</span>)</div><div class="line"><span class="comment">#重新加入姓名两列至数据框</span></div><div class="line">roster&lt;-cbind(firstname,lastname,roster[,-<span class="number">1</span>])</div><div class="line"><span class="comment">#按照姓名两列排序</span></div><div class="line">roster=roster[order(lastname,firstname),]</div></pre></td></tr></table></figure>
+<h2 id="2、控制流"><a href="#2、控制流" class="headerlink" title="2、控制流"></a>2、控制流</h2><h3 id="（1）重复和循环"><a href="#（1）重复和循环" class="headerlink" title="（1）重复和循环"></a>（1）重复和循环</h3><ul>
+<li>低效费时，尽量使用内建函数与apply函数</li>
+</ul>
+<p>1)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#for:</span></div><div class="line"><span class="keyword">for</span> (var <span class="keyword">in</span> seq) statement</div><div class="line">		</div><div class="line"><span class="comment">#eg. </span></div><div class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:<span class="number">10</span>) print(<span class="string">"Hello world"</span>)</div></pre></td></tr></table></figure>
+<p>2)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#while：</span></div><div class="line"><span class="keyword">while</span>(cond) statement</div><div class="line"></div><div class="line"><span class="comment">#eg.</span></div><div class="line">i=<span class="number">0</span>;</div><div class="line"><span class="keyword">while</span>(i&lt;<span class="number">10</span>)</div><div class="line">&#123;</div><div class="line">  print(<span class="string">"x"</span>);i=i+<span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="（2）条件执行"><a href="#（2）条件执行" class="headerlink" title="（2）条件执行"></a>（2）条件执行</h3><p>1)</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#if-else结构</span></div><div class="line"><span class="keyword">if</span>(!is.character(date)) &#123;date2&lt;-as.factor(date)&#125; <span class="keyword">else</span> &#123;print(<span class="string">"Done"</span>)&#125;</div></pre></td></tr></table></figure>
+<p>2) </p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#switch结构</span></div><div class="line">feeling&lt;-c(<span class="string">"sad"</span>,<span class="string">"afraid"</span>)</div><div class="line"><span class="keyword">for</span>(i <span class="keyword">in</span> feeling)</div><div class="line">print(</div><div class="line">  <span class="keyword">switch</span>(i,</div><div class="line">         happy=<span class="string">"Happy"</span>,</div><div class="line">         sad=<span class="string">"Sad"</span>,</div><div class="line">         afraid=<span class="string">"afraid"</span>)</div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="3、用户自编函数"><a href="#3、用户自编函数" class="headerlink" title="3、用户自编函数"></a>3、用户自编函数</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#函数：</span></div><div class="line">mystats&lt;-<span class="keyword">function</span>(x,parametric=<span class="literal">TRUE</span>,print=<span class="literal">FALSE</span>)&#123;</div><div class="line">  <span class="keyword">if</span>(parametric)&#123;</div><div class="line">    center&lt;-mean(x);spread&lt;-sd(x)</div><div class="line">    centerStr&lt;- paste(<span class="string">"Mean="</span>,center,<span class="string">"\n"</span>,<span class="string">"SD="</span>,spread,<span class="string">"\n"</span>)</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    center&lt;-median(x);spread&lt;-mad(x)</div><div class="line">    centerStr&lt;- paste(<span class="string">"Median="</span>,center,<span class="string">"\n"</span>,<span class="string">"MAD="</span>,spread,<span class="string">"\n"</span>)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">if</span>(print)&#123;</div><div class="line">    cat(centerStr)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> (list(center=center,spread=spread))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#使用：</span></div><div class="line">set.seed(<span class="number">1234</span>)</div><div class="line">x&lt;-rnorm(<span class="number">500</span>)</div><div class="line">y=mystats(x,parametric = <span class="literal">TRUE</span>,print = <span class="literal">FALSE</span>)</div><div class="line"></div><div class="line"><span class="comment">#函数：</span></div><div class="line">mydate&lt;-<span class="keyword">function</span>(type=<span class="string">"long"</span>)&#123;</div><div class="line">  <span class="keyword">switch</span>(type,</div><div class="line">         long=format(Sys.time(),<span class="string">"%A %B %d %Y"</span>),</div><div class="line">         short=format(Sys.time(),<span class="string">"%m-%d-%y"</span>),</div><div class="line">         cat(type,<span class="string">"is not a recognized type\n"</span>)</div><div class="line">         )</div><div class="line">&#125;</div><div class="line"><span class="comment">#使用：</span></div><div class="line">mydate(<span class="string">"short"</span>)</div></pre></td></tr></table></figure>
+<h2 id="4、整合与重构"><a href="#4、整合与重构" class="headerlink" title="4、整合与重构"></a>4、整合与重构</h2><h3 id="（1）转置"><a href="#（1）转置" class="headerlink" title="（1）转置"></a>（1）转置</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cars&lt;-mtcars[<span class="number">1</span>:<span class="number">5</span>,<span class="number">1</span>:<span class="number">4</span>]</div><div class="line">t(cars)</div></pre></td></tr></table></figure>
+<h3 id="（2）聚合函数"><a href="#（2）聚合函数" class="headerlink" title="（2）聚合函数"></a>（2）聚合函数</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#整合</span></div><div class="line">options(digits = <span class="number">3</span>)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">aggdata=aggregate(mtcars,  by =list(气缸=cyl,档位=gear),FUN=mean,na.rm=<span class="literal">TRUE</span>)</div><div class="line">aggdata</div><div class="line"></div><div class="line"><span class="comment">#将所有数据按照气缸与档位进行分组，求均值</span></div><div class="line">        气缸 档位  mpg cyl disp  hp drat   wt qsec  vs   am gear carb</div><div class="line">    <span class="number">1</span>    <span class="number">4</span>    <span class="number">3</span> <span class="number">21.5</span>   <span class="number">4</span>  <span class="number">120</span>  <span class="number">97</span> <span class="number">3.70</span> <span class="number">2.46</span> <span class="number">20.0</span> <span class="number">1.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">1.00</span></div><div class="line">    <span class="number">2</span>    <span class="number">6</span>    <span class="number">3</span> <span class="number">19.8</span>   <span class="number">6</span>  <span class="number">242</span> <span class="number">108</span> <span class="number">2.92</span> <span class="number">3.34</span> <span class="number">19.8</span> <span class="number">1.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">1.00</span></div><div class="line">    <span class="number">3</span>    <span class="number">8</span>    <span class="number">3</span> <span class="number">15.1</span>   <span class="number">8</span>  <span class="number">358</span> <span class="number">194</span> <span class="number">3.12</span> <span class="number">4.10</span> <span class="number">17.1</span> <span class="number">0.0</span> <span class="number">0.00</span>    <span class="number">3</span> <span class="number">3.08</span></div><div class="line">    <span class="number">4</span>    <span class="number">4</span>    <span class="number">4</span> <span class="number">26.9</span>   <span class="number">4</span>  <span class="number">103</span>  <span class="number">76</span> <span class="number">4.11</span> <span class="number">2.38</span> <span class="number">19.6</span> <span class="number">1.0</span> <span class="number">0.75</span>    <span class="number">4</span> <span class="number">1.50</span></div><div class="line">    <span class="number">5</span>    <span class="number">6</span>    <span class="number">4</span> <span class="number">19.8</span>   <span class="number">6</span>  <span class="number">164</span> <span class="number">116</span> <span class="number">3.91</span> <span class="number">3.09</span> <span class="number">17.7</span> <span class="number">0.5</span> <span class="number">0.50</span>    <span class="number">4</span> <span class="number">4.00</span></div><div class="line">    <span class="number">6</span>    <span class="number">4</span>    <span class="number">5</span> <span class="number">28.2</span>   <span class="number">4</span>  <span class="number">108</span> <span class="number">102</span> <span class="number">4.10</span> <span class="number">1.83</span> <span class="number">16.8</span> <span class="number">0.5</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">2.00</span></div><div class="line">    <span class="number">7</span>    <span class="number">6</span>    <span class="number">5</span> <span class="number">19.7</span>   <span class="number">6</span>  <span class="number">145</span> <span class="number">175</span> <span class="number">3.62</span> <span class="number">2.77</span> <span class="number">15.5</span> <span class="number">0.0</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">6.00</span></div><div class="line">    <span class="number">8</span>    <span class="number">8</span>    <span class="number">5</span> <span class="number">15.4</span>   <span class="number">8</span>  <span class="number">326</span> <span class="number">300</span> <span class="number">3.88</span> <span class="number">3.37</span> <span class="number">14.6</span> <span class="number">0.0</span> <span class="number">1.00</span>    <span class="number">5</span> <span class="number">6.00</span></div></pre></td></tr></table></figure>
+<h3 id="（3）reshape包"><a href="#（3）reshape包" class="headerlink" title="（3）reshape包"></a>（3）reshape包</h3><h4 id="1）融合"><a href="#1）融合" class="headerlink" title="1）融合"></a>1）融合</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#测试数据</span></div><div class="line">id=c(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</div><div class="line">time=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</div><div class="line">x1=c(<span class="number">5</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">2</span>)</div><div class="line">x2=c(<span class="number">6</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">4</span>)</div><div class="line"></div><div class="line">textData=data.frame(id,time,x1,x2,stringsAsFactors = <span class="literal">FALSE</span>)</div><div class="line">		</div><div class="line"><span class="keyword">library</span>(reshape)</div><div class="line"></div><div class="line">md&lt;-melt(textData, id=(c(<span class="string">"id"</span>,<span class="string">"time"</span>)))</div><div class="line"></div><div class="line">           id time x1 x2</div><div class="line">        <span class="number">1</span>  <span class="number">1</span>    <span class="number">1</span>  <span class="number">5</span>  <span class="number">6</span></div><div class="line">        <span class="number">2</span>  <span class="number">1</span>    <span class="number">2</span>  <span class="number">3</span>  <span class="number">5</span></div><div class="line">        <span class="number">3</span>  <span class="number">2</span>    <span class="number">1</span>  <span class="number">6</span>  <span class="number">1</span></div><div class="line">        <span class="number">4</span>  <span class="number">2</span>    <span class="number">2</span>  <span class="number">2</span>  <span class="number">4</span></div><div class="line"><span class="comment">#转换为</span></div><div class="line">           id time variable value</div><div class="line">        <span class="number">1</span>  <span class="number">1</span>    <span class="number">1</span>       x1     <span class="number">5</span></div><div class="line">        <span class="number">2</span>  <span class="number">1</span>    <span class="number">2</span>       x1     <span class="number">3</span></div><div class="line">        <span class="number">3</span>  <span class="number">2</span>    <span class="number">1</span>       x1     <span class="number">6</span></div><div class="line">        <span class="number">4</span>  <span class="number">2</span>    <span class="number">2</span>       x1     <span class="number">2</span></div><div class="line">        <span class="number">5</span>  <span class="number">1</span>    <span class="number">1</span>       x2     <span class="number">6</span></div><div class="line">        <span class="number">6</span>  <span class="number">1</span>    <span class="number">2</span>       x2     <span class="number">5</span></div><div class="line">        <span class="number">7</span>  <span class="number">2</span>    <span class="number">1</span>       x2     <span class="number">1</span></div><div class="line">        <span class="number">8</span>  <span class="number">2</span>    <span class="number">2</span>       x2     <span class="number">4</span></div></pre></td></tr></table></figure>
+<h4 id="2）重铸"><a href="#2）重铸" class="headerlink" title="2）重铸"></a>2）重铸</h4><p><code>cast(md, formula,FUN) #md为已经融合的数据</code></p>
+<p><code>formula: rowvar1 + rowvar2 +…~ colvar1 + colvar2 +…</code></p>
+<p>在这一公式中， rowvar1 + rowvar2 + …定义了要划掉的变量集合，以确定各行的内容，</p>
+<p>而colvar1 + colvar2 + …则定义了要划掉的、确定各列内容的变量集合。</p>
+<p>参见图中的示例。</p>
+<p><img src="/2017/01/06/chapter05-高级数据管理/rebuild.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R高级数据管理/">R高级数据管理</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/" data-title="chapter05 高级数据管理 | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/06/chapter06-基本图形/" title="chapter06 基本图形">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter06 基本图形</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/01/06/chapter04-基本数据管理/"  title="chapter04 基本数据管理">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter04 基本数据管理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/01/06/chapter05-高级数据管理/" data-title="chapter05 高级数据管理" data-url="https://pingansheng.github.io/2017/01/06/chapter05-高级数据管理/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#高级数据管理"><span class="toc-text">高级数据管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、数值和字符处理函数"><span class="toc-text">1、数值和字符处理函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）数学函数"><span class="toc-text">（1）数学函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）统计函数"><span class="toc-text">（2）统计函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）概率函数"><span class="toc-text">（3）概率函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）、设定随机数种子"><span class="toc-text">1）、设定随机数种子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）、生成多元正态数据"><span class="toc-text">2）、生成多元正态数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（4）字符处理函数"><span class="toc-text">（4）字符处理函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（5）其他函数"><span class="toc-text">（5）其他函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（6）函数应用到矩阵或数据框"><span class="toc-text">（6）函数应用到矩阵或数据框</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、控制流"><span class="toc-text">2、控制流</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）重复和循环"><span class="toc-text">（1）重复和循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）条件执行"><span class="toc-text">（2）条件执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、用户自编函数"><span class="toc-text">3、用户自编函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、整合与重构"><span class="toc-text">4、整合与重构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）转置"><span class="toc-text">（1）转置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）聚合函数"><span class="toc-text">（2）聚合函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）reshape包"><span class="toc-text">（3）reshape包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）融合"><span class="toc-text">1）融合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）重铸"><span class="toc-text">2）重铸</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

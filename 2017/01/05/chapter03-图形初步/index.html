@@ -1,0 +1,1018 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>chapter03 图形初步 | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="图形初步1、基本图形plot(o_data,type=”b”,main=”主标题”,sub=”子标题”,xlab=”年龄”,ylab=”周长”)  2、符号与线条   参数 含义     pch 指定绘制点时使用的符号   cex 指定符号的大小。cex是一个数值，表示绘图符号相对于默认大小的缩放倍数。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等   l">
+<meta name="keywords" content="R语言,R图形初步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chapter03 图形初步">
+<meta property="og:url" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="图形初步1、基本图形plot(o_data,type=”b”,main=”主标题”,sub=”子标题”,xlab=”年龄”,ylab=”周长”)  2、符号与线条   参数 含义     pch 指定绘制点时使用的符号   cex 指定符号的大小。cex是一个数值，表示绘图符号相对于默认大小的缩放倍数。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等   l">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/o_data.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotFirst.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotFlag1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotFlag2.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotFlagEg.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/rColor.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/rColorSort.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/rainColor.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/grey.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/textPro.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/font.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/userdefinedXY.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/userdefinedXYEg.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/LegendXYEg.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/textXY.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/mathFlag.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotUnit1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/plotUnit2.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:05.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chapter03 图形初步">
+<meta name="twitter:description" content="图形初步1、基本图形plot(o_data,type=”b”,main=”主标题”,sub=”子标题”,xlab=”年龄”,ylab=”周长”)  2、符号与线条   参数 含义     pch 指定绘制点时使用的符号   cex 指定符号的大小。cex是一个数值，表示绘图符号相对于默认大小的缩放倍数。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等   l">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/o_data.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/05/chapter03-图形初步/" title="chapter03 图形初步" itemprop="url">chapter03 图形初步</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-05T05:04:43.000Z" itemprop="datePublished"> 发表于 2017-01-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图形初步"><span class="toc-text">图形初步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、基本图形"><span class="toc-text">1、基本图形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、符号与线条"><span class="toc-text">2、符号与线条</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、颜色"><span class="toc-text">3、颜色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、文本属性"><span class="toc-text">4、文本属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、图形尺寸"><span class="toc-text">5、图形尺寸</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、自定义文本坐标轴和图例"><span class="toc-text">6、自定义文本坐标轴和图例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、自定义坐标轴"><span class="toc-text">1、自定义坐标轴</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、次要刻度线"><span class="toc-text">2、次要刻度线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、参考线"><span class="toc-text">3、参考线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、图例"><span class="toc-text">4、图例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5、文本标注"><span class="toc-text">5、文本标注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6、数学标注"><span class="toc-text">6、数学标注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7、-图形组合"><span class="toc-text">7、 图形组合</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="图形初步"><a href="#图形初步" class="headerlink" title="图形初步"></a>图形初步</h1><h2 id="1、基本图形"><a href="#1、基本图形" class="headerlink" title="1、基本图形"></a>1、基本图形</h2><p>plot(o_data,type=”b”,main=”主标题”,sub=”子标题”,xlab=”年龄”,ylab=”周长”)</p>
+<p><img src="/2017/01/05/chapter03-图形初步/o_data.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/plotFirst.png" alt=""></p>
+<h2 id="2、符号与线条"><a href="#2、符号与线条" class="headerlink" title="2、符号与线条"></a>2、符号与线条</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>指定绘制点时使用的符号</td>
+</tr>
+<tr>
+<td>cex</td>
+<td>指定符号的大小。cex是一个数值，表示绘图符号相对于默认大小的缩放倍数。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等</td>
+</tr>
+<tr>
+<td>lty</td>
+<td>指定线条类型</td>
+</tr>
+<tr>
+<td>lwd</td>
+<td>指定线条宽度。 lwd是以默认值的相对大小来表示的（默认值为1）。例如， lwd=2将生成一条两倍于默认宽度的线条</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2017/01/05/chapter03-图形初步/plotFlag1.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/plotFlag2.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">plot(o_data,type=<span class="string">"b"</span>, pch=<span class="string">"8"</span>, cex=<span class="number">1</span>, lty=<span class="number">6</span>, lwd=<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotFlagEg.png" alt=""></p>
+<h2 id="3、颜色"><a href="#3、颜色" class="headerlink" title="3、颜色"></a>3、颜色</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col</td>
+<td>默认的绘图颜色。某些函数（如lines和pie）可以接受一个含有颜色值的向量并自动循环使用。 例如， 如果设定col=c(“red”, “blue”)并需要绘制三条线，则第一条线将为红色，第二条线为蓝色，第三条线又将为红色</td>
+</tr>
+<tr>
+<td>col.axis</td>
+<td>坐标轴刻度文字的颜色</td>
+</tr>
+<tr>
+<td>col.lab</td>
+<td>坐标轴标签（名称）的颜色</td>
+</tr>
+<tr>
+<td>col.main</td>
+<td>标题颜色</td>
+</tr>
+<tr>
+<td>col.sub</td>
+<td>副标题颜色</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>图形的前景色</td>
+</tr>
+<tr>
+<td>bg</td>
+<td>图形的背景色</td>
+</tr>
+</tbody>
+</table>
+<p>在R中，可以通过颜色下标、颜色名称、十六进制的颜色值、 RGB值或HSV值来指定颜色。举例来说， col=1、 col=”white”、 col=”#FFFFFF”、 col=rgb(1,1,1)和col=hsv(0,0,1)都是表示白色的等价方式。</p>
+<p><img src="/2017/01/05/chapter03-图形初步/rColor.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/rColorSort.png" alt=""></p>
+<p><code>rainbow(n)</code> 生成n种连续的彩虹色<br><code>gran(0:n/n)</code> 生成N阶灰度色<br><img src="/2017/01/05/chapter03-图形初步/rainColor.png" alt=""><br><img src="/2017/01/05/chapter03-图形初步/grey.png" alt=""></p>
+<h2 id="4、文本属性"><a href="#4、文本属性" class="headerlink" title="4、文本属性"></a>4、文本属性</h2><p>用于指定文本大小的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cex</td>
+<td>表示相对于默认大小缩放倍数的数值。默认大小为1， 1.5表示放大为默认值的1.5倍， 0.5表示缩小为默认值的50%，等等</td>
+</tr>
+<tr>
+<td>cex.axis</td>
+<td>坐标轴刻度文字的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.lab</td>
+<td>坐标轴标签（名称）的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.main</td>
+<td>标题的缩放倍数。类似于cex</td>
+</tr>
+<tr>
+<td>cex.sub</td>
+<td>副标题的缩放倍数。类似于cex</td>
+</tr>
+</tbody>
+</table>
+<p>用于指定字体族、字号和字样的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>font</td>
+<td>整数。用于指定绘图使用的字体样式。 1=常规， 2=粗体， 3=斜体， 4=粗斜体，5=符号字体（以Adobe符号编码表示）</td>
+</tr>
+<tr>
+<td>font.axis</td>
+<td>坐标轴刻度文字的字体样式</td>
+</tr>
+<tr>
+<td>font.lab</td>
+<td>坐标轴标签（名称）的字体样式</td>
+</tr>
+<tr>
+<td>font.main</td>
+<td>标题的字体样式</td>
+</tr>
+<tr>
+<td>font.sub</td>
+<td>副标题的字体样式</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>字体磅值（1磅约为1/72英寸）。文本的最终大小为 ps*cex</td>
+</tr>
+<tr>
+<td>family</td>
+<td>绘制文本时使用的字体族。标准的取值为serif （衬线）、 sans （无衬线）和mono（等宽）</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2017/01/05/chapter03-图形初步/textPro.png" alt=""></p>
+<p>在Windows中，可以通过函数windowsFont()来创建字体簇这类映射。在Mac上，请改用quartzFonts()。<br><img src="/2017/01/05/chapter03-图形初步/font.png" alt=""><br>使用时为<code>par(family=A)</code></p>
+<p>默认在Windows系统中，等宽字体映射为TT Courier New，衬线字体映射为TT Times New Roman，无衬线字体则映射为TT Arial（TT代表True Type）</p>
+<p>若使用pdf输出图形，可以使用<code>names(pdfFonts())</code>找出那些字体可用，然后使用<code>pdf(file=&quot;myplot.pdf&quot;, family=&quot;fontname&quot;)</code></p>
+<h2 id="5、图形尺寸"><a href="#5、图形尺寸" class="headerlink" title="5、图形尺寸"></a>5、图形尺寸</h2><p>用于控制图形尺寸和边界大小的参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pin</td>
+<td>以英寸表示的图形尺寸（宽和高）</td>
+</tr>
+<tr>
+<td>mai</td>
+<td>以数值向量表示的边界大小，顺序为“下、左、上、右”，单位为英寸</td>
+</tr>
+<tr>
+<td>mar</td>
+<td>以数值向量表示的边界大小，顺序为“下、左、上、右”，单位为英分(1/12英寸)。默认值为c(5, 4, 4, 2) + 0.1</td>
+</tr>
+</tbody>
+</table>
+<p><code>par(pin=c(4,3),mar=c(5,0.5,5,0.5))</code></p>
+<h2 id="6、自定义文本坐标轴和图例"><a href="#6、自定义文本坐标轴和图例" class="headerlink" title="6、自定义文本坐标轴和图例"></a>6、自定义文本坐标轴和图例</h2><p><code>par()</code>或者<code>plot()</code>中添加<code>ann=FALSE</code>来移除默认的标题和标签</p>
+<p><img src="/2017/01/05/chapter03-图形初步/userdefinedXY.png" alt=""></p>
+<h3 id="1、自定义坐标轴"><a href="#1、自定义坐标轴" class="headerlink" title="1、自定义坐标轴"></a>1、自定义坐标轴</h3><p><code>axis(side,at=,labels=,pos=,lty=,col=,las=,tck=,…)</code></p>
+<p>使用自定义坐标轴应当禁用自动坐标轴：<code>axes=FALSE</code></p>
+<ul>
+<li>将禁用全部坐标轴（包括坐标轴框架线，除非你添加了参数frame.plot=TRUE）。参数xaxt=”n”和yaxt=”n”将分别禁用X轴或Y轴（会留下框架线，只是去除了刻度）。</li>
+</ul>
+<p>坐标轴选项</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>side</td>
+<td>一个整数，表示在图形的哪边绘制坐标轴（1=下， 2=左， 3=上， 4=右）</td>
+</tr>
+<tr>
+<td>at</td>
+<td>一个数值型向量，表示需要绘制刻度线的位置</td>
+</tr>
+<tr>
+<td>labels</td>
+<td>一个字符型向量，表示置于刻度线旁边的文字标签（如果为NULL，则将直接使用at中的值）</td>
+</tr>
+<tr>
+<td>pos</td>
+<td>坐标轴线绘制位置的坐标（即与另一条坐标轴相交位置的值）</td>
+</tr>
+<tr>
+<td>lty</td>
+<td>线条类型</td>
+</tr>
+<tr>
+<td>col</td>
+<td>线条和刻度线颜色</td>
+</tr>
+<tr>
+<td>las</td>
+<td>标签是否平行于（=0）或垂直于（=2）坐标轴</td>
+</tr>
+<tr>
+<td>tck</td>
+<td>刻度线的长度，以相对于绘图区域大小的分数表示（负值表示在图形外侧，正值表示在图形内侧， 0表示禁用刻度， 1表示绘制网格线）；默认值为-0.01</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>)</div><div class="line">par(mar=c(<span class="number">5</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">8</span>)+<span class="number">0.1</span>)</div><div class="line">plot(x,y,type=<span class="string">"b"</span>,pch=<span class="number">21</span>,col=<span class="string">"red"</span>,yaxt=<span class="string">"n"</span>,lty=<span class="number">3</span>,ann=<span class="literal">FALSE</span>)</div><div class="line"><span class="comment">#yaxt=”n”表示不绘制Y轴刻度</span></div><div class="line">lines(x,z,type=<span class="string">"b"</span>,pch=<span class="number">22</span>,col=<span class="string">"blue"</span>,lty=<span class="number">2</span>)</div><div class="line">axis(<span class="number">2</span>,at=x,labels=x,col.axis=<span class="string">"red"</span>,las=<span class="number">2</span>)</div><div class="line">axis(<span class="number">4</span>,at=z,labels=round(z,digits=<span class="number">2</span>),col.axis=<span class="string">"blue"</span>,las=<span class="number">2</span>,cex.axis=<span class="number">0.7</span>,tck=-<span class="number">.01</span>)</div><div class="line">mtext(<span class="string">"y=10/x"</span>,side=<span class="number">4</span>,line=<span class="number">3</span>,cex.lab=<span class="number">1</span>,las=<span class="number">2</span>,col=<span class="string">"blue"</span>)</div><div class="line">title(<span class="string">"Axes"</span>,xlab=<span class="string">"X values"</span>, ylab=<span class="string">"Y=X"</span>)</div><div class="line">par(opar)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/userdefinedXYEg.png" alt=""></p>
+<h3 id="2、次要刻度线"><a href="#2、次要刻度线" class="headerlink" title="2、次要刻度线"></a>2、次要刻度线</h3><p>使用包Hmisc 中的minor.tick()函数。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">minor.tick(nx=n,ny=n,tick.ratio=n)</div><div class="line">//nx、ny: X、Y轴两条主刻度线之间需要的区间个数</div><div class="line">//tick.ratio: 次要刻度线相对于主刻度线的大小比例</div></pre></td></tr></table></figure>
+<h3 id="3、参考线"><a href="#3、参考线" class="headerlink" title="3、参考线"></a>3、参考线</h3><p><code>abline()</code>为图形添加参考线:<br><code>abline(h=yvalues,v=xvalues)</code>,其中也可以指定其他参数</p>
+<h3 id="4、图例"><a href="#4、图例" class="headerlink" title="4、图例"></a>4、图例</h3><p><code>legend(location,title,legend,…)</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>location</td>
+<td>有许多方式可以指定图例的位置。你可以直接给定图例左上角的x、 y坐标，也可以执行locator(1)，然后通过鼠标单击给出图例的位置，还可以使用关键字bottom、 bottomleft、left、 topleft、 top、 topright、 right、 bottomright或center放置图例。如果你使用了以上某个关键字，那么可以同时使用参数inset=指定图例向图形内侧移动的小（以绘图区域大小的分数表示）</td>
+</tr>
+<tr>
+<td>title</td>
+<td>图例标题的字符串（可选）</td>
+</tr>
+<tr>
+<td>legend</td>
+<td>图例标签组成的字符型向量</td>
+</tr>
+<tr>
+<td>…</td>
+<td>其他选项。如果图例标示的是颜色不同的线条，需要指定col=加上颜色值组成的向量。如果图例标示的是符号不同的点，则需指定pch=加上符号的代码组成的向量。如果图例标示的是不同的线条宽度或线条类型，请使用lwd=或lty=加上宽度值或类型值组成的向量。要为图例创建颜色填充的盒形（常见于条形图、箱线图或饼图），需要使用参数fill=加上颜色值组成的向量</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">dose&lt;-c(<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>,<span class="number">45</span>,<span class="number">60</span>);</div><div class="line">dA&lt;-c(<span class="number">16</span>,<span class="number">20</span>,<span class="number">27</span>,<span class="number">40</span>,<span class="number">60</span>);</div><div class="line">dB&lt;-c(<span class="number">15</span>,<span class="number">18</span>,<span class="number">25</span>,<span class="number">31</span>,<span class="number">40</span>);</div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>);</div><div class="line">par(lwd=<span class="number">2</span>,cex=<span class="number">1.5</span>,font.lab=<span class="number">2</span>);</div><div class="line">plot(dose,dA,type=<span class="string">"b"</span>,pch=<span class="number">15</span>,lty=<span class="number">1</span>,col=<span class="string">"red"</span>,ylim=c(<span class="number">0</span>,<span class="number">60</span>),main=<span class="string">"Drug A vs. Drug B"</span>,xlab=<span class="string">"Drug Dosage"</span>, ylab=<span class="string">"Drug REsponse"</span>);</div><div class="line">lines(dose,dB,type=<span class="string">"b"</span>,pch=<span class="number">17</span>,lty=<span class="number">2</span>,col=<span class="string">"blue"</span>);</div><div class="line">abline(h=c(<span class="number">30</span>),lwd=<span class="number">1.5</span>,lty=<span class="number">2</span>,col=<span class="string">"gray"</span>);</div><div class="line">minor.tick(nx=<span class="number">3</span>,ny=<span class="number">3</span>,tick.ratio=<span class="number">0.5</span>);</div><div class="line">legend(<span class="string">"topleft"</span>,inset=<span class="number">.05</span>,title=<span class="string">"Drug Type"</span>,c(<span class="string">"A"</span>,<span class="string">"B"</span>),lty=c(<span class="number">1</span>,<span class="number">2</span>),pch=c(<span class="number">15</span>,<span class="number">17</span>),col=c(<span class="string">"red"</span>,<span class="string">"blue"</span>));</div><div class="line"><span class="comment">#inset表示图例距离主图边框的距离百分比，当位置是用关键字表示时</span></div><div class="line">par(opar)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/LegendXYEg.png" alt=""></p>
+<h3 id="5、文本标注"><a href="#5、文本标注" class="headerlink" title="5、文本标注"></a>5、文本标注</h3><p>向绘图区域内部添加文本（同时可以绘制点）：<code>text(location, &quot;text to place&quot;, pos,…)</code><br>向图形四个边界之一添加文本：<code>mtext(&quot;text to place&quot;, side, line=n,…)</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>location</td>
+<td>文本的位置参数。可为一对x,y坐标，也可通过指定location为locator(1)使用鼠标交互式地确定摆放位置</td>
+</tr>
+<tr>
+<td>pos</td>
+<td>文本相对于位置参数的方位。1=下，2=左，3=上，4=右。如果指定了pos，就可以同时指定参数offset=作为偏移量，以相对于单个字符宽度的比例表示</td>
+</tr>
+<tr>
+<td>side</td>
+<td>指定用来放置文本的边。 1=下， 2=左， 3=上， 4=右。你可以指定参数line=来内移或外移文本，随着值的增加，文本将外移。也可使用adj=0将文本向左下对齐，或使用adj=1右上对齐</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#实例：</span></div><div class="line">plot(dA,dose,pch=<span class="number">18</span>,col=<span class="string">"blue"</span>)</div><div class="line">text(<span class="number">40</span>,<span class="number">33</span>,family=<span class="string">"serif"</span>,<span class="string">"TEST"</span>)</div><div class="line">text(dA,dose,row.names(dA),cex=<span class="number">0.6</span>,pos=<span class="number">4</span>)</div><div class="line"><span class="comment">#从某个数据框的行名称中读取文本</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/textXY.png" alt=""></p>
+<h3 id="6、数学标注"><a href="#6、数学标注" class="headerlink" title="6、数学标注"></a>6、数学标注</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#在（1,1.9）点输出公式，hat(x)表示x拔</span></div><div class="line">text(<span class="number">1</span>,<span class="number">1.9</span>,expression (hat(x)))</div><div class="line"><span class="comment">#expression中语句会解释为数学公式</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/mathFlag.png" alt=""></p>
+<h2 id="7、-图形组合"><a href="#7、-图形组合" class="headerlink" title="7、 图形组合"></a>7、 图形组合</h2><ul>
+<li><p><code>par</code>参数<code>mfrow=c(nrows,ncols)</code>来创建图形矩阵，<code>mfrow</code>表示按行排列，<code>nfcol</code>表示按列排列。</p>
+</li>
+<li><p><code>layout()</code>函数可控制更多参数</p>
+</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#图形组合</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">opar&lt;-par(no.readonly = <span class="literal">TRUE</span>)</div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line">plot(wt,mpg,main=<span class="string">"wt vs. mpg"</span>)</div><div class="line">plot(wt,disp,main=<span class="string">"wt vs. disp"</span>)</div><div class="line">hist(wt,main=<span class="string">"histogram of wt"</span>)</div><div class="line">boxplot(wt, main=<span class="string">"Boxplot of wt"</span>)</div><div class="line">par(opar)</div><div class="line"><span class="keyword">detach</span>(mtcars)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotUnit1.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#图形组合layout()</span></div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line">layout(matrix(c(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>),<span class="number">2</span>,<span class="number">2</span>,byrow=<span class="literal">TRUE</span>),widths=c(<span class="number">3</span>,<span class="number">1</span>),heights=c(<span class="number">1</span>,<span class="number">2</span>))</div><div class="line">hist(wt)</div><div class="line">hist(mpg)</div><div class="line">hist(disp)</div><div class="line"><span class="keyword">detach</span>(mtcars)</div><div class="line"><span class="comment">#矩阵表示每个图排列的位置，1123表示第一行的两个位置均排列第一个图片，第二个图片在左下角位置，第三个图片在右下角位置，widths表示一行内不同图片的宽度比例，height为不同行的图高度比例</span></div></pre></td></tr></table></figure>
+<p><img src="/2017/01/05/chapter03-图形初步/plotUnit2.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R图形初步/">R图形初步</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/" data-title="chapter03 图形初步 | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/06/chapter04-基本数据管理/" title="chapter04 基本数据管理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter04 基本数据管理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/01/05/chapter02-创建数据集/"  title="chapter02 创建数据集">
+ <strong>下一篇：</strong><br/> 
+ <span>chapter02 创建数据集
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/01/05/chapter03-图形初步/" data-title="chapter03 图形初步" data-url="https://pingansheng.github.io/2017/01/05/chapter03-图形初步/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图形初步"><span class="toc-text">图形初步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、基本图形"><span class="toc-text">1、基本图形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、符号与线条"><span class="toc-text">2、符号与线条</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、颜色"><span class="toc-text">3、颜色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、文本属性"><span class="toc-text">4、文本属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、图形尺寸"><span class="toc-text">5、图形尺寸</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、自定义文本坐标轴和图例"><span class="toc-text">6、自定义文本坐标轴和图例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、自定义坐标轴"><span class="toc-text">1、自定义坐标轴</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、次要刻度线"><span class="toc-text">2、次要刻度线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、参考线"><span class="toc-text">3、参考线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、图例"><span class="toc-text">4、图例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5、文本标注"><span class="toc-text">5、文本标注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6、数学标注"><span class="toc-text">6、数学标注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7、-图形组合"><span class="toc-text">7、 图形组合</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

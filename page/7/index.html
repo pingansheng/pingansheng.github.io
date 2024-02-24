@@ -1,0 +1,1124 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/7/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/28/Understand-JVM-Part-III/" title="Understand JVM Part III" itemprop="url">Understand JVM Part III</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-28T08:17:49.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="编译与代码优化"><a href="#编译与代码优化" class="headerlink" title="编译与代码优化"></a>编译与代码优化</h1><h2 id="1-编译过程与优化"><a href="#1-编译过程与优化" class="headerlink" title="1 编译过程与优化"></a>1 编译过程与优化</h2><h3 id="1-1-解析填充符号表"><a href="#1-1-解析填充符号表" class="headerlink" title="1.1 解析填充符号表"></a>1.1 解析填充符号表</h3><ul>
+<li>词法分析</li>
+<li>语法分析</li>
+<li>填充符号表</li>
+</ul>
+<h3 id="1-2-注解处理器"><a href="#1-2-注解处理器" class="headerlink" title="1.2 注解处理器"></a>1.2 注解处理器</h3><ul>
+<li>处理注解信息</li>
+</ul>
+<h3 id="1-3-语义分析与字节码生成"><a href="#1-3-语义分析与字节码生成" class="headerlink" title="1.3 语义分析与字节码生成"></a>1.3 语义分析与字节码生成</h3><ul>
+<li>标注检查（类型匹配、常量折叠等）</li>
+<li>数据与控制流分析（分支返回值检查、异常处理、局部变量的赋值等）<ul>
+<li>局部变量的final含义在编译期保证，运行期常量没有访问标志</li>
+</ul>
+</li>
+<li>解语法糖<ul>
+<li>泛型、变长参数、自动拆装箱</li>
+</ul>
+</li>
+<li>字节码生成<ul>
+<li>除写入磁盘字节码信息外，额外修改了少量代码（父类的实例构造器、变量初始化、语句块等按顺序收缩到<code>&lt;init&gt;</code>或<code>&lt;clinit&gt;</code>方法中，或者如StringBuilder的自动生成等）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-运行过程与优化"><a href="#2-运行过程与优化" class="headerlink" title="2 运行过程与优化"></a>2 运行过程与优化</h2><h3 id="2-1-即时编译器"><a href="#2-1-即时编译器" class="headerlink" title="2.1 即时编译器"></a>2.1 即时编译器</h3><h4 id="2-1-1-热点代码识别"><a href="#2-1-1-热点代码识别" class="headerlink" title="2.1.1 热点代码识别"></a>2.1.1 热点代码识别</h4><ul>
+<li>可识别热点方法与热点代码块（执行期间进行，栈上替换）</li>
+<li>HotSpot使用计数器热点探测方式（还有采样的方式，即周期性的检查栈顶的方法，找到经常出现的）</li>
+<li>计数器分为方法调用计数器和回边计数器</li>
+<li>计数器阀值默认Client下1500，Server下10000</li>
+<li>执行方法时，先检查有没有JIT版本，存在使用，否则该方法的调用计数器+1，然后判断调用计数器与回边计数器值之和是否超过方法调用计数器阀值，是则向JIT编译器发出编译请求</li>
+<li>默认设置下方法调用计数器超过一定时间减半，该过程为热度衰减，时间段称为方法统计的半衰期</li>
+<li>回边计数器统计循环体中代码执行的次数（字节码中遇到控制流向后跳转称为回边）</li>
+<li>回边计数器阀值通过计算公式：<ul>
+<li>Client模式：方法调用计数器阀值 *　OSR比率(OnStackReplacePercentage) / 100 = 13995（默认）</li>
+<li>Server模式：方法调用计数器阀值 *　OSR比率(OnStackReplacePercentage) - 解释器监控比率（InterpreterProfilePercentage） / 100 = 10700（默认）</li>
+</ul>
+</li>
+<li>遇到回边指令时，检查是否有编译版本，没有则回边计数器+1并判断二计数器之和是否超过阀值，超过则发出OSR编译请求，并降低回边计数器值以继续使用解释模式运行来等待编译。</li>
+</ul>
+<h4 id="2-1-2-编译过程"><a href="#2-1-2-编译过程" class="headerlink" title="2.1.2 编译过程"></a>2.1.2 编译过程</h4><p><img src="/2017/06/28/Understand-JVM-Part-III/JITCompiler.png" alt=""></p>
+<h3 id="2-2-编译优化"><a href="#2-2-编译优化" class="headerlink" title="2.2 编译优化"></a>2.2 编译优化</h3><h4 id="2-2-1-公共字表达式消除（类似合并同类项）"><a href="#2-2-1-公共字表达式消除（类似合并同类项）" class="headerlink" title="2.2.1 公共字表达式消除（类似合并同类项）"></a>2.2.1 公共字表达式消除（类似合并同类项）</h4><ul>
+<li><code>a * c</code>与<code>c * a</code>合并</li>
+<li><code>a + a</code> =&gt; <code>a * 2</code></li>
+</ul>
+<h4 id="2-2-2-数组边界检查消除"><a href="#2-2-2-数组边界检查消除" class="headerlink" title="2.2.2 数组边界检查消除"></a>2.2.2 数组边界检查消除</h4><ul>
+<li>上下文判断索引不会越界，去掉检查数组越界的逻辑</li>
+<li>隐式异常优化</li>
+</ul>
+<h4 id="2-2-3-方法内联"><a href="#2-2-3-方法内联" class="headerlink" title="2.2.3 方法内联"></a>2.2.3 方法内联</h4><ul>
+<li>非虚方法直接内联</li>
+<li>虚方法查询CHA，如果只有一个版本使用，可以内联，但需要设置逃生门以切换会解释模式</li>
+<li>内联缓存，虚方法入口前，发生一次调用后，缓存方法接收者版本，每次调用都比较方法接收者版本，如果每次调用方法接收者版本一致，则内联继续使用</li>
+<li>逃逸分析，目前不成熟<ul>
+<li>对象在方法中定义，可能会传入其他外部方法或赋值给其他线程可访问的变量，称之为方法逃逸或线程逃逸</li>
+<li>如果证明一个对象不会逃逸，则可进行特殊优化：<ol>
+<li>栈上分配（目前HotSpot不支持），直接在方法帧上分配对象内存，出栈直接销毁，避免GC</li>
+<li>同步消除，对该变量的同步措施去除（没人来竞争）</li>
+<li>标量替换，将变量拆散（如对象），需要时不创建对象，而创建可被该方法使用到的成员变量</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-Java编译器的劣势与优势"><a href="#2-3-Java编译器的劣势与优势" class="headerlink" title="2.3 Java编译器的劣势与优势"></a>2.3 Java编译器的劣势与优势</h3><h4 id="2-3-1-劣势"><a href="#2-3-1-劣势" class="headerlink" title="2.3.1 劣势"></a>2.3.1 劣势</h4><ol>
+<li>受制于编译成本</li>
+<li>类型安全检查成本</li>
+<li>多态选择频率极大</li>
+<li>动态扩展，加载新的类改变整体继承关系，全局优化难以施展</li>
+<li>对象堆内存分配，局部变量才栈上分配，C++多种方式</li>
+<li>GC</li>
+</ol>
+<h4 id="2-3-2-优势"><a href="#2-3-2-优势" class="headerlink" title="2.3.2 优势"></a>2.3.2 优势</h4><ol>
+<li>动态安全</li>
+<li>动态扩展</li>
+<li>垃圾回收</li>
+<li>别名分析</li>
+<li>运行期间监控为基础的优化（调用频率预测，分支频率预测，裁剪未选中分支）</li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/28/Understand-JVM-Part-III/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/06/28/Understand-JVM-Part-III/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/22/Understand-JVM-Part-II/" title="Understand JVM Part II" itemprop="url">Understand JVM Part II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-22T05:24:36.000Z" itemprop="datePublished"> 发表于 2017-06-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="虚拟机执行系统"><a href="#虚拟机执行系统" class="headerlink" title="虚拟机执行系统"></a>虚拟机执行系统</h1><h2 id="Class文件结构与字节码"><a href="#Class文件结构与字节码" class="headerlink" title="Class文件结构与字节码"></a>Class文件结构与字节码</h2><h3 id="Class文件结构（详细结构规则请Google）"><a href="#Class文件结构（详细结构规则请Google）" class="headerlink" title="Class文件结构（详细结构规则请Google）"></a>Class文件结构（详细结构规则请Google）</h3><ul>
+<li>魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE</li>
+<li>常量池</li>
+<li>访问标志</li>
+<li>类索引、父类索引与接口索引集合</li>
+<li>字段表集合</li>
+<li>方法表集合</li>
+<li>属性表集合<h3 id="字节码（列表请Google）"><a href="#字节码（列表请Google）" class="headerlink" title="字节码（列表请Google）"></a>字节码（列表请Google）</h3></li>
+<li>大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑</li>
+<li>大多数对于boolean、short、byte、char等类型的操作，实际使用int类型作为运算类型</li>
+<li>运算指令中，只有除0操作抛出ArithmeticException，其他操作不会出现异常</li>
+<li>窄化类型转换指令直接丢弃最低N个字节以外的东西，不会有异常</li>
+<li>指令类型主要有（加载存储、运算、类型转换、对象创建与访问、操作数栈、控制转移、方法调用与返回、异常处理、同步（管程））</li>
+</ul>
+<h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h3 id="时机"><a href="#时机" class="headerlink" title="时机"></a>时机</h3><ol>
+<li>遇到new getstatic putstatic invokestatic这4条指令，如果类没有初始化，则进行初始化</li>
+<li>使用reflect包对类方法反射调用，如果没有初始化则初始化</li>
+<li>初始化某类，若父类未初始化，则初始化父类</li>
+<li>jvm启动时，用户需要指定一个主类（main方法），jvm首先初始化这个类</li>
+<li>使用JDM1.7的动态语言支持，MethodHandler实例的相关使用时，方法句柄对应类未初始化时</li>
+</ol>
+<ul>
+<li>以上5中情况称为对类的主动引用，被动引用时不触发初始化类（创建数组，引用别的类的静态常量，通过子类引用父类的静态变量）</li>
+<li>接口的初始化中，不要求父接口初始化，只有需要使用时才进行初始化父接口</li>
+</ul>
+<h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><ul>
+<li>类的生命周期：加载-&gt;验证-&gt;准备-&gt;解析-&gt;初始化-&gt;使用-&gt;卸载</li>
+<li>加载：类的二进制字节流保存在方法区中，并生成一个Class对象作为方法区这个类数据的入口，对于HotSpot虚拟机来说Class对象存放在方法区中而不是堆中（如果是数组类型，则递归加载去掉一个维度的组件类型，如果组件类型为引用类型，则数组在加载这个组件的类加载器的类空间名称上被标识）</li>
+<li>验证：文件格式、元数据、字节码、符号引用</li>
+<li>准备：设置类变量（非实例变量）初始值，方法区中进行，如果不是final static, 则首先按照类型赋值0值，初始化用户指定值包装在类构造器<code>&lt;clinit&gt;</code>方法中，在初始化阶段执行，final static则直接赋值为用户指定值</li>
+<li>解析：常量池中的符号引用替换为直接引用（类或接口、字段、类方法、接口方法）</li>
+<li>初始化：执行类构造器<code>&lt;clinit&gt;()</code>方法,<ul>
+<li><code>&lt;clinit&gt;()</code>由类变量的赋值动作和static语句块合并产生，static语句块不可以赋值定义在其后的变量</li>
+<li>jvm保证父类的<code>&lt;clinit&gt;()</code>方法先执行，static语句块也是父类的先执行</li>
+<li><code>&lt;clinit&gt;()</code>方法不是必须的，如果既没有类变量的赋值也没有static语句块</li>
+<li>接口也会有该方法，但执行时不需要先执行父接口（使用时才执行）中的该方法，接口的实现类初始化不会执行接口的该方法</li>
+<li>jvm保证执行该方法多线程安全，如果耗时，则造成阻塞</li>
+</ul>
+</li>
+</ul>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><ul>
+<li>类加载器用于获取某个类的二进制字节流</li>
+<li>每一个类加载器，都有一个类名称空间，判断两个类是否相等，需要在两个类都为同一个类加载器加载的情况下才有意义，否则必定不等  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUserClassLoder</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        ClassLoader MyClassLoader = <span class="keyword">new</span> ClassLoader() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</div><div class="line"></div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    String fileName = name.substring(name.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>) + <span class="string">".class"</span>;</div><div class="line">                    InputStream is = getClass().getResourceAsStream(fileName);</div><div class="line">                    <span class="keyword">if</span> (is == <span class="keyword">null</span>) &#123;</div><div class="line">                        <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(name);</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[is.available()];</div><div class="line">                    is.read(b);</div><div class="line">                    <span class="keyword">return</span> defineClass(name, b, <span class="number">0</span>, b.length);</div><div class="line"></div><div class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        Object a = MyClassLoader.loadClass(<span class="string">"jvm.classloader.TestUserClassLoder"</span>).newInstance();</div><div class="line">        Object b = <span class="keyword">new</span> TestUserClassLoder();</div><div class="line">        System.out.println(a <span class="keyword">instanceof</span> TestUserClassLoder);<span class="comment">//false 不是同一个类加载器实例加载 必然不相等 包括instance</span></div><div class="line">        System.out.println(b <span class="keyword">instanceof</span> TestUserClassLoder);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h3><ul>
+<li><p>对于JVM来说，只存在两种不同的类加载器：一种是启动类加载器（jvm一部分，c++实现，用户获取不到），另一种由Java实现，独立于JVM</p>
+</li>
+<li><p>从开发角度，主要有三种类加载器：</p>
+<ol>
+<li>启动类加载器：加载JAVA_HOME/lib目录下面的复合条件的类（jar包）</li>
+<li>扩展类加载器：加载JAVA_HOME/lib/ext目录下面的所有类库</li>
+<li>应用程序类加载器：用于加载用户类路径上的类库，程序中默认的类加载器</li>
+</ol>
+</li>
+<li><p>类加载器之间通过双亲委派规则进行配合，如图</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/双亲委派.png" alt=""></p>
+</li>
+<li><p>双亲委派模型中：</p>
+<ol>
+<li>除了顶层启动类加载器，其他类加载器都应当有自己的父类加载器(一般通过组合实现)</li>
+<li>类加载器接收到类加载请求，首先将请求委派给父类加载器完成，只有父类加载器反馈无法加载才尝试自己加载</li>
+<li>Java类随着类加载器具备了优先级的层次关系（Object类存在于rt.jar中，用户定义的Object即使全类名一致也不会加载，因为启动类加载器已经加载了该类，所有任何环境中Object类都是同一个）</li>
+</ol>
+</li>
+<li><p>双亲委派模型的破坏，JVM团队为了解决某些问题引入了线程上下文加载器，破坏了双亲委派请求链路，直接使用下层类加载器加载目标类（如Spring框架可以放在共享的jar目录中，则Spring类的加载由共享类加载器加载，而此时Spring需要管理用户的类，加载Spring类的共享类加载器无法加载用户的类，此时Spring则使用线程上下文加载器，即谁调用Spring去管理Bean，谁就要提供给Spring类加载器）</p>
+</li>
+</ul>
+<h3 id="案例：Tomcat类加载结构"><a href="#案例：Tomcat类加载结构" class="headerlink" title="案例：Tomcat类加载结构"></a>案例：Tomcat类加载结构</h3><ul>
+<li><p>要解决的问题</p>
+<ol>
+<li>部署在同一个服务器上的多个应用Java类库实现相互隔离</li>
+<li>部署在同一个服务器上的应用间Java类库可以共享（例如公共的类库）</li>
+<li>服务器需要保证自身的安全不受应用影响，服务器所使用的类库与应用使用的类库应该隔离</li>
+<li>JSP服务器需要支持HotSwap(JSP文件修改，JSP对应的生成类需要热替换) </li>
+</ol>
+</li>
+<li><p>Tomcat的类文件目录结构</p>
+<ul>
+<li><code>/common/*</code>：放在这个下面的类库，可以被Tomcat和多有的Web应用程序共同使用。</li>
+<li><code>/server/*</code>：类库可以被Tomcat使用，对所有的Web应用程序都不可见。</li>
+<li><code>/shared/*</code>：类库可被所有web应用程序共同使用，但对Tomcat自己不可见</li>
+<li><code>/WEB-INF/*</code>：类库仅仅可以被此Web应用程序使用，对Tomcat和其他web程序都不可见。</li>
+</ul>
+</li>
+<li><p>Tomcat设计的类加载器结构，不同的类加载器加载不同的部分，实现了隔离</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/Tomcat类加载器.png" alt=""></p>
+</li>
+<li><p>JasperLoader的加载范围仅仅是这个 JSP 文件所编译出来的那一个 Class， 它出现的目的就是为了被丢弃：当服务器检测到 JSP 文件被修改时，会替换掉目前的 JasperLoader 的实例，并通过再建立一个新的 Jsp 类加载器来实现 JSP 文件的 HotSwap 功能。</p>
+</li>
+<li><p>对于 Tomcat 的 6.x 版本，只有指定了 tomcat/conf/catalina.properties配置文件的 server.loader 和 share.loader 项后才会真正建立 CatalinaClassLoader 和 SharedClassLoader 的实例，否则会用到这两个类加载器的地方都会用 CommonClassLoader 的实例代替，而默认没有设置，所以 Tomcat 6.x 顺理成章地把/common、/server 和/shared 三个目录默认合并到一起变成一个/lib 目录。这个目录里的类库相当于以前/common目录中类库的作用。这是Tomcat设计团队为了简化部署所做的一项改进。</p>
+</li>
+</ul>
+<h2 id="字节码执行引擎"><a href="#字节码执行引擎" class="headerlink" title="字节码执行引擎"></a>字节码执行引擎</h2><h3 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h3><ul>
+<li>栈帧存储了方法的局部变量表、操作数栈、动态连接和方法返回地址等信息。</li>
+<li>每一个方法从调用开始至执行完成的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</li>
+<li>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</li>
+<li>对于执行引擎来说，在活动线程中，只有位于栈顶的栈帧才是有效的，称为当前栈帧。</li>
+</ul>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><ul>
+<li>存放方法参数和方法内部的局部变量</li>
+<li>局部变量表容量以变量槽为最小单位（Slot），每个Slot可以存放32位以内的数据，64存放在两个Slot中（long double）</li>
+<li>编译程序时，需要使用多少局部变量表已经确定，不受代码运行期间影响</li>
+<li>方法执行时，使用局部变量表完成传参，如果是实例方法，第0位Slot存放对象的实例引用（this指针），其他参数从1开始传入，之后是内部的局部变量</li>
+<li><p>Slot会复用，会对垃圾回收产生影响，但编译成JIT代码后枚举GC Roots行为会与解释执行有不同，不会有问题</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">byte</span>[] bytes=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//此处不一定回收内存，回收bytes本质是要看Slot中是否存在对bytes数据对象的引用，GC Roots包含局部变量表</span></div><div class="line">        <span class="comment">//此时占用的Slot没有被其他变量使用，栈帧中的存放bytes的Slot中仍然存在对数据的引用</span></div><div class="line">        <span class="comment">// int i=0; 此处加本行则会回收，i会复用bytes的Slot</span></div><div class="line">        System.gc();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>局部变量初始化才可以使用，不存在准备阶段（赋初值，参考类变量）</p>
+</li>
+</ul>
+<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><ul>
+<li>编译程序时，需要使用深的操作数栈已经确定，不受代码运行期间影响</li>
+<li>操作数栈的数据类型必须与字节码指令序列严格匹配，编译器保证</li>
+<li>Java虚拟机的解释执行引擎称为基于栈的执行引擎，栈即指操作数栈</li>
+<li>一般的虚拟机会对操作数栈进行优化，让下面栈帧的部分操作数栈与上面栈帧的部分局部变量表重叠，省去了额外的参数复制</li>
+</ul>
+<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><ul>
+<li>指向运行时常量池中该栈帧方法的引用，用户支持调用过程中的动态连接（Dynamic Linking）</li>
+</ul>
+<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><ul>
+<li>保存方法被调用的位置</li>
+<li>方法可以正常返回或异常返回，异常返回没有返回值</li>
+<li>方法退出操作大致：恢复上层方法的局部变量表和操作数栈 -&gt; 返回值压入调用者操作数栈 -&gt; PC计数器指向下一条地址</li>
+</ul>
+<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><ul>
+<li>确定被调用方法的版本过程而不是执行过程</li>
+<li>类加载阶段的解析阶段，将一部分方法转换为直接引用，这些方法在执行前可确定版本，且运行期不可变（见下）</li>
+<li><p>Java关于方法调用的字节码：</p>
+<ol>
+<li>invokestatic:调用静态方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokespecial:调用实例构造器方法，私有方法和父类方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokevirtual:调用虚方法 <strong>（final方法也是该字节码调，但是其不是虚方法）</strong></li>
+<li>invokeinterface:调用接口方法，会在运行时再确定一个实现此接口的对象。</li>
+<li>invokedynamic:先在运行时动态解析出调用点限定符所引用的方法，然后再执行该方法，在此之前的4条调用指令，分派逻辑是固化在Java虚拟机内部的，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。</li>
+</ol>
+</li>
+<li><p>方法版本的确定-分派：</p>
+<ul>
+<li>静态分派：根据依赖静态类型选择方法版本（方法重载）</li>
+<li>动态分派：运行期根据实际类型确定方法执行版本</li>
+</ul>
+</li>
+<li>Java: 静态多分派（根据静态类型与参数列表选择方法，编译期确定），动态单分派（此时只需要确定具体对象类型的方法版本，不同参数列表导致的方法版本确定已经在编译期完成）</li>
+<li><p>动态分派实现方式：虚方法表，保存各个方法的实际入口，没有重写父类方法就指向父类实现入口（还有其他方法，如内联缓存Inline Cache、基于继承关系分析CHA的守护内联Guard Inlining等非稳定手段）</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/vtable.png" alt=""></p>
+</li>
+<li><p>Java7之后提供了MethodHandle机制实现动态方法调用</p>
+</li>
+</ul>
+<h3 id="基于栈的字节码执行引擎"><a href="#基于栈的字节码执行引擎" class="headerlink" title="基于栈的字节码执行引擎"></a>基于栈的字节码执行引擎</h3><ul>
+<li>Java 编译器输出的指令流，基本上是一种基于栈的指令集架构，大部分都是零地址指令。</li>
+<li>基于栈的指令集主要的优点就是可移植，寄存器由硬件直接提供，程序直接依赖这些硬件寄存器则不可避免地要受到硬件的约束。</li>
+<li>栈架构指令集的主要缺点是执行速度相对来说会稍慢一些。</li>
+</ul>
+<h3 id="案例：远程调用"><a href="#案例：远程调用" class="headerlink" title="案例：远程调用"></a>案例：远程调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassExecutor</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(MyClassLoader.class.getClassLoader());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> Class <span class="title">loadBytes</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> defineClass(<span class="keyword">null</span>, bytes, <span class="number">0</span>, bytes.length);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 执行外部传过来的代表一个Java类的Byte数组&lt;br&gt;</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> classByte</div><div class="line">     *         代表一个Java类的Byte数组</div><div class="line">     * <span class="doctag">@param</span> methodName</div><div class="line">     *          方法名称</div><div class="line">     * <span class="doctag">@return</span> 执行结果</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">execute</span><span class="params">(<span class="keyword">byte</span>[] classByte, String methodName)</span> </span>&#123;</div><div class="line">        Class clazz = <span class="keyword">new</span> MyClassLoader().loadBytes(classByte);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">           Object obj=clazz.newInstance();</div><div class="line">            Method method = clazz.getMethod(methodName);</div><div class="line">            <span class="keyword">return</span> method.invoke(obj);</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            <span class="keyword">return</span> <span class="string">"Err"</span> + e.getMessage();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/22/Understand-JVM-Part-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/06/22/Understand-JVM-Part-II/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/14/Understand-JVM-Part-I/" title="Understand JVM Part I" itemprop="url">Understand JVM Part I</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-14T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h1><h2 id="Java的内存区域"><a href="#Java的内存区域" class="headerlink" title="Java的内存区域"></a>Java的内存区域</h2><p><img src="/2017/06/14/Understand-JVM-Part-I/运行时数据区.png" alt=""></p>
+<h4 id="1、程序计数（寄存）器"><a href="#1、程序计数（寄存）器" class="headerlink" title="1、程序计数（寄存）器"></a>1、程序计数（寄存）器</h4><ul>
+<li>可看作当前线程执行的字节码行数指示器，各线程私有，线程切换时可以恢复当前的状态</li>
+<li>此内存区域是唯一一个不定义OutOfMemoryError的区域</li>
+<li>如果执行的是Java方法，计数器记录的是正在执行的虚拟机字节码指令的地址，本地方法则为空</li>
+</ul>
+<h4 id="2、Java虚拟机栈"><a href="#2、Java虚拟机栈" class="headerlink" title="2、Java虚拟机栈"></a>2、Java虚拟机栈</h4><ul>
+<li>线程私有，生命周期与线程相同</li>
+<li>此区域描述的是Java方法执行的内存模型 - 每个方法执行同时在栈中创建一个新的栈元素，即栈帧(Stack Frame), 用于存储局部变量表、操作数栈、动态链接、方法出口等信息（递归调用如果没有终止条件或次数过多，每次递归调用都会创建栈帧，栈就会无法容纳足够的栈帧而溢出）</li>
+<li>局部变量表在编译期间完成分配，进入方法时，这个方法在栈帧中的局部变量表分配空间完全确定，运行期间不会改变</li>
+<li>当线程请求的栈深度超过允许抛出StackOverflowError</li>
+<li>若是虚拟机允许动态扩展此区域（大多数都可以），那么扩展时申请不到足够的内存，抛出OOM</li>
+</ul>
+<h4 id="3、本地方法栈"><a href="#3、本地方法栈" class="headerlink" title="3、本地方法栈"></a>3、本地方法栈</h4><ul>
+<li>类似于虚拟机栈，为Native方法服务</li>
+<li>也会抛出两种异常SOE、OOM</li>
+</ul>
+<h4 id="4、Java堆"><a href="#4、Java堆" class="headerlink" title="4、Java堆"></a>4、Java堆</h4><ul>
+<li>JVM管理的最大一块内存，所有线程共享</li>
+<li>分配所有的对象实例与数组</li>
+<li>JVM的优化技术如逃逸分析、栈上分配、标量替换会导致上条规则不绝对</li>
+<li>进一步可分为新生代与老年代或Eden、FromSurvivor、ToSurvivor空间</li>
+<li>内存分配时也可能会分出线程私有的分配缓冲区（Thread Local Allocation Buffer, TLAB）</li>
+<li>Java堆划分的目的都是为了更好更快的回收与分配内存</li>
+<li>堆分配可抛出OOM</li>
+<li>多线程创建过程中，如果每个线程分配的内存过大，更容易OOM，此时需要减少最大堆与栈容量来换取更多线程（每个进程OS分配的内存是有上限的）</li>
+</ul>
+<h4 id="5、方法区"><a href="#5、方法区" class="headerlink" title="5、方法区"></a>5、方法区</h4><ul>
+<li>线程共享，存储被虚拟机加载的类信息、常量、静态变量、即时编译器(JIT)编译后的代码</li>
+<li>HotSpot虚拟机使用永久代来实现方法区，这样可以使得GC一起管理这部分内存</li>
+<li>未来逐步将采用Native Memory来实现，避免内存溢出，Java8已经使用元空间来实现这一部分</li>
+<li>分配可抛出OOM</li>
+</ul>
+<h4 id="6、运行时常量池"><a href="#6、运行时常量池" class="headerlink" title="6、运行时常量池"></a>6、运行时常量池</h4><ul>
+<li>方法区的一部分</li>
+<li>存放Class文件中的各种字面量和符号引用，以及翻译出来的直接引用</li>
+<li>具备动态性，运行期间也可以将新的常量放入</li>
+<li>可抛出OOM</li>
+</ul>
+<h4 id="7、直接内存"><a href="#7、直接内存" class="headerlink" title="7、直接内存"></a>7、直接内存</h4><ul>
+<li>不属于运行时数据区，不是Java虚拟机规范中定义的内存区域</li>
+<li>此部分内存也频繁的使用且会抛出OOM</li>
+<li>NIO类可以使用Native函数直接分配堆外内存，通过存储在Java堆中的DirectByteBuffer对象作为内存的引用进行操作，这样可以避免在Native堆与Java堆复制数据</li>
+<li>此区域内存不受Java堆限制，当各个区域内存总和大于物理内存时，动态扩展时出现OOM</li>
+</ul>
+<h2 id="Java对象"><a href="#Java对象" class="headerlink" title="Java对象"></a>Java对象</h2><h4 id="1、对象的创建"><a href="#1、对象的创建" class="headerlink" title="1、对象的创建"></a>1、对象的创建</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/对象创建过程.png" alt=""></p>
+<h4 id="2、对象的内存布局"><a href="#2、对象的内存布局" class="headerlink" title="2、对象的内存布局"></a>2、对象的内存布局</h4><ul>
+<li>对象结构包含对象头（Header）、示例数据（Instance Data）、对齐填空（Padding）</li>
+<li>32位机器上，非数组对象，对象头一共4 + 4 = 8字节，64为机器为8 + 8 = 16字节，数组长度始终为4字节<br><img src="/2017/06/14/Understand-JVM-Part-I/对象头结构.png" alt=""></li>
+<li><p>其中MarkWord结构如下<br><img src="/2017/06/14/Understand-JVM-Part-I/MarkWord结构.jpg" alt=""></p>
+</li>
+<li><p>由于HotSpot要求对象的起始地址为8字节的整数倍，所有需要Padding来补全</p>
+</li>
+</ul>
+<h4 id="3、对象的访问"><a href="#3、对象的访问" class="headerlink" title="3、对象的访问"></a>3、对象的访问</h4><ul>
+<li>直接指针访问<blockquote>
+<p>本地变量表中存储Java堆中的对象引用，堆中对象存储指向方法区类型数据</p>
+</blockquote>
+</li>
+<li>句柄访问<blockquote>
+<p>本地变量表中存储指向句柄池中的对象句柄地址，句柄中包含实例数据地址与类型数据地址，对象移动时，只改变句柄池中的指针，本地变量表指向的是稳定的句柄地址</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="垃圾收集器与内存分配"><a href="#垃圾收集器与内存分配" class="headerlink" title="垃圾收集器与内存分配"></a>垃圾收集器与内存分配</h2><h4 id="1、需要收集的内存"><a href="#1、需要收集的内存" class="headerlink" title="1、需要收集的内存"></a>1、需要收集的内存</h4><ul>
+<li>程序计数器、虚拟机栈、本地方法栈随线程消亡而消亡（栈帧入栈与出栈）</li>
+<li>堆（包括方法区）需要垃圾回收器参与</li>
+</ul>
+<h4 id="2、寻找可回收的对象"><a href="#2、寻找可回收的对象" class="headerlink" title="2、寻找可回收的对象"></a>2、寻找可回收的对象</h4><ul>
+<li>引用计数：难以解决循环引用问题</li>
+<li>可达性分析：Java、C#使用, 通过GC Roots系列对象进行可达性分析，不可用的对象就可以回收，GC Root对象主要包括：栈中的引用（本地变量表）、方法区类静态属性引用、方法区常量引用、本地方法栈中JNI(Native方法)的引用</li>
+<li>引用的加强：JVM对引用进行了进一步划分<ol>
+<li>强引用：一般情况下的引用，<code>Object o = new Object()</code></li>
+<li>软引用：系统发送OOM之前将这些引用再次回收，如果还不够才OOM, 参见类<code>SoftReference</code></li>
+<li>弱引用：存活至下一次垃圾回收，参见类<code>WeakReference</code></li>
+<li>虚引用：无法通过虚引用来获取一个对象，为一个对象设置虚引用关联唯一目的是在其回收时收到一个通知，参见类<code>PhantomReference</code></li>
+</ol>
+</li>
+</ul>
+<h4 id="3、最后一次挣扎"><a href="#3、最后一次挣扎" class="headerlink" title="3、最后一次挣扎"></a>3、最后一次挣扎</h4><ul>
+<li>对象判定不可达之后不会马上回收，会进行判定需要不需要执行<code>finalize()</code>方法，如果需要执行，进入F-Queue，Finalizer线程会进行处理，如果<code>finalize()</code>方法中对象成功“自救”则不会回收（重新与引用链挂钩，例如将自己挂在某个类的静态变量下）</li>
+<li>强制！！finalize方法不允许使用！</li>
+</ul>
+<h4 id="4、关于方法区"><a href="#4、关于方法区" class="headerlink" title="4、关于方法区"></a>4、关于方法区</h4><ul>
+<li>存在垃圾回收，主要有废弃常量与无用类</li>
+<li>废弃常量判断条件：如果没有地方引用某个常量，则垃圾回收时可以回收</li>
+<li>废弃类判断条件按：该类所有实例被回收、该类的ClassLoder被回收、该类对应的Class对象没有被引用，无法在任何地方通过反射该类的方法</li>
+<li>JVM创建的3个默认的类加载器（BootStrap Classloader、ExtClassLoader、AppClassLoader）加载的系统类（如String）或应用类都不能再运行时释放，无法满足上面的条件</li>
+</ul>
+<h4 id="5、垃圾回收算法"><a href="#5、垃圾回收算法" class="headerlink" title="5、垃圾回收算法"></a>5、垃圾回收算法</h4><pre><code>1. 标记清扫（Mark-Sweep）
+    * 效率低、碎片化
+    * 分配大对象找不到连续内存引发二次清扫
+
+2. 复制（Copying）
+    * 现代商业虚拟机都采用这种方式
+    * 将内存分成两块，把存活的对象复制到另一块，整体清理前一块内存
+    * IBM研究表明大部分对象“朝生夕死”，将内寸分为一大（Eden）二小（Survivor），清理时
+      将Eden和S1存活的对象复制到S2中，清理掉Eden和S1，HotSpot默认的比例是8:1
+    * 上条提到的S2不足时，需要老年代进行分配担保，即将无法存放的对象放置老年代
+    * 两个Survivor区域的操作逻辑目的是为了始终保留一个S区域是空的
+
+3. 标记整理（Mark-Compact）
+    * 标记后，让存活的对象都向一端移动，直接清理端边界以外的内存
+
+4. 分代回收
+    * 当前商业虚拟机均采用
+    * 将内存分代，不同代内存采用不同方式，新生代有大量对象死亡，采用复制算法，而老年代
+      对象存活率高，没有额外的空间做分配担保，使用“标记清理”或“标记整理”方式
+</code></pre><h4 id="6、HotSpot算法实现"><a href="#6、HotSpot算法实现" class="headerlink" title="6、HotSpot算法实现"></a>6、HotSpot算法实现</h4><pre><code>1. 枚举根节点
+    * 在枚举根节点时，需要停顿所有Java执行线程以保证结果的准确性（Stop The World）
+    * 使用OopMap数据结构快速直接得知那些地方存在对象引用，类加载完成的时候，HotSpot把对象什么偏移量是什么类型计算出来，
+      JIT编译过程也会记录栈与寄存器哪些位置是引用，GC扫描时直接获取该信息
+2. 安全点（Safepoint）
+    * 对于具备长时间执行特征的程序，程序执行在到达安全点时才暂停，依靠指令序列重复判定（方法调用、循环跳转、异常跳转）
+    * 采用主动式中断，在执行指令中加入test执行使得线程自陷，进而中断
+3. 安全区域（Saferegion）
+    * 对于无法进入安全点的程序，如Sleep、Block中的线程，通过判定当前是否进入安全区并标识自身，此时GC时将跳过这些线程
+    * 线程离开安全区时，检查系统是否完成根节点枚举或GC过程，完成则继续执行，否则等待完成的信号
+</code></pre><h4 id="7、垃圾收集器"><a href="#7、垃圾收集器" class="headerlink" title="7、垃圾收集器"></a>7、垃圾收集器</h4><p><img src="/2017/06/14/Understand-JVM-Part-I/GCs.png" alt=""></p>
+<ul>
+<li>垃圾收集器是搭配使用的</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>收集器</th>
+<th style="text-align:left">算法</th>
+<th style="text-align:left">用于分代</th>
+<th style="text-align:left">多线程</th>
+<th style="text-align:left">配对收集器</th>
+<th style="text-align:left">暂停所有用户线程</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>ParNew</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; CMS</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Parallel Scavenge</td>
+<td style="text-align:left">复制</td>
+<td style="text-align:left">新生代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial Old; Parallel Old</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>Serial Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">N</td>
+<td style="text-align:left">Serial; ParNew; Parallel Scavenge;</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">( CMS 在Server模式下的备用预案)</td>
+</tr>
+<tr>
+<td>Parallel Old</td>
+<td style="text-align:left">标记整理</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Parallel Scavenge</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td>CMS(Concurrent Mark Sweep)</td>
+<td style="text-align:left">标记清扫</td>
+<td style="text-align:left">老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Serial; ParNew</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记与重新标记停所有用户线程</td>
+</tr>
+<tr>
+<td>G1</td>
+<td style="text-align:left">标记整理（整体）<br>复制（局部）</td>
+<td style="text-align:left">新生代; 老年代</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">part</td>
+<td style="text-align:left">初始标记、最终标记、筛选回收暂停所有用户线程</td>
+</tr>
+</tbody>
+</table>
+<h4 id="8、内存分配与回收策略"><a href="#8、内存分配与回收策略" class="headerlink" title="8、内存分配与回收策略"></a>8、内存分配与回收策略</h4><ul>
+<li>对象首先在Eden上分配，空间不足时，JVM发起Minor GC(新生代GC 对应的老年代GC称为 Major/Full GC)</li>
+<li>大对象直接进入老年代（例如大的字符串或数组）</li>
+<li>长期存活的对象将进入老年代（每个对象定义了一个Age计数器，每次Minor GC存活Age+1，超过阀值进入老年代）</li>
+<li>Survivor中相同年龄所有对象大小总和超过一半的，年龄大于该数的进入老年代，不需要阀值条件</li>
+<li>JDK 1.6U24之后，分配对象时若老年代连续空间大于新生代对象总大小或每次晋升的平均值就会发生Minor GC，否则进行Full GC, 之前版本依赖HandlePromotionFailure参数进行判断</li>
+<li>Perm区域的回收由Full GC触发</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/14/Understand-JVM-Part-I/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/06/14/Understand-JVM-Part-I/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

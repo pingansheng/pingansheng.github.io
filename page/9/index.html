@@ -1,0 +1,1073 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/9/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/27/Effective-Java-2th-Part-III/" title="Effective Java 2th Part III" itemprop="url">Effective Java 2th Part III</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-27T08:22:27.000Z" itemprop="datePublished"> 发表于 2017-03-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Effective-Java-2th-Part-III"><a href="#Effective-Java-2th-Part-III" class="headerlink" title="Effective Java 2th Part III"></a>Effective Java 2th Part III</h1><h2 id="通用程序设计"><a href="#通用程序设计" class="headerlink" title="通用程序设计"></a>通用程序设计</h2><p>45、将局部变量的作用域最小化</p>
+<ul>
+<li>第一次使用的地方声明</li>
+<li>每个局部变量的声明都应该有一个初始化表达式</li>
+<li><code>for(int i=0,j=getMax();i&gt;j;i++)</code>使用这种方式避免每次迭代的冗余计算</li>
+<li>方法小而集中</li>
+</ul>
+<p>46、for-each优先</p>
+<ul>
+<li>没有性能损失（集合数只取了一次，见45条）</li>
+<li>删除元素无法使用</li>
+<li>转换元素无法使用</li>
+<li><p>多个集合平行迭代无法使用</p>
+<p>47、了解和使用类库</p>
+<ul>
+<li>Random.nextInt</li>
+</ul>
+</li>
+</ul>
+<p>48、需要精确的答案避免使用float和double</p>
+<ul>
+<li>BigDecimal，int(9位数字)或long(18位数字)</li>
+<li>int或long需要手动控制小数位数</li>
+<li>BigDecimal功能齐全但用法不方便，速度慢</li>
+</ul>
+<p>49、基本类型优先于装箱基本类型</p>
+<ul>
+<li>==操作符执行同一性比较</li>
+<li>操作中混合装箱与基本类型，都会进行拆箱比较</li>
+<li>循环中注意装箱类型反复计算导致的大量装箱拆箱操作<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Long sum=<span class="number">0L</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">long</span> i=<span class="number">0L</span>;i&lt;<span class="number">1000000</span>;i++)&#123;</div><div class="line">    sum+=i;<span class="comment">//装箱拆箱</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>50、如果其他类型更适合，尽量避免使用字符串</p>
+<ul>
+<li>不要代替其他类型，如int等数字形式，应当做类型转换</li>
+<li>不适合代替枚举</li>
+<li>不适合代替聚集类型（以分隔符表示一串有含义的信息”Name-kkk#Age-12”）</li>
+<li>不适合代替能力表（用于授权的某个唯一变量标识）</li>
+</ul>
+<p>51、当心字符串拼接性能</p>
+<ul>
+<li>拼接字符串时间复杂度n平方</li>
+<li>使用StringBuilder</li>
+</ul>
+<p>52、通过接口引用对象</p>
+<ul>
+<li>如果没有合适的接口存在，使用类引用</li>
+</ul>
+<p>53、接口优先于反射机制</p>
+<ul>
+<li>编译检查失效</li>
+<li>代码冗长难懂</li>
+<li>性能损失</li>
+</ul>
+<p>54、谨慎的使用本地方法</p>
+<ul>
+<li>性能逐渐不是问题</li>
+<li>本地语言不是安全的</li>
+<li>不可再自由移植</li>
+</ul>
+<p>55、谨慎优化</p>
+<ul>
+<li>不要进行优化</li>
+<li>还是不要进行优化-在未找到清晰的优化方案之前</li>
+<li>设计时要考虑性能（算法，API，数据格式，线路层）</li>
+<li>避免限制性能的设计决策</li>
+<li>优化之前与之后，测量性能</li>
+</ul>
+<p>56、遵守普遍接受的命名惯例</p>
+<ul>
+<li>详细内容见alibaba Java开发手册</li>
+</ul>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>57、只针对异常的情况才使用异常</p>
+<ul>
+<li>不要使用异常用于正常的控制流</li>
+</ul>
+<p>58、对可恢复的情况使用受检异常，对编程错误使用运行时异常</p>
+<ul>
+<li>不要使用error</li>
+<li>未受检的抛出结构使用RuntimeException的子类</li>
+</ul>
+<p>59、避免不必要地使用受检的异常</p>
+<p>60、优先使用标准异常</p>
+<p>61、抛出与抽象相对应的异常</p>
+<ul>
+<li>高层的实现捕获底层的异常，同时抛出可以按照高层抽象进行解释的异常</li>
+<li>尽量处理或阻止来自底层的异常</li>
+</ul>
+<p>62、每个方法抛出的异常要有文档</p>
+<ul>
+<li>记录异常与条件</li>
+<li>只记录未受检异常</li>
+</ul>
+<p>63、在细节消息中包含能捕获失败的消息</p>
+<ul>
+<li>异常信息应该包含所有对该异常有贡献的参数和值</li>
+<li>可以通过构造特定的异常类构造函数去规范的产生高质量的帮助信息</li>
+</ul>
+<p>64、努力使失败保持原子性</p>
+<ul>
+<li>异常出现后，尽量使得处理的对象保持之前的状态而不要修改属性等信息</li>
+<li>所有可能的检查在修改对象之前进行</li>
+</ul>
+<p>65、不要忽略异常</p>
+<ul>
+<li>catch语句不要空置</li>
+</ul>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>66、同步访问共享的可变数据</p>
+<ul>
+<li>注意”活性失败”, JVM优化可能将局部变量修改读取方式导致无法看到关键的开关变量</li>
+<li>读写都需要同步</li>
+<li>“安全性失败”，常规的并发问题，如i++</li>
+</ul>
+<p>67、避免过度同步</p>
+<ul>
+<li>同步区域尽可能小</li>
+<li>同步区域不可调用外来方法（接口，可覆盖的方法等），会导致死锁或异常</li>
+</ul>
+<p>68、Executor和task优于线程</p>
+<ul>
+<li>使用线程池而不是简单的new Thread(){}.start();</li>
+</ul>
+<p>69、并发工具优先于wait和notify</p>
+<ul>
+<li>永远不要在循环之外调用o.wait()</li>
+<li>新代码中不要使用wait和notify,而是用并发工具替代（Executor，并发集合，同步器）</li>
+<li>优先使用notifyAll();</li>
+</ul>
+<p>70、线程安全文档化</p>
+<ul>
+<li>不同级别的线程安全要有文档说明</li>
+<li>锁封装在同步的对象中</li>
+</ul>
+<p>71、慎用延迟初始化</p>
+<ul>
+<li><p>静态域使用内部类实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</div><div class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Object field=getField();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;&#125;;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getField</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> B.field;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>实例域使用双重检查</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function">Object <span class="title">getField</span><span class="params">()</span></span>&#123;</div><div class="line">    Object res=field;</div><div class="line">    <span class="keyword">if</span>(<span class="keyword">null</span>==field)&#123;</div><div class="line">        <span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</div><div class="line">            res=field;</div><div class="line">            <span class="keyword">if</span>(<span class="keyword">null</span>==res)&#123;</div><div class="line">                field=res=getField();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>72、不要依赖于线程调度器</p>
+<ul>
+<li>Thead.yield 不靠谱，只用于手动的增加并发用以复现测试bug</li>
+<li>线程优先级不靠谱</li>
+</ul>
+<p>73、避免使用线程组</p>
+<ul>
+<li>禁用</li>
+</ul>
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><p>74、谨慎地实现Serializable接口</p>
+<ul>
+<li>大大降低修改灵活性</li>
+<li>serialVersionUID如果不提供，系统会调用复杂运算过程生成</li>
+<li>序列化构造器覆盖了默认的构造器行为</li>
+<li>新版本发布，测试负担加重</li>
+<li>为继承而设计的类尽量少的实现序列化接口</li>
+<li>使用AtomicReference实现线程安全状态机表示类已经初始化等信息</li>
+<li>内部类不要实现（内部类有另外的合成域用于指向外部类成员，序列化形式不清楚）</li>
+<li>静态成员类可以实现</li>
+</ul>
+<p>75、考虑使用自定义的序列化形式</p>
+<ul>
+<li>如果对象的物理表示法和逻辑数据内容有实质性的区别，不建议使用默认序列化形式</li>
+<li>加序列化UID(性能提升一些)</li>
+</ul>
+<p>76、保护性的编写readobject方法</p>
+<ul>
+<li>readObject方法中尽量对字段进行保护性拷贝后赋值，序列化字节流可能存在对对象内部字段的引用，进而再反序列化之后调用readObject之后对内部字段进行修改</li>
+</ul>
+<p>77、对于实例控制，枚举类型优先于readResolve</p>
+<ul>
+<li>对于单例模式实例化，使用枚举类型作为实例控制</li>
+</ul>
+<p>78、考虑用序列化代理代替序列化实例</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Effective-Java/">Effective Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/03/27/Effective-Java-2th-Part-III/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/03/27/Effective-Java-2th-Part-III/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/16/Effective-Java-2th-Part-II/" title="Effective Java 2th Part II" itemprop="url">Effective Java 2th Part II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-16T08:10:41.000Z" itemprop="datePublished"> 发表于 2017-02-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Effective-Java-2th-Part-II"><a href="#Effective-Java-2th-Part-II" class="headerlink" title="Effective Java 2th Part II"></a>Effective Java 2th Part II</h1><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>23、请不要在新代码中使用原生态类型</p>
+<ul>
+<li>尽量使用泛型</li>
+</ul>
+<p>24、消除非受检警告</p>
+<p>25、列表优先于数组</p>
+<ul>
+<li>不要混用数据与列表</li>
+<li>数据是具体化的，运行时才知道类型，泛型是擦除式的，运行时会丢弃类型，在编译时强化类型</li>
+</ul>
+<p>26、优先考虑泛型</p>
+<p>27、优先考虑泛型方法</p>
+<ul>
+<li>静态工具尤其适合泛型化</li>
+</ul>
+<p>28、利用有限制通配符来提升API的灵活性</p>
+<ul>
+<li>PECS, 用于生产者使用&lt;? extends T&gt;, 用于消费者使用&lt;? super T&gt;</li>
+<li>所有的comparable和comparator都是消费者</li>
+</ul>
+<p>29、优先考虑类型安全的异构容器</p>
+<ul>
+<li>Map中存储不同类型的对象可以用类型对象Class<t>作为Key,get时候使用Class.cast进行转换</t></li>
+</ul>
+<h2 id="枚举和注解"><a href="#枚举和注解" class="headerlink" title="枚举和注解"></a>枚举和注解</h2><p>30、用enum代替常量int</p>
+<ul>
+<li>枚举是不可变的，每个枚举都有自己的命名空间，不担心重名问题</li>
+<li><p>如果每个枚举对应不同的行为，使用特定于常量的方法实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Oper&#123;</div><div class="line"></div><div class="line">    PLUS&#123;<span class="function"><span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x+y;&#125;&#125;,</div><div class="line">    MINUS&#123;<span class="function"><span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x-y;&#125;&#125;;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>多个枚举常量同时共享相同的行为，则考虑策略枚举（枚举套枚举，里面的枚举提供方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//伪代码 </span></div><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> A&#123;</div><div class="line">    X1(B.Y1),</div><div class="line">    X2(B.Y1),</div><div class="line">    X3(B.Y2);</div><div class="line"></div><div class="line">    <span class="keyword">enum</span> B&#123;</div><div class="line">        Y1(<span class="function"><span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;&#125;),</div><div class="line">        Y2(<span class="function"><span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;&#125;);</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>31、用实例域代替序数</p>
+<ul>
+<li>尽量不要使用ordinal方法获取序号</li>
+<li>显示指定一个字段表示值</li>
+</ul>
+<p>32、EnumSet代替位域</p>
+<ul>
+<li>EnumSet.of(X1,X2),表示某几个枚举值的Set</li>
+</ul>
+<p>33、用EnumMap代替序数索引</p>
+<ul>
+<li>当枚举作为Key时，使用EnumMap作为其集合载体，替代枚举数组</li>
+</ul>
+<p>34、用接口模拟可伸缩的枚举</p>
+<ul>
+<li>利用枚举实现某接口可以动态的扩展枚举，调用使用接口调用即可</li>
+<li>调用端的参数两种声明方式<code>&lt;T extends Enum&lt;T&gt; &amp; AInterface&gt;</code>和<code>Collection&lt;? extends AInterface&gt;</code></li>
+</ul>
+<p>35、注解优先于命名模式</p>
+<ul>
+<li>使用注解而不是使用具体名称去判断执行逻辑</li>
+</ul>
+<p>36、坚持使用Override注解</p>
+<ul>
+<li>使得编译器提前得到错误</li>
+</ul>
+<p>37、用标记接口定义类型</p>
+<ul>
+<li>定义某一个类型使用接口</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>38、检查参数的有效性</p>
+<ul>
+<li>断言或条件判断</li>
+<li>对于所有参数如果可以合理完成逻辑，限制越少越好</li>
+</ul>
+<p>39、必要时进行保护性拷贝</p>
+<ul>
+<li>对外提供的服务，要做保护性的设计</li>
+<li>保护性拷贝在检查有效性之前进行</li>
+<li>参数可以被不信任的子类化，勿使用clone拷贝</li>
+<li>自身组件返回考虑做保护性拷贝</li>
+</ul>
+<p>40、谨慎设计方法签名</p>
+<ul>
+<li>名称谨慎</li>
+<li>不过于追求便利方法</li>
+<li>参数列表&lt;=4，过多则拆分方法或创建辅助类作为参数，或者采用builder模式</li>
+<li>参数优先使用接口</li>
+<li>boolean优先使用二值枚举setType(Person.MALE)</li>
+</ul>
+<p>41、慎用重载</p>
+<ul>
+<li>调用重载方法在编译时决定，而覆盖方法在运行时决定</li>
+<li>不要导出两个具有相同参数数目的重载方法</li>
+<li>构造器重载可考虑导出静态工厂</li>
+<li>多个重载方法，一般将具体化的重载方法转发给通用的重载方法以保证结果的一致性</li>
+<li>传递同样的参数时，所有的重载方法必须一致</li>
+</ul>
+<p>42、慎用可变参数</p>
+<ul>
+<li>每次调用均会导致一次数据分配和初始化</li>
+<li>可以创建一系列接收参数数量的方法重载组，最后一个再使用可变参数<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span></span></div><div class="line"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1)</span></div><div class="line"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1,<span class="keyword">int</span> a2)</span></div><div class="line"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a1,<span class="keyword">int</span> a2,<span class="keyword">int</span> ...rest)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>43、返回零长度的数组或者集合，而不是null</p>
+<ul>
+<li>返回类型是数组或者集合的方法返回零长度对象</li>
+</ul>
+<p>44、为所有导出的API元素编写文档注释</p>
+<ul>
+<li><code>&lt;pre&gt; {@code int i=1;}&lt;pre/&gt;</code> 用于导出代码</li>
+<li><code>{@literal Map&lt;String,String&gt;}</code> 用于原样输出内容并且转移html字符</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Effective-Java/">Effective Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/16/Effective-Java-2th-Part-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/16/Effective-Java-2th-Part-II/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/07/Effective-Java-2th-Part-I/" title="Effective Java 2th Part I" itemprop="url">Effective Java 2th Part I</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-02-07T07:32:04.000Z" itemprop="datePublished"> 发表于 2017-02-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Effective-Java-2th-Part-I"><a href="#Effective-Java-2th-Part-I" class="headerlink" title="Effective Java 2th Part I"></a>Effective Java 2th Part I</h1><h2 id="创建与销毁对象"><a href="#创建与销毁对象" class="headerlink" title="创建与销毁对象"></a>创建与销毁对象</h2><p>1、静态工厂代替构造器<br>优点：</p>
+<ul>
+<li>命名：方法名称表示对象含义</li>
+<li>复用：不需要每次都创建新对象</li>
+<li>返回子类对象：可以返回该类的子类对象</li>
+<li>创建参数化类型对象简洁：new HashMap<string,list<string>&gt;().<br>缺点：</string,list<string></li>
+<li>没有默认或保护的构造方法无法子类化</li>
+<li>只是一个静态方法而不像构造函数有明确的语法含义</li>
+</ul>
+<p>2、多个构造参数考虑使用构造器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p1;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p2;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p3;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p4;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> p5;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p1=<span class="number">0</span>;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p2=<span class="number">0</span>;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p3=<span class="number">0</span>;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p4=<span class="number">0</span>;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> p5=<span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">(<span class="keyword">int</span> p1,<span class="keyword">int</span> p2)</span></span>&#123;</div><div class="line">            <span class="keyword">this</span>.p1=p1;</div><div class="line">            <span class="keyword">this</span>.p2=p2;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP3</span><span class="params">(<span class="keyword">int</span> p3)</span></span>&#123;</div><div class="line">            <span class="keyword">this</span>.p3=p3;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP4</span><span class="params">(<span class="keyword">int</span> p4)</span></span>&#123;</div><div class="line">            <span class="keyword">this</span>.p4=p4;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setP5</span><span class="params">(<span class="keyword">int</span> p5)</span></span>&#123;</div><div class="line">            <span class="keyword">this</span>.p5=p5;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> App <span class="title">build</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> App(<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">(Builder builder)</span></span>&#123;</div><div class="line">        p1=builder.p1;</div><div class="line">        p2=builder.p2;</div><div class="line">        p3=builder.p3;</div><div class="line">        p4=builder.p4;</div><div class="line">        p5=builder.p5;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//client</span></div><div class="line">App app=<span class="keyword">new</span> App.Builder(<span class="number">1</span>,<span class="number">2</span>).setP3(<span class="number">3</span>).setP4(<span class="number">4</span>).setP5(<span class="number">5</span>).build();</div></pre></td></tr></table></figure>
+<p>优点：</p>
+<ul>
+<li>灵活</li>
+<li>具名</li>
+<li>安全<br>缺点：</li>
+<li>需要创建构造器，性能开销</li>
+</ul>
+<p>3、私有构造器强化单例属性</p>
+<ul>
+<li>见单例模式</li>
+<li>唯一元素的枚举类也是一种单例的最好方法</li>
+</ul>
+<p>4、私有构造函数使得某些类不可实例化（工具类等）</p>
+<p>5、不要创建多余的对象</p>
+<ul>
+<li>避免频繁使用装箱基本类型<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Long s=<span class="number">0L</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">long</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++)&#123;</div><div class="line">    s+=i;<span class="comment">//warning!每次都创建一个Long对象</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>6、消除过期的对象引用</p>
+<ul>
+<li>如果类自己管理内存，注意内存泄漏，比如自己实现的堆栈</li>
+<li>缓存要注意清理问题</li>
+<li>监听器与回调</li>
+</ul>
+<p>7、避免使用终结方法</p>
+<h2 id="对于所有对象都通用的方法"><a href="#对于所有对象都通用的方法" class="headerlink" title="对于所有对象都通用的方法"></a>对于所有对象都通用的方法</h2><p>8、覆盖equals方法注意：</p>
+<ul>
+<li>自反性、对称性、传递性、一致性、非空性（x.equals(null)==false）</li>
+<li>使用instanceof检查参数是否为正确类型</li>
+<li>注意方法的入参类型是Object，否则是重载</li>
+<li>==比较不是float与double的基本类型，引用使用equals，float使用Float.compare(),double使用Double.compare()</li>
+</ul>
+<p>9、覆盖equals时候始终覆盖hashcode</p>
+<ul>
+<li>否则影响hash</li>
+</ul>
+<p>10、始终覆盖toString()</p>
+<p>11、谨慎实现cloneable接口</p>
+<ul>
+<li>一般不要实现，否则需要提供良好的实现，深度拷贝与同步</li>
+</ul>
+<p>12、考虑实现comparable接口</p>
+<ul>
+<li>获得更多的内置集合功能，如排序等</li>
+</ul>
+<h2 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h2><p>13、使类和成员的可访问性最小化</p>
+<ul>
+<li>封装</li>
+</ul>
+<p>14、访问属性使用访问方法而不是直接访问</p>
+<ul>
+<li>私有的嵌套类可以直接访问，危害性较小</li>
+</ul>
+<p>15、尽量使用不可变性</p>
+<ul>
+<li>线程安全，内部信息共享，提供大量构件</li>
+</ul>
+<p>16、使用复合而不是继承</p>
+<ul>
+<li>复合和转发机制（装饰器模式）</li>
+<li>只有在is-a关系时使用继承</li>
+</ul>
+<p>17、要么为继承而设计，要么禁止继承</p>
+<ul>
+<li>需要提供详细的文档说明</li>
+<li>好的API文档描述一个操作做了什么，而不是如何做的</li>
+<li>如果允许继承，构造器不可以调用可覆盖的方法</li>
+</ul>
+<p>18、接口优于抽象类</p>
+<ul>
+<li>接口利于实现混合类型（某个类具有某种特定的功能，如Comparable接口）</li>
+<li>利于实现非层次的类结构，比如歌唱家与作家接口</li>
+<li>一般导出接口的骨架实现抽象类或简单实现（用于直接使用或继承）</li>
+<li>抽象类对比接口更容易演变</li>
+<li>公开接口一旦发布，几乎无法修改，建议同时发布骨架抽象类</li>
+</ul>
+<p>19、接口只用于定义类型</p>
+<ul>
+<li>导出常量使用枚举，而不是包含一堆static final变量</li>
+</ul>
+<p>20、类层次优于标签类</p>
+<ul>
+<li>不要在一个类中完成相似而又不同的多套逻辑（三角形与原形面积计算，一个类中使用switch类的逻辑判断）</li>
+<li>针对相似而不同的逻辑关系，考虑拆成子类父类的类层次关系</li>
+</ul>
+<p>21、用函数对象标识策略</p>
+<ul>
+<li>策略模式</li>
+</ul>
+<p>22、优先考虑静态成员类</p>
+<ul>
+<li>非静态的嵌套类每个实例都会持有一个外围类的引用</li>
+<li>如果嵌套类不需要外围实例的引用，就使用静态，否则使用非静态</li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Effective-Java/">Effective Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/02/07/Effective-Java-2th-Part-I/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/02/07/Effective-Java-2th-Part-I/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

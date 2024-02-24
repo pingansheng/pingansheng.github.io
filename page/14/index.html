@@ -1,0 +1,818 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Peter I&#x2F;O">
+<meta property="og:url" content="https://pingansheng.github.io/page/14/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peter I&#x2F;O">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/09/R语言-随机森林/" title="R语言-随机森林" itemprop="url">R语言-随机森林</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-09T03:16:56.000Z" itemprop="datePublished"> 发表于 2017-01-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="随机森林示例"><a href="#随机森林示例" class="headerlink" title="随机森林示例"></a>随机森林示例</h1><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#取相关变量</span></div><div class="line">data&lt;-dataOri[,c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>)]</div><div class="line"><span class="comment">#取自变量</span></div><div class="line">modelData=data[,c(<span class="number">2</span>:<span class="number">12</span>)]</div><div class="line"><span class="comment">#取大小合适的数据集</span></div><div class="line">x&lt;-modelData[c(<span class="number">1</span>:nrow(modelData)),c(-<span class="number">6</span>,-<span class="number">8</span>)]</div><div class="line"><span class="comment">#去除缺失值</span></div><div class="line">x=na.omit(x)</div><div class="line"><span class="comment">#分为两部分（3:7分）</span></div><div class="line">traindata&lt;-x[sample(<span class="number">1</span>:nrow(x),nrow(x)*<span class="number">0.7</span>,replace=<span class="literal">FALSE</span>),]</div><div class="line">testdata&lt;-x[sample(<span class="number">1</span>:nrow(x),nrow(x)-nrow(traindata),replace=<span class="literal">FALSE</span>),]</div><div class="line"><span class="keyword">library</span>(randomForest)</div><div class="line"><span class="comment">#~表示连接因变量与自变量之间的关系，X~.表示预测模式是所有X与其他所有变量</span></div><div class="line">RF&lt;-randomForest(as.factor(is_back)~.,data=traindata,proximity=<span class="literal">TRUE</span>, importance=<span class="literal">TRUE</span>)</div><div class="line">plot(RF)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/09/R语言-随机森林/RFPlot.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#获取变量的重要性排序</span></div><div class="line">imp &lt;- importance(RF)</div><div class="line">impvar &lt;- imp[order(imp[, <span class="number">3</span>], decreasing=<span class="literal">TRUE</span>),];</div><div class="line">impvar</div><div class="line"><span class="comment">#查看变量重要性排序图</span></div><div class="line">varImpPlot(RF)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/09/R语言-随机森林/importantPlot.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#查看某个变量对数据的重要性分布图</span></div><div class="line">partialPlot(RF,traindata,province_id)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/09/R语言-随机森林/varPlot.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#测试模型在traindata上的效果</span></div><div class="line">table(predict(RF), traindata$is_back)</div><div class="line"><span class="comment">#测试模型在testdata上的效果</span></div><div class="line">isbackPred &lt;- predict(RF, newdata=testdata)</div><div class="line">table(isbackPred, testdata$is_back)</div><div class="line"><span class="comment"># 绘制每一个观测值被判断正确的概率图</span></div><div class="line">plot(margin(RF, testdata$is_back))</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/09/R语言-随机森林/predictView.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/随机森林/">随机森林</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/09/R语言-随机森林/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/09/R语言-随机森林/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/06/chapter07-基本统计分析/" title="chapter07 基本统计分析" itemprop="url">chapter07 基本统计分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-06T06:25:25.000Z" itemprop="datePublished"> 发表于 2017-01-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="基本统计分析"><a href="#基本统计分析" class="headerlink" title="基本统计分析"></a>基本统计分析</h1><h2 id="1、描述性统计分析"><a href="#1、描述性统计分析" class="headerlink" title="1、描述性统计分析"></a>1、描述性统计分析</h2><h3 id="（1）方法集合"><a href="#（1）方法集合" class="headerlink" title="（1）方法集合"></a>（1）方法集合</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#summary</span></div><div class="line">&gt; new_var&lt;-mtcars[vars]</div><div class="line">&gt; summary(new_var)</div><div class="line">      mpg              hp              wt       </div><div class="line"> Min.   :<span class="number">10.40</span>   Min.   : <span class="number">52.0</span>   Min.   :<span class="number">1.513</span>  </div><div class="line"> 1st Qu.:<span class="number">15.43</span>   1st Qu.: <span class="number">96.5</span>   1st Qu.:<span class="number">2.581</span>  </div><div class="line"> Median :<span class="number">19.20</span>   Median :<span class="number">123.0</span>   Median :<span class="number">3.325</span>  </div><div class="line"> Mean   :<span class="number">20.09</span>   Mean   :<span class="number">146.7</span>   Mean   :<span class="number">3.217</span>  </div><div class="line"> 3rd Qu.:<span class="number">22.80</span>   3rd Qu.:<span class="number">180.0</span>   3rd Qu.:<span class="number">3.610</span>  </div><div class="line"> Max.   :<span class="number">33.90</span>   Max.   :<span class="number">335.0</span>   Max.   :<span class="number">5.424</span>  </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#fivenum 返回图基五数 最小，下四分位数，中位数，上四分位数与最大值</span></div><div class="line">&gt; sapply(new_var, fivenum)</div><div class="line">       mpg  hp     wt</div><div class="line">[<span class="number">1</span>,] <span class="number">10.40</span>  <span class="number">52</span> <span class="number">1.5130</span></div><div class="line">[<span class="number">2</span>,] <span class="number">15.35</span>  <span class="number">96</span> <span class="number">2.5425</span></div><div class="line">[<span class="number">3</span>,] <span class="number">19.20</span> <span class="number">123</span> <span class="number">3.3250</span></div><div class="line">[<span class="number">4</span>,] <span class="number">22.80</span> <span class="number">180</span> <span class="number">3.6500</span></div><div class="line">[<span class="number">5</span>,] <span class="number">33.90</span> <span class="number">335</span> <span class="number">5.4240</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#自编函数计算偏度与峰度</span></div><div class="line">&gt; mystats&lt;-<span class="keyword">function</span>(x,na.omit=<span class="literal">FALSE</span>)&#123;</div><div class="line">+   <span class="keyword">if</span>(na.omit)</div><div class="line">+       x&lt;x[!is.na(x)]</div><div class="line">+   m&lt;-mean(x)</div><div class="line">+   n&lt;-length(x)</div><div class="line">+   s&lt;-sd(x)</div><div class="line">+   skew&lt;-sum(((x-m)/s)^<span class="number">3</span>)/n</div><div class="line">+   kurt&lt;-sum(((x-m)/s)^<span class="number">4</span>)/n-<span class="number">3</span></div><div class="line">+   <span class="keyword">return</span>(c(n=n, mean=m,stdev=s,skew=skew,kurtosis=kurt))</div><div class="line">+ &#125;</div><div class="line">&gt; </div><div class="line">&gt; sapply(new_var, mystats)</div><div class="line">               mpg          hp          wt</div><div class="line">n        <span class="number">32.000000</span>  <span class="number">32.0000000</span> <span class="number">32.00000000</span></div><div class="line">mean     <span class="number">20.090625</span> <span class="number">146.6875000</span>  <span class="number">3.21725000</span></div><div class="line">stdev     <span class="number">6.026948</span>  <span class="number">68.5628685</span>  <span class="number">0.97845744</span></div><div class="line">skew      <span class="number">0.610655</span>   <span class="number">0.7260237</span>  <span class="number">0.42314646</span></div><div class="line">kurtosis -<span class="number">0.372766</span>  -<span class="number">0.1355511</span> -<span class="number">0.02271075</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#第三方包 Hmisc pastecs psych包含很多描述性统计量函数</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(Hmisc)</div><div class="line">&gt; <span class="comment">#describe()函数可返回变量和观测的数量、缺失值和唯一值的数目、平均值、分位数，以及五个最大的值和五个最小的值。</span></div><div class="line">&gt; describe(new_var)</div><div class="line">    vars  n   mean    sd median trimmed   mad   min    max  range skew kurtosis    se</div><div class="line">mpg    <span class="number">1</span> <span class="number">32</span>  <span class="number">20.09</span>  <span class="number">6.03</span>  <span class="number">19.20</span>   <span class="number">19.70</span>  <span class="number">5.41</span> <span class="number">10.40</span>  <span class="number">33.90</span>  <span class="number">23.50</span> <span class="number">0.61</span>    -<span class="number">0.37</span>  <span class="number">1.07</span></div><div class="line">hp     <span class="number">2</span> <span class="number">32</span> <span class="number">146.69</span> <span class="number">68.56</span> <span class="number">123.00</span>  <span class="number">141.19</span> <span class="number">77.10</span> <span class="number">52.00</span> <span class="number">335.00</span> <span class="number">283.00</span> <span class="number">0.73</span>    -<span class="number">0.14</span> <span class="number">12.12</span></div><div class="line">wt     <span class="number">3</span> <span class="number">32</span>   <span class="number">3.22</span>  <span class="number">0.98</span>   <span class="number">3.33</span>    <span class="number">3.15</span>  <span class="number">0.77</span>  <span class="number">1.51</span>   <span class="number">5.42</span>   <span class="number">3.91</span> <span class="number">0.42</span>    -<span class="number">0.02</span>  <span class="number">0.17</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#pastecs stat.desc()的函数，它可以计算种类繁多的描述性统计量</span></div><div class="line">&gt; <span class="keyword">library</span>(pastecs)</div><div class="line">&gt; stat.desc(new_var)</div><div class="line">                     mpg           hp          wt</div><div class="line">nbr.val       <span class="number">32.0000000</span>   <span class="number">32.0000000</span>  <span class="number">32.0000000</span></div><div class="line">nbr.null       <span class="number">0.0000000</span>    <span class="number">0.0000000</span>   <span class="number">0.0000000</span></div><div class="line">nbr.na         <span class="number">0.0000000</span>    <span class="number">0.0000000</span>   <span class="number">0.0000000</span></div><div class="line">min           <span class="number">10.4000000</span>   <span class="number">52.0000000</span>   <span class="number">1.5130000</span></div><div class="line">max           <span class="number">33.9000000</span>  <span class="number">335.0000000</span>   <span class="number">5.4240000</span></div><div class="line">range         <span class="number">23.5000000</span>  <span class="number">283.0000000</span>   <span class="number">3.9110000</span></div><div class="line">sum          <span class="number">642.9000000</span> <span class="number">4694.0000000</span> <span class="number">102.9520000</span></div><div class="line">median        <span class="number">19.2000000</span>  <span class="number">123.0000000</span>   <span class="number">3.3250000</span></div><div class="line">mean          <span class="number">20.0906250</span>  <span class="number">146.6875000</span>   <span class="number">3.2172500</span></div><div class="line">SE.mean        <span class="number">1.0654240</span>   <span class="number">12.1203173</span>   <span class="number">0.1729685</span></div><div class="line">CI.mean.0.95   <span class="number">2.1729465</span>   <span class="number">24.7195501</span>   <span class="number">0.3527715</span></div><div class="line">var           <span class="number">36.3241028</span> <span class="number">4700.8669355</span>   <span class="number">0.9573790</span></div><div class="line">std.dev        <span class="number">6.0269481</span>   <span class="number">68.5628685</span>   <span class="number">0.9784574</span></div><div class="line">coef.var       <span class="number">0.2999881</span>    <span class="number">0.4674077</span>   <span class="number">0.3041285</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#psych describe()的函数 计算非缺失值的数量、平均数、标准差、中位数、截尾均值、绝对中位差、最小值、最大值、值域、偏度、峰度和平均值的标准误。</span></div><div class="line">&gt; <span class="keyword">library</span>(psych)</div><div class="line">&gt; <span class="comment">#同名函数以最后载入的包为准，可以加包名Hmisc::describe(x)</span></div><div class="line">&gt; describe(new_var)</div><div class="line">    vars  n   mean    sd median trimmed   mad   min    max  range skew kurtosis    se</div><div class="line">mpg    <span class="number">1</span> <span class="number">32</span>  <span class="number">20.09</span>  <span class="number">6.03</span>  <span class="number">19.20</span>   <span class="number">19.70</span>  <span class="number">5.41</span> <span class="number">10.40</span>  <span class="number">33.90</span>  <span class="number">23.50</span> <span class="number">0.61</span>    -<span class="number">0.37</span>  <span class="number">1.07</span></div><div class="line">hp     <span class="number">2</span> <span class="number">32</span> <span class="number">146.69</span> <span class="number">68.56</span> <span class="number">123.00</span>  <span class="number">141.19</span> <span class="number">77.10</span> <span class="number">52.00</span> <span class="number">335.00</span> <span class="number">283.00</span> <span class="number">0.73</span>    -<span class="number">0.14</span> <span class="number">12.12</span></div><div class="line">wt     <span class="number">3</span> <span class="number">32</span>   <span class="number">3.22</span>  <span class="number">0.98</span>   <span class="number">3.33</span>    <span class="number">3.15</span>  <span class="number">0.77</span>  <span class="number">1.51</span>   <span class="number">5.42</span>   <span class="number">3.91</span> <span class="number">0.42</span>    -<span class="number">0.02</span>  <span class="number">0.17</span></div></pre></td></tr></table></figure>
+<p>（2）分组计算描述性统计变量</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#分组计算描述性统计变量</span></div><div class="line">&gt; <span class="comment">#aggregate can only use single function to the data</span></div><div class="line">&gt; aggregate(mtcars[vars],by=list(am=mtcars$am),mean)</div><div class="line">  am      mpg       hp       wt</div><div class="line"><span class="number">1</span>  <span class="number">0</span> <span class="number">17.14737</span> <span class="number">160.2632</span> <span class="number">3.768895</span></div><div class="line"><span class="number">2</span>  <span class="number">1</span> <span class="number">24.39231</span> <span class="number">126.8462</span> <span class="number">2.411000</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#use by(data, INDICESm FUN) to use servial methods</span></div><div class="line">&gt; </div><div class="line">&gt; dstats&lt;-<span class="keyword">function</span>(x)(</div><div class="line">+   c(mean=mean(x), sd=sd(x))</div><div class="line">+ )</div><div class="line">&gt; </div><div class="line">&gt; by(mtcars[vars], mtcars$am, mean)</div><div class="line">mtcars$am: <span class="number">0</span></div><div class="line">[<span class="number">1</span>] <span class="literal">NA</span></div><div class="line">---------------------------------------------------------------------------------------------------------- </div><div class="line">mtcars$am: <span class="number">1</span></div><div class="line">[<span class="number">1</span>] <span class="literal">NA</span></div><div class="line">Warning messages:</div><div class="line"><span class="number">1</span>: In mean.default(data[x, , drop = <span class="literal">FALSE</span>], <span class="keyword">...</span>) :</div><div class="line">  参数不是数值也不是逻辑值：回覆<span class="literal">NA</span></div><div class="line"><span class="number">2</span>: In mean.default(data[x, , drop = <span class="literal">FALSE</span>], <span class="keyword">...</span>) :</div><div class="line">  参数不是数值也不是逻辑值：回覆<span class="literal">NA</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#使用reshape灵活的导出描述性统计量</span></div><div class="line">&gt; dstats&lt;-<span class="keyword">function</span>(x)(</div><div class="line">+   c(n=length(x),mean=mean(x), sd=sd(x))</div><div class="line">+ )</div><div class="line">&gt; <span class="keyword">library</span>(reshape)</div><div class="line">&gt; <span class="comment">#首先融合数据框</span></div><div class="line">&gt; dfm &lt;- melt(mtcars, measure.vars=c(<span class="string">"mpg"</span>,<span class="string">"hp"</span>,<span class="string">"wt"</span>), id.vars = c(<span class="string">"am"</span>,<span class="string">"cyl"</span>))</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#重铸 (variable表示融合后的数据中的度量变量，默认名称为variable)</span></div><div class="line">&gt; cast(dfm, am + cyl + variable ~., dstats)</div><div class="line">   am cyl variable  n       mean         sd</div><div class="line"><span class="number">1</span>   <span class="number">0</span>   <span class="number">4</span>      mpg  <span class="number">3</span>  <span class="number">22.900000</span>  <span class="number">1.4525839</span></div><div class="line"><span class="number">2</span>   <span class="number">0</span>   <span class="number">4</span>       hp  <span class="number">3</span>  <span class="number">84.666667</span> <span class="number">19.6553640</span></div><div class="line"><span class="number">3</span>   <span class="number">0</span>   <span class="number">4</span>       wt  <span class="number">3</span>   <span class="number">2.935000</span>  <span class="number">0.4075230</span></div><div class="line"><span class="number">4</span>   <span class="number">0</span>   <span class="number">6</span>      mpg  <span class="number">4</span>  <span class="number">19.125000</span>  <span class="number">1.6317169</span></div><div class="line"><span class="number">5</span>   <span class="number">0</span>   <span class="number">6</span>       hp  <span class="number">4</span> <span class="number">115.250000</span>  <span class="number">9.1787799</span></div><div class="line"><span class="number">6</span>   <span class="number">0</span>   <span class="number">6</span>       wt  <span class="number">4</span>   <span class="number">3.388750</span>  <span class="number">0.1162164</span></div><div class="line"><span class="number">7</span>   <span class="number">0</span>   <span class="number">8</span>      mpg <span class="number">12</span>  <span class="number">15.050000</span>  <span class="number">2.7743959</span></div><div class="line"><span class="number">8</span>   <span class="number">0</span>   <span class="number">8</span>       hp <span class="number">12</span> <span class="number">194.166667</span> <span class="number">33.3598379</span></div><div class="line"><span class="number">9</span>   <span class="number">0</span>   <span class="number">8</span>       wt <span class="number">12</span>   <span class="number">4.104083</span>  <span class="number">0.7683069</span></div><div class="line"><span class="number">10</span>  <span class="number">1</span>   <span class="number">4</span>      mpg  <span class="number">8</span>  <span class="number">28.075000</span>  <span class="number">4.4838599</span></div><div class="line"><span class="number">11</span>  <span class="number">1</span>   <span class="number">4</span>       hp  <span class="number">8</span>  <span class="number">81.875000</span> <span class="number">22.6554156</span></div><div class="line"><span class="number">12</span>  <span class="number">1</span>   <span class="number">4</span>       wt  <span class="number">8</span>   <span class="number">2.042250</span>  <span class="number">0.4093485</span></div><div class="line"><span class="number">13</span>  <span class="number">1</span>   <span class="number">6</span>      mpg  <span class="number">3</span>  <span class="number">20.566667</span>  <span class="number">0.7505553</span></div><div class="line"><span class="number">14</span>  <span class="number">1</span>   <span class="number">6</span>       hp  <span class="number">3</span> <span class="number">131.666667</span> <span class="number">37.5277675</span></div><div class="line"><span class="number">15</span>  <span class="number">1</span>   <span class="number">6</span>       wt  <span class="number">3</span>   <span class="number">2.755000</span>  <span class="number">0.1281601</span></div><div class="line"><span class="number">16</span>  <span class="number">1</span>   <span class="number">8</span>      mpg  <span class="number">2</span>  <span class="number">15.400000</span>  <span class="number">0.5656854</span></div><div class="line"><span class="number">17</span>  <span class="number">1</span>   <span class="number">8</span>       hp  <span class="number">2</span> <span class="number">299.500000</span> <span class="number">50.2045815</span></div><div class="line"><span class="number">18</span>  <span class="number">1</span>   <span class="number">8</span>       wt  <span class="number">2</span>   <span class="number">3.370000</span>  <span class="number">0.2828427</span></div></pre></td></tr></table></figure>
+<h2 id="2、频数表和列联表"><a href="#2、频数表和列联表" class="headerlink" title="2、频数表和列联表"></a>2、频数表和列联表</h2><h3 id="（1）生成频数表"><a href="#（1）生成频数表" class="headerlink" title="（1）生成频数表"></a>（1）生成频数表</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>table(var1, var2, …, varN)</td>
+<td>使用 N 个类别型变量（因子）创建一个 N 维列联表</td>
+</tr>
+<tr>
+<td>xtabs(formula, data)</td>
+<td>根据一个公式和一个矩阵或数据框创建一个 N 维列联表</td>
+</tr>
+<tr>
+<td>prop.table(table, margins)</td>
+<td>依margins定义的边际列表将表中条目表示为分数形式</td>
+</tr>
+<tr>
+<td>margin.table(table, margins)</td>
+<td>依margins定义的边际列表计算表中条目的和</td>
+</tr>
+<tr>
+<td>addmargins(table, margins)</td>
+<td>将概述边margins（默认是求和结果）放入表中</td>
+</tr>
+<tr>
+<td>ftable(table)</td>
+<td>创建一个紧凑的“平铺”式列联表</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#频数表</span></div><div class="line">&gt; <span class="keyword">library</span>(vcd)</div><div class="line">&gt; art=Arthritis</div><div class="line">&gt; </div><div class="line">&gt; head(art)</div><div class="line">  ID Treatment  Sex Age Improved</div><div class="line"><span class="number">1</span> <span class="number">57</span>   Treated Male  <span class="number">27</span>     Some</div><div class="line"><span class="number">2</span> <span class="number">46</span>   Treated Male  <span class="number">29</span>     None</div><div class="line"><span class="number">3</span> <span class="number">77</span>   Treated Male  <span class="number">30</span>     None</div><div class="line"><span class="number">4</span> <span class="number">17</span>   Treated Male  <span class="number">32</span>   Marked</div><div class="line"><span class="number">5</span> <span class="number">36</span>   Treated Male  <span class="number">46</span>   Marked</div><div class="line"><span class="number">6</span> <span class="number">23</span>   Treated Male  <span class="number">58</span>   Marked</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#一维列联表</span></div><div class="line">&gt; mytable &lt;- with(art, table(Improved))</div><div class="line">&gt; mytable</div><div class="line">Improved</div><div class="line">  None   Some Marked </div><div class="line">    <span class="number">42</span>     <span class="number">14</span>     <span class="number">28</span> </div><div class="line">&gt; <span class="comment">#prop.table() 将频数转化为比例值</span></div><div class="line">&gt; prop.table(mytable)*<span class="number">100</span></div><div class="line">Improved</div><div class="line">    None     Some   Marked </div><div class="line"><span class="number">50.00000</span> <span class="number">16.66667</span> <span class="number">33.33333</span> </div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#二维列联表 </span></div><div class="line">&gt; <span class="comment">#table默认忽略缺失值，使用缺失值则加useNA="ifany"</span></div><div class="line">&gt; <span class="comment"># xtabs如果公式左边有变量则为频数变量</span></div><div class="line">&gt; mytable &lt;- xtabs(~ Treatment+Improved, data=art)</div><div class="line">&gt; mytable</div><div class="line">         Improved</div><div class="line">Treatment None Some Marked</div><div class="line">  Placebo   <span class="number">29</span>    <span class="number">7</span>      <span class="number">7</span></div><div class="line">  Treated   <span class="number">13</span>    <span class="number">7</span>     <span class="number">21</span></div><div class="line">&gt; <span class="comment">#边际频数</span></div><div class="line">&gt; margin.table(mytable,<span class="number">2</span>)</div><div class="line">Improved</div><div class="line">  None   Some Marked </div><div class="line">    <span class="number">42</span>     <span class="number">14</span>     <span class="number">28</span> </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#比例 下标表示按照第几个变量进行比例计算，</span></div><div class="line">&gt; <span class="comment">#不选择则默认为所有变量进行计算</span></div><div class="line">&gt; prop.table(mytable,<span class="number">1</span>)</div><div class="line">         Improved</div><div class="line">Treatment      None      Some    Marked</div><div class="line">  Placebo <span class="number">0.6744186</span> <span class="number">0.1627907</span> <span class="number">0.1627907</span></div><div class="line">  Treated <span class="number">0.3170732</span> <span class="number">0.1707317</span> <span class="number">0.5121951</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#函数addmargins()为结果增加边际和</span></div><div class="line">&gt; addmargins(mytable)</div><div class="line">         Improved</div><div class="line">Treatment None Some Marked Sum</div><div class="line">  Placebo   <span class="number">29</span>    <span class="number">7</span>      <span class="number">7</span>  <span class="number">43</span></div><div class="line">  Treated   <span class="number">13</span>    <span class="number">7</span>     <span class="number">21</span>  <span class="number">41</span></div><div class="line">  Sum       <span class="number">42</span>   <span class="number">14</span>     <span class="number">28</span>  <span class="number">84</span></div><div class="line">&gt; </div><div class="line">&gt; addmargins(prop.table(mytable))</div><div class="line">         Improved</div><div class="line">Treatment       None       Some     Marked        Sum</div><div class="line">  Placebo <span class="number">0.34523810</span> <span class="number">0.08333333</span> <span class="number">0.08333333</span> <span class="number">0.51190476</span></div><div class="line">  Treated <span class="number">0.15476190</span> <span class="number">0.08333333</span> <span class="number">0.25000000</span> <span class="number">0.48809524</span></div><div class="line">  Sum     <span class="number">0.50000000</span> <span class="number">0.16666667</span> <span class="number">0.33333333</span> <span class="number">1.00000000</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#默认产生行与列的和，加参数控制只显示行或列</span></div><div class="line">&gt; addmargins(prop.table(mytable),<span class="number">2</span>)</div><div class="line">         Improved</div><div class="line">Treatment       None       Some     Marked        Sum</div><div class="line">  Placebo <span class="number">0.34523810</span> <span class="number">0.08333333</span> <span class="number">0.08333333</span> <span class="number">0.51190476</span></div><div class="line">  Treated <span class="number">0.15476190</span> <span class="number">0.08333333</span> <span class="number">0.25000000</span> <span class="number">0.48809524</span></div><div class="line">&gt; addmargins(prop.table(mytable),<span class="number">1</span>)</div><div class="line">         Improved</div><div class="line">Treatment       None       Some     Marked</div><div class="line">  Placebo <span class="number">0.34523810</span> <span class="number">0.08333333</span> <span class="number">0.08333333</span></div><div class="line">  Treated <span class="number">0.15476190</span> <span class="number">0.08333333</span> <span class="number">0.25000000</span></div><div class="line">  Sum     <span class="number">0.50000000</span> <span class="number">0.16666667</span> <span class="number">0.33333333</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#使用CrossTabIe创建二维表</span></div><div class="line">&gt; <span class="keyword">library</span>(gmodels)</div><div class="line">&gt; ss=CrossTable(art$Treatment,art$Improved)</div><div class="line"></div><div class="line"> </div><div class="line">   Cell Contents</div><div class="line">|-------------------------|</div><div class="line">|                       N |</div><div class="line">| Chi-square contribution |</div><div class="line">|           N / Row Total |</div><div class="line">|           N / Col Total |</div><div class="line">|         N / Table Total |</div><div class="line">|-------------------------|</div><div class="line"></div><div class="line"> </div><div class="line">Total Observations <span class="keyword">in</span> Table:  <span class="number">84</span> </div><div class="line"></div><div class="line"> </div><div class="line">              | art$Improved </div><div class="line">art$Treatment |      None |      Some |    Marked | Row Total | </div><div class="line">--------------|-----------|-----------|-----------|-----------|</div><div class="line">      Placebo |        <span class="number">29</span> |         <span class="number">7</span> |         <span class="number">7</span> |        <span class="number">43</span> | </div><div class="line">              |     <span class="number">2.616</span> |     <span class="number">0.004</span> |     <span class="number">3.752</span> |           | </div><div class="line">              |     <span class="number">0.674</span> |     <span class="number">0.163</span> |     <span class="number">0.163</span> |     <span class="number">0.512</span> | </div><div class="line">              |     <span class="number">0.690</span> |     <span class="number">0.500</span> |     <span class="number">0.250</span> |           | </div><div class="line">              |     <span class="number">0.345</span> |     <span class="number">0.083</span> |     <span class="number">0.083</span> |           | </div><div class="line">--------------|-----------|-----------|-----------|-----------|</div><div class="line">      Treated |        <span class="number">13</span> |         <span class="number">7</span> |        <span class="number">21</span> |        <span class="number">41</span> | </div><div class="line">              |     <span class="number">2.744</span> |     <span class="number">0.004</span> |     <span class="number">3.935</span> |           | </div><div class="line">              |     <span class="number">0.317</span> |     <span class="number">0.171</span> |     <span class="number">0.512</span> |     <span class="number">0.488</span> | </div><div class="line">              |     <span class="number">0.310</span> |     <span class="number">0.500</span> |     <span class="number">0.750</span> |           | </div><div class="line">              |     <span class="number">0.155</span> |     <span class="number">0.083</span> |     <span class="number">0.250</span> |           | </div><div class="line">--------------|-----------|-----------|-----------|-----------|</div><div class="line"> Column Total |        <span class="number">42</span> |        <span class="number">14</span> |        <span class="number">28</span> |        <span class="number">84</span> | </div><div class="line">              |     <span class="number">0.500</span> |     <span class="number">0.167</span> |     <span class="number">0.333</span> |           | </div><div class="line">--------------|-----------|-----------|-----------|-----------|</div><div class="line"></div><div class="line"> </div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多维列联表</span></div><div class="line">&gt; mytable&lt;-xtabs(~Treatment+Sex+Improved,data=art)</div><div class="line">&gt; mytable</div><div class="line">, , Improved = None</div><div class="line"></div><div class="line">         Sex</div><div class="line">Treatment Female Male</div><div class="line">  Placebo     <span class="number">19</span>   <span class="number">10</span></div><div class="line">  Treated      <span class="number">6</span>    <span class="number">7</span></div><div class="line"></div><div class="line">, , Improved = Some</div><div class="line"></div><div class="line">         Sex</div><div class="line">Treatment Female Male</div><div class="line">  Placebo      <span class="number">7</span>    <span class="number">0</span></div><div class="line">  Treated      <span class="number">5</span>    <span class="number">2</span></div><div class="line"></div><div class="line">, , Improved = Marked</div><div class="line"></div><div class="line">         Sex</div><div class="line">Treatment Female Male</div><div class="line">  Placebo      <span class="number">6</span>    <span class="number">1</span></div><div class="line">  Treated     <span class="number">16</span>    <span class="number">5</span></div><div class="line"></div><div class="line">&gt; ftable(mytable)</div><div class="line">                 Improved None Some Marked</div><div class="line">Treatment Sex                             </div><div class="line">Placebo   Female            <span class="number">19</span>    <span class="number">7</span>      <span class="number">6</span></div><div class="line">          Male              <span class="number">10</span>    <span class="number">0</span>      <span class="number">1</span></div><div class="line">Treated   Female             <span class="number">6</span>    <span class="number">5</span>     <span class="number">16</span></div><div class="line">          Male               <span class="number">7</span>    <span class="number">2</span>      <span class="number">5</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#边际频数</span></div><div class="line">&gt; margin.table(mytable,<span class="number">1</span>)</div><div class="line">Treatment</div><div class="line">Placebo Treated </div><div class="line">     <span class="number">43</span>      <span class="number">41</span> </div><div class="line">&gt; margin.table(mytable,<span class="number">2</span>)</div><div class="line">Sex</div><div class="line">Female   Male </div><div class="line">    <span class="number">59</span>     <span class="number">25</span> </div><div class="line">&gt; margin.table(mytable,<span class="number">3</span>)</div><div class="line">Improved</div><div class="line">  None   Some Marked </div><div class="line">    <span class="number">42</span>     <span class="number">14</span>     <span class="number">28</span> </div><div class="line">&gt; margin.table(mytable,c(<span class="number">1</span>,<span class="number">3</span>))</div><div class="line">         Improved</div><div class="line">Treatment None Some Marked</div><div class="line">  Placebo   <span class="number">29</span>    <span class="number">7</span>      <span class="number">7</span></div><div class="line">  Treated   <span class="number">13</span>    <span class="number">7</span>     <span class="number">21</span></div><div class="line">&gt; ftable(prop.table(mytable,c(<span class="number">1</span>,<span class="number">2</span>)))</div><div class="line">                 Improved       None       Some     Marked</div><div class="line">Treatment Sex                                             </div><div class="line">Placebo   Female          <span class="number">0.59375000</span> <span class="number">0.21875000</span> <span class="number">0.18750000</span></div><div class="line">          Male            <span class="number">0.90909091</span> <span class="number">0.00000000</span> <span class="number">0.09090909</span></div><div class="line">Treated   Female          <span class="number">0.22222222</span> <span class="number">0.18518519</span> <span class="number">0.59259259</span></div><div class="line">          Male            <span class="number">0.50000000</span> <span class="number">0.14285714</span> <span class="number">0.35714286</span></div><div class="line">&gt; </div><div class="line">&gt; ftable(addmargins(prop.table(mytable,c(<span class="number">1</span>,<span class="number">2</span>)),<span class="number">3</span>))</div><div class="line">                 Improved       None       Some     Marked        Sum</div><div class="line">Treatment Sex                                                        </div><div class="line">Placebo   Female          <span class="number">0.59375000</span> <span class="number">0.21875000</span> <span class="number">0.18750000</span> <span class="number">1.00000000</span></div><div class="line">          Male            <span class="number">0.90909091</span> <span class="number">0.00000000</span> <span class="number">0.09090909</span> <span class="number">1.00000000</span></div><div class="line">Treated   Female          <span class="number">0.22222222</span> <span class="number">0.18518519</span> <span class="number">0.59259259</span> <span class="number">1.00000000</span></div><div class="line">          Male            <span class="number">0.50000000</span> <span class="number">0.14285714</span> <span class="number">0.35714286</span> <span class="number">1.00000000</span></div></pre></td></tr></table></figure>
+<h3 id="（2）独立性检验"><a href="#（2）独立性检验" class="headerlink" title="（2）独立性检验"></a>（2）独立性检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#独立性检验</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#卡方独立性检验</span></div><div class="line">&gt; <span class="comment">#p值表示独立性的概率，一般以0.01为分界</span></div><div class="line">&gt; <span class="keyword">library</span>(vcd)</div><div class="line">&gt; mytable&lt;-xtabs(~Treatment+Improved,data=Arthritis)</div><div class="line">&gt; chisq.test(mytable)</div><div class="line"></div><div class="line">	Pearson-s Chi-squared test</div><div class="line"></div><div class="line">data:  mytable</div><div class="line">X-squared = <span class="number">13.055</span>, df = <span class="number">2</span>, p-value = <span class="number">0.001463</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; mytable&lt;-xtabs(~Improved+Sex,data=Arthritis)</div><div class="line">&gt; chisq.test(mytable)</div><div class="line"></div><div class="line">	Pearson-s Chi-squared test</div><div class="line"></div><div class="line">data:  mytable</div><div class="line">X-squared = <span class="number">4.8407</span>, df = <span class="number">2</span>, p-value = <span class="number">0.08889</span></div><div class="line"></div><div class="line">Warning message:</div><div class="line">In chisq.test(mytable) : Chi-squared近似算法有可能不准</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#fisher精确检验</span></div><div class="line">&gt; mytable&lt;-xtabs(~Treatment+Improved,data=Arthritis)</div><div class="line">&gt; fisher.test(mytable)</div><div class="line"></div><div class="line">	Fisher-s Exact Test <span class="keyword">for</span> Count Data</div><div class="line"></div><div class="line">data:  mytable</div><div class="line">p-value = <span class="number">0.001393</span></div><div class="line">alternative hypothesis: two.sided</div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#Cochran-Mantel—Haenszel检验</span></div><div class="line">&gt; <span class="comment">#原假设是，两个名义变量在第三个变量的每一层中都是条件独立的</span></div><div class="line">&gt; mytable&lt;-xtabs(~Treatment+Improved+Sex,data=Arthritis)</div><div class="line">&gt; mantelhaen.test(mytable)</div><div class="line"></div><div class="line">	Cochran-Mantel-Haenszel test</div><div class="line"></div><div class="line">data:  mytable</div><div class="line">Cochran-Mantel-Haenszel M^<span class="number">2</span> = <span class="number">14.632</span>, df = <span class="number">2</span>, p-value = <span class="number">0.0006647</span></div></pre></td></tr></table></figure>
+<h3 id="（3）相关性的度量"><a href="#（3）相关性的度量" class="headerlink" title="（3）相关性的度量"></a>（3）相关性的度量</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#相关性的检验</span></div><div class="line">&gt; <span class="comment">#二维列联表的phi系数、列联系数和Cramer’s V系数</span></div><div class="line">&gt; <span class="keyword">library</span>(vcd)</div><div class="line">&gt; mytable&lt;-xtabs(~Treatment+Improved, data = Arthritis)</div><div class="line">&gt; assocstats(mytable)</div><div class="line">                    X^<span class="number">2</span> df  P(&gt; X^<span class="number">2</span>)</div><div class="line">Likelihood Ratio <span class="number">13.530</span>  <span class="number">2</span> <span class="number">0.0011536</span></div><div class="line">Pearson          <span class="number">13.055</span>  <span class="number">2</span> <span class="number">0.0014626</span></div><div class="line"></div><div class="line">Phi-Coefficient   : <span class="literal">NA</span> </div><div class="line">Contingency Coeff.: <span class="number">0.367</span> </div><div class="line">Cramer-s V        : <span class="number">0.394</span> </div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#列联表转化为扁平表</span></div><div class="line">&gt; table2flat &lt;- <span class="keyword">function</span>(mytable) &#123;</div><div class="line">+   <span class="comment">#转换成扁平表包含频数</span></div><div class="line">+   df &lt;- as.data.frame(mytable)</div><div class="line">+   <span class="comment">#取得扁平表的行数与列数</span></div><div class="line">+   rows &lt;- dim(df)[<span class="number">1</span>]</div><div class="line">+   cols &lt;- dim(df)[<span class="number">2</span>]</div><div class="line">+   x &lt;- <span class="literal">NULL</span></div><div class="line">+   </div><div class="line">+   <span class="comment">#重新构造每一行，根据频数</span></div><div class="line">+   <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:rows) &#123;</div><div class="line">+     <span class="keyword">for</span> (j <span class="keyword">in</span> <span class="number">1</span>:df$Freq[i]) &#123;</div><div class="line">+       row &lt;- df[i, c(<span class="number">1</span>:(cols - <span class="number">1</span>))]</div><div class="line">+       x &lt;- rbind(x,row)</div><div class="line">+     &#125;</div><div class="line">+   &#125;</div><div class="line">+   </div><div class="line">+   <span class="comment">#重新对行名进行赋值</span></div><div class="line">+   row.names(x) &lt;- c(<span class="number">1</span>:dim(x)[<span class="number">1</span>])</div><div class="line">+   <span class="keyword">return</span>(x)</div><div class="line">+ &#125;</div><div class="line">&gt; table2flat(mytable)</div><div class="line">   Treatment Improved</div><div class="line"><span class="number">1</span>    Placebo     None</div><div class="line"><span class="number">2</span>    Placebo     None</div><div class="line"><span class="number">3</span>    Placebo     None</div><div class="line"><span class="number">4</span>    Placebo     None</div><div class="line"><span class="number">5</span>    Placebo     None</div><div class="line"><span class="number">6</span>    Placebo     None</div><div class="line"><span class="number">7</span>    Placebo     None</div><div class="line">…</div></pre></td></tr></table></figure>
+<p>转换列联表为扁平表的函数</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#转换列联表为扁平表的函数：</span></div><div class="line"><span class="comment">#列联表转化为扁平表</span></div><div class="line">table2flat &lt;- <span class="keyword">function</span>(mytable) &#123;</div><div class="line">  <span class="comment">#转换成扁平表包含频数</span></div><div class="line">  df &lt;- as.data.frame(mytable)</div><div class="line">  <span class="comment">#取得扁平表的行数与列数</span></div><div class="line">  rows &lt;- dim(df)[<span class="number">1</span>]</div><div class="line">  cols &lt;- dim(df)[<span class="number">2</span>]</div><div class="line">  x &lt;- <span class="literal">NULL</span></div><div class="line">  </div><div class="line">  <span class="comment">#重新构造每一行，根据频数</span></div><div class="line">  <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:rows) &#123;</div><div class="line">    <span class="keyword">for</span> (j <span class="keyword">in</span> <span class="number">1</span>:df$Freq[i]) &#123;</div><div class="line">      row &lt;- df[i, c(<span class="number">1</span>:(cols - <span class="number">1</span>))]</div><div class="line">      x &lt;- rbind(x,row)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">#重新对行名进行赋值</span></div><div class="line">  row.names(x) &lt;- c(<span class="number">1</span>:dim(x)[<span class="number">1</span>])</div><div class="line">  <span class="keyword">return</span>(x)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="3、相关"><a href="#3、相关" class="headerlink" title="3、相关"></a>3、相关</h2><h3 id="（1）相关的类型"><a href="#（1）相关的类型" class="headerlink" title="（1）相关的类型"></a>（1）相关的类型</h3><p>相关性系数包含包括Pearson相关系数、 Spearman相关系数、 Kendall相关系数、偏相关系数、多分格（polychoric）相关系数和多系列（polyserial）相关系数。下面让我们依次理解这些相关系数。</p>
+<p>Pearson、 Spearman和Kendall相关</p>
+<ul>
+<li>Pearson积差相关系数衡量了两个定量变量之间的线性相关程度。</li>
+<li>Spearman等级相关系数则衡量分级定序变量之间的相关程度。 </li>
+<li>Kendall’s Tau相关系数也是一种非参数的等级相关度量。</li>
+</ul>
+<p>cor函数可以计算三种相关性系数：<code>cor(x, use= ,method= )</code>，<code>cov</code>可以计算协方差</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>矩阵或数据框</td>
+</tr>
+<tr>
+<td>use</td>
+<td>指定缺失数据的处理方式。可选的方式为all.obs（假设不存在缺失数据——遇到缺失数据时将报错）、 everything  （默认参数，遇到缺失数据时，相关系数的计算结果将被设为missing）、 complete.obs（行删除）以及 pairwise.complete.obs（成对删除， pairwise deletion）</td>
+</tr>
+<tr>
+<td>method</td>
+<td>指定相关系数的类型。可选类型为pearson（默认）、 spearman或kendall</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#相关性系数</span></div><div class="line">&gt; </div><div class="line">&gt; state &lt;- state.x77[,<span class="number">1</span>:<span class="number">6</span>]</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#协方差</span></div><div class="line">&gt; cov(state)</div><div class="line">              Population      Income   Illiteracy     Life Exp      Murder      HS Grad</div><div class="line">Population <span class="number">19931683.7588</span> <span class="number">571229.7796</span>  <span class="number">292.8679592</span> -<span class="number">407.8424612</span> <span class="number">5663.523714</span> -<span class="number">3551.509551</span></div><div class="line">Income       <span class="number">571229.7796</span> <span class="number">377573.3061</span> -<span class="number">163.7020408</span>  <span class="number">280.6631837</span> -<span class="number">521.894286</span>  <span class="number">3076.768980</span></div><div class="line">Illiteracy      <span class="number">292.8680</span>   -<span class="number">163.7020</span>    <span class="number">0.3715306</span>   -<span class="number">0.4815122</span>    <span class="number">1.581776</span>    -<span class="number">3.235469</span></div><div class="line">Life Exp       -<span class="number">407.8425</span>    <span class="number">280.6632</span>   -<span class="number">0.4815122</span>    <span class="number">1.8020204</span>   -<span class="number">3.869480</span>     <span class="number">6.312685</span></div><div class="line">Murder         <span class="number">5663.5237</span>   -<span class="number">521.8943</span>    <span class="number">1.5817755</span>   -<span class="number">3.8694804</span>   <span class="number">13.627465</span>   -<span class="number">14.549616</span></div><div class="line">HS Grad       -<span class="number">3551.5096</span>   <span class="number">3076.7690</span>   -<span class="number">3.2354694</span>    <span class="number">6.3126849</span>  -<span class="number">14.549616</span>    <span class="number">65.237894</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#相关系数</span></div><div class="line">&gt; cor(state)</div><div class="line">            Population     Income Illiteracy    Life Exp     Murder     HS Grad</div><div class="line">Population  <span class="number">1.00000000</span>  <span class="number">0.2082276</span>  <span class="number">0.1076224</span> -<span class="number">0.06805195</span>  <span class="number">0.3436428</span> -<span class="number">0.09848975</span></div><div class="line">Income      <span class="number">0.20822756</span>  <span class="number">1.0000000</span> -<span class="number">0.4370752</span>  <span class="number">0.34025534</span> -<span class="number">0.2300776</span>  <span class="number">0.61993232</span></div><div class="line">Illiteracy  <span class="number">0.10762237</span> -<span class="number">0.4370752</span>  <span class="number">1.0000000</span> -<span class="number">0.58847793</span>  <span class="number">0.7029752</span> -<span class="number">0.65718861</span></div><div class="line">Life Exp   -<span class="number">0.06805195</span>  <span class="number">0.3402553</span> -<span class="number">0.5884779</span>  <span class="number">1.00000000</span> -<span class="number">0.7808458</span>  <span class="number">0.58221620</span></div><div class="line">Murder      <span class="number">0.34364275</span> -<span class="number">0.2300776</span>  <span class="number">0.7029752</span> -<span class="number">0.78084575</span>  <span class="number">1.0000000</span> -<span class="number">0.48797102</span></div><div class="line">HS Grad    -<span class="number">0.09848975</span>  <span class="number">0.6199323</span> -<span class="number">0.6571886</span>  <span class="number">0.58221620</span> -<span class="number">0.4879710</span>  <span class="number">1.00000000</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#相关系数</span></div><div class="line">&gt; cor(state, method=<span class="string">"spearman"</span>)</div><div class="line">           Population     Income Illiteracy   Life Exp     Murder    HS Grad</div><div class="line">Population  <span class="number">1.0000000</span>  <span class="number">0.1246098</span>  <span class="number">0.3130496</span> -<span class="number">0.1040171</span>  <span class="number">0.3457401</span> -<span class="number">0.3833649</span></div><div class="line">Income      <span class="number">0.1246098</span>  <span class="number">1.0000000</span> -<span class="number">0.3145948</span>  <span class="number">0.3241050</span> -<span class="number">0.2174623</span>  <span class="number">0.5104809</span></div><div class="line">Illiteracy  <span class="number">0.3130496</span> -<span class="number">0.3145948</span>  <span class="number">1.0000000</span> -<span class="number">0.5553735</span>  <span class="number">0.6723592</span> -<span class="number">0.6545396</span></div><div class="line">Life Exp   -<span class="number">0.1040171</span>  <span class="number">0.3241050</span> -<span class="number">0.5553735</span>  <span class="number">1.0000000</span> -<span class="number">0.7802406</span>  <span class="number">0.5239410</span></div><div class="line">Murder      <span class="number">0.3457401</span> -<span class="number">0.2174623</span>  <span class="number">0.6723592</span> -<span class="number">0.7802406</span>  <span class="number">1.0000000</span> -<span class="number">0.4367330</span></div><div class="line">HS Grad    -<span class="number">0.3833649</span>  <span class="number">0.5104809</span> -<span class="number">0.6545396</span>  <span class="number">0.5239410</span> -<span class="number">0.4367330</span>  <span class="number">1.0000000</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#默认情况显示方阵也可以非方阵进行显示</span></div><div class="line">&gt; x&lt;-state[,c(<span class="string">"Population"</span>,<span class="string">"Income"</span>,<span class="string">"Illiteracy"</span>,<span class="string">"HS Grad"</span>)]</div><div class="line">&gt; y&lt;-state[,c(<span class="string">"Life Exp"</span>,<span class="string">"Murder"</span>)]</div><div class="line">&gt; </div><div class="line">&gt; cor(x,y)</div><div class="line">              Life Exp     Murder</div><div class="line">Population -<span class="number">0.06805195</span>  <span class="number">0.3436428</span></div><div class="line">Income      <span class="number">0.34025534</span> -<span class="number">0.2300776</span></div><div class="line">Illiteracy -<span class="number">0.58847793</span>  <span class="number">0.7029752</span></div><div class="line">HS Grad     <span class="number">0.58221620</span> -<span class="number">0.4879710</span></div></pre></td></tr></table></figure>
+<p>偏相关<br><code>pcor(u, S)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#偏相关</span></div><div class="line">&gt; <span class="comment">#pcor(u, S) u为数值向量，前两个为要计算相关的下标，其余为控制变量</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(ggm)</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#在控制收入 文盲率 高中毕业率时，人口和谋杀率的偏相关系数</span></div><div class="line">&gt; pcor(c(<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>), cov(state))</div><div class="line">[<span class="number">1</span>] <span class="number">0.3462724</span></div></pre></td></tr></table></figure>
+<h3 id="（2）相关的显著性检验"><a href="#（2）相关的显著性检验" class="headerlink" title="（2）相关的显著性检验"></a>（2）相关的显著性检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#相关性的显著性检验</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#cor.test(x,y, alternative = ,method = )</span></div><div class="line">&gt; <span class="comment">#x,y为检验的变量，alternative标识指定双侧检验或者单侧检验，two.side(默认), less(一般为相关系数&lt;0) or greater(~&gt;0)</span></div><div class="line">&gt; <span class="comment">#method用于指定计算的相关类型，pearson, kendall,  spearman</span></div><div class="line">&gt; </div><div class="line">&gt; cor.test(state[,<span class="number">3</span>],state[,<span class="number">5</span>])</div><div class="line"></div><div class="line">	Pearson-s product-moment correlation</div><div class="line"></div><div class="line">data:  state[, <span class="number">3</span>] and state[, <span class="number">5</span>]</div><div class="line">t = <span class="number">6.8479</span>, df = <span class="number">48</span>, p-value = <span class="number">1.258e-08</span></div><div class="line">alternative hypothesis: true correlation is not equal to <span class="number">0</span></div><div class="line"><span class="number">95</span> percent confidence interval:</div><div class="line"> <span class="number">0.5279280</span> <span class="number">0.8207295</span></div><div class="line">sample estimates:</div><div class="line">      cor </div><div class="line"><span class="number">0.7029752</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#cor.test只能计算一组变量，psych包corr.test计算多组变量并且计算不同的相关系数及其显著性参数</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="keyword">library</span>(psych)</div><div class="line">&gt; </div><div class="line">&gt; corr.test(state, use=<span class="string">"complete"</span>)</div><div class="line">Call:corr.test(x = state, use = <span class="string">"complete"</span>)</div><div class="line">Correlation matrix </div><div class="line">           Population Income Illiteracy Life Exp Murder HS Grad</div><div class="line">Population       <span class="number">1.00</span>   <span class="number">0.21</span>       <span class="number">0.11</span>    -<span class="number">0.07</span>   <span class="number">0.34</span>   -<span class="number">0.10</span></div><div class="line">Income           <span class="number">0.21</span>   <span class="number">1.00</span>      -<span class="number">0.44</span>     <span class="number">0.34</span>  -<span class="number">0.23</span>    <span class="number">0.62</span></div><div class="line">Illiteracy       <span class="number">0.11</span>  -<span class="number">0.44</span>       <span class="number">1.00</span>    -<span class="number">0.59</span>   <span class="number">0.70</span>   -<span class="number">0.66</span></div><div class="line">Life Exp        -<span class="number">0.07</span>   <span class="number">0.34</span>      -<span class="number">0.59</span>     <span class="number">1.00</span>  -<span class="number">0.78</span>    <span class="number">0.58</span></div><div class="line">Murder           <span class="number">0.34</span>  -<span class="number">0.23</span>       <span class="number">0.70</span>    -<span class="number">0.78</span>   <span class="number">1.00</span>   -<span class="number">0.49</span></div><div class="line">HS Grad         -<span class="number">0.10</span>   <span class="number">0.62</span>      -<span class="number">0.66</span>     <span class="number">0.58</span>  -<span class="number">0.49</span>    <span class="number">1.00</span></div><div class="line">Sample Size </div><div class="line">[<span class="number">1</span>] <span class="number">50</span></div><div class="line">Probability values (Entries above the diagonal are adjusted <span class="keyword">for</span> multiple tests.) </div><div class="line">           Population Income Illiteracy Life Exp Murder HS Grad</div><div class="line">Population       <span class="number">0.00</span>   <span class="number">0.59</span>       <span class="number">1.00</span>      <span class="number">1.0</span>   <span class="number">0.10</span>       <span class="number">1</span></div><div class="line">Income           <span class="number">0.15</span>   <span class="number">0.00</span>       <span class="number">0.01</span>      <span class="number">0.1</span>   <span class="number">0.54</span>       <span class="number">0</span></div><div class="line">Illiteracy       <span class="number">0.46</span>   <span class="number">0.00</span>       <span class="number">0.00</span>      <span class="number">0.0</span>   <span class="number">0.00</span>       <span class="number">0</span></div><div class="line">Life Exp         <span class="number">0.64</span>   <span class="number">0.02</span>       <span class="number">0.00</span>      <span class="number">0.0</span>   <span class="number">0.00</span>       <span class="number">0</span></div><div class="line">Murder           <span class="number">0.01</span>   <span class="number">0.11</span>       <span class="number">0.00</span>      <span class="number">0.0</span>   <span class="number">0.00</span>       <span class="number">0</span></div><div class="line">HS Grad          <span class="number">0.50</span>   <span class="number">0.00</span>       <span class="number">0.00</span>      <span class="number">0.0</span>   <span class="number">0.00</span>       <span class="number">0</span></div><div class="line"></div><div class="line"> To see confidence intervals of the correlations, print with the short=<span class="literal">FALSE</span> option</div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#use=的取值可为"pairwise"或"complete"（分别表示对缺失值执行成对删除或行删</span></div><div class="line">&gt; <span class="comment">#除） 。参数method=的取值可为"pearson"（默认值）、 "spearman"或"kendall"。</span></div><div class="line">&gt; <span class="comment">#偏相关显著性检验可使用pcor.test(r, q, n) r=偏相关系数，q=控制变量的位置，n=样本大小</span></div><div class="line">&gt; </div><div class="line">&gt; pcor.test(pcor(c(<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>), cov(state)),<span class="number">2</span>,<span class="number">50</span>)</div><div class="line">$tval</div><div class="line">[<span class="number">1</span>] <span class="number">2.503409</span></div><div class="line"></div><div class="line">$df</div><div class="line">[<span class="number">1</span>] <span class="number">46</span></div><div class="line"></div><div class="line">$pvalue</div><div class="line">[<span class="number">1</span>] <span class="number">0.01591253</span></div></pre></td></tr></table></figure>
+<h2 id="4、T检验"><a href="#4、T检验" class="headerlink" title="4、T检验"></a>4、T检验</h2><h3 id="（1）独立样本的T检验"><a href="#（1）独立样本的T检验" class="headerlink" title="（1）独立样本的T检验"></a>（1）独立样本的T检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#t检验</span></div><div class="line">&gt; <span class="comment">#使用MASS包中的UScrime数据集。它包含了1960年美国47个州的刑</span></div><div class="line">&gt; <span class="comment">#罚制度对犯罪率影响的信息。我们感兴趣的结果变量为Prob（监禁的概率） 、 U1（14~24岁年龄</span></div><div class="line">&gt; <span class="comment">#段城市男性失业率）和U2（35~39岁年龄段城市男性失业率）。类别型变量So（指示该州是否位</span></div><div class="line">&gt; <span class="comment">#于南方的指示变量）将作为分组变量使用。</span></div><div class="line">&gt; <span class="keyword">library</span>(MASS)</div><div class="line">&gt; </div><div class="line">&gt; describe(UScrime)</div><div class="line">     vars  n   mean     sd median trimmed    mad    min     max   range  skew kurtosis    se</div><div class="line">M       <span class="number">1</span> <span class="number">47</span> <span class="number">138.57</span>  <span class="number">12.57</span> <span class="number">136.00</span>  <span class="number">137.54</span>  <span class="number">11.86</span> <span class="number">119.00</span>  <span class="number">177.00</span>   <span class="number">58.00</span>  <span class="number">0.82</span>     <span class="number">0.38</span>  <span class="number">1.83</span></div><div class="line">So      <span class="number">2</span> <span class="number">47</span>   <span class="number">0.34</span>   <span class="number">0.48</span>   <span class="number">0.00</span>    <span class="number">0.31</span>   <span class="number">0.00</span>   <span class="number">0.00</span>    <span class="number">1.00</span>    <span class="number">1.00</span>  <span class="number">0.65</span>    -<span class="number">1.61</span>  <span class="number">0.07</span></div><div class="line">Ed      <span class="number">3</span> <span class="number">47</span> <span class="number">105.64</span>  <span class="number">11.19</span> <span class="number">108.00</span>  <span class="number">105.90</span>  <span class="number">11.86</span>  <span class="number">87.00</span>  <span class="number">122.00</span>   <span class="number">35.00</span> -<span class="number">0.32</span>    -<span class="number">1.15</span>  <span class="number">1.63</span></div><div class="line">Po1     <span class="number">4</span> <span class="number">47</span>  <span class="number">85.00</span>  <span class="number">29.72</span>  <span class="number">78.00</span>   <span class="number">82.13</span>  <span class="number">28.17</span>  <span class="number">45.00</span>  <span class="number">166.00</span>  <span class="number">121.00</span>  <span class="number">0.89</span>     <span class="number">0.16</span>  <span class="number">4.33</span></div><div class="line">Po2     <span class="number">5</span> <span class="number">47</span>  <span class="number">80.23</span>  <span class="number">27.96</span>  <span class="number">73.00</span>   <span class="number">77.59</span>  <span class="number">28.17</span>  <span class="number">41.00</span>  <span class="number">157.00</span>  <span class="number">116.00</span>  <span class="number">0.84</span>     <span class="number">0.01</span>  <span class="number">4.08</span></div><div class="line">LF      <span class="number">6</span> <span class="number">47</span> <span class="number">561.19</span>  <span class="number">40.41</span> <span class="number">560.00</span>  <span class="number">559.87</span>  <span class="number">45.96</span> <span class="number">480.00</span>  <span class="number">641.00</span>  <span class="number">161.00</span>  <span class="number">0.27</span>    -<span class="number">0.89</span>  <span class="number">5.89</span></div><div class="line">M.F     <span class="number">7</span> <span class="number">47</span> <span class="number">983.02</span>  <span class="number">29.47</span> <span class="number">977.00</span>  <span class="number">980.23</span>  <span class="number">19.27</span> <span class="number">934.00</span> <span class="number">1071.00</span>  <span class="number">137.00</span>  <span class="number">0.99</span>     <span class="number">0.65</span>  <span class="number">4.30</span></div><div class="line">Pop     <span class="number">8</span> <span class="number">47</span>  <span class="number">36.62</span>  <span class="number">38.07</span>  <span class="number">25.00</span>   <span class="number">29.95</span>  <span class="number">22.24</span>   <span class="number">3.00</span>  <span class="number">168.00</span>  <span class="number">165.00</span>  <span class="number">1.85</span>     <span class="number">3.08</span>  <span class="number">5.55</span></div><div class="line">NW      <span class="number">9</span> <span class="number">47</span> <span class="number">101.13</span> <span class="number">102.83</span>  <span class="number">76.00</span>   <span class="number">85.56</span>  <span class="number">77.10</span>   <span class="number">2.00</span>  <span class="number">423.00</span>  <span class="number">421.00</span>  <span class="number">1.38</span>     <span class="number">1.08</span> <span class="number">15.00</span></div><div class="line">U1     <span class="number">10</span> <span class="number">47</span>  <span class="number">95.47</span>  <span class="number">18.03</span>  <span class="number">92.00</span>   <span class="number">93.69</span>  <span class="number">17.79</span>  <span class="number">70.00</span>  <span class="number">142.00</span>   <span class="number">72.00</span>  <span class="number">0.77</span>    -<span class="number">0.13</span>  <span class="number">2.63</span></div><div class="line">U2     <span class="number">11</span> <span class="number">47</span>  <span class="number">33.98</span>   <span class="number">8.45</span>  <span class="number">34.00</span>   <span class="number">33.49</span>   <span class="number">8.90</span>  <span class="number">20.00</span>   <span class="number">58.00</span>   <span class="number">38.00</span>  <span class="number">0.54</span>     <span class="number">0.17</span>  <span class="number">1.23</span></div><div class="line">GDP    <span class="number">12</span> <span class="number">47</span> <span class="number">525.38</span>  <span class="number">96.49</span> <span class="number">537.00</span>  <span class="number">528.67</span> <span class="number">111.19</span> <span class="number">288.00</span>  <span class="number">689.00</span>  <span class="number">401.00</span> -<span class="number">0.38</span>    -<span class="number">0.61</span> <span class="number">14.07</span></div><div class="line">Ineq   <span class="number">13</span> <span class="number">47</span> <span class="number">194.00</span>  <span class="number">39.90</span> <span class="number">176.00</span>  <span class="number">192.79</span>  <span class="number">35.58</span> <span class="number">126.00</span>  <span class="number">276.00</span>  <span class="number">150.00</span>  <span class="number">0.37</span>    -<span class="number">1.14</span>  <span class="number">5.82</span></div><div class="line">Prob   <span class="number">14</span> <span class="number">47</span>   <span class="number">0.05</span>   <span class="number">0.02</span>   <span class="number">0.04</span>    <span class="number">0.05</span>   <span class="number">0.02</span>   <span class="number">0.01</span>    <span class="number">0.12</span>    <span class="number">0.11</span>  <span class="number">0.88</span>     <span class="number">0.75</span>  <span class="number">0.00</span></div><div class="line">Time   <span class="number">15</span> <span class="number">47</span>  <span class="number">26.60</span>   <span class="number">7.09</span>  <span class="number">25.80</span>   <span class="number">26.35</span>   <span class="number">6.37</span>  <span class="number">12.20</span>   <span class="number">44.00</span>   <span class="number">31.80</span>  <span class="number">0.37</span>    -<span class="number">0.41</span>  <span class="number">1.03</span></div><div class="line">y      <span class="number">16</span> <span class="number">47</span> <span class="number">905.09</span> <span class="number">386.76</span> <span class="number">831.00</span>  <span class="number">863.05</span> <span class="number">314.31</span> <span class="number">342.00</span> <span class="number">1993.00</span> <span class="number">1651.00</span>  <span class="number">1.05</span>     <span class="number">0.78</span> <span class="number">56.42</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#独立样本T检验</span></div><div class="line">&gt; <span class="comment">#t检验的假设两组数据独立且源自正太总体，调用格式</span></div><div class="line">&gt; <span class="comment">#t.test(y~x, data) y为数值型，x为二分型变量</span></div><div class="line">&gt; <span class="comment">#t.test(y1,y2) 均为数值型变量，data为可选，表示包含这些变量的矩阵或数据框</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#t检验默认方差不相等，var.equal=TRUE以假定方差相等</span></div><div class="line">&gt; <span class="comment">#默认备择假设是双侧（均值不相等，大小的方向不确定）</span></div><div class="line">&gt; <span class="comment">#可添加alternative="less" 或 alternative="greater"进行有方向的检验</span></div><div class="line">&gt; </div><div class="line">&gt; t.test(Prob~So, data=UScrime)</div><div class="line"></div><div class="line">	Welch Two Sample t-test</div><div class="line"></div><div class="line">data:  Prob by So</div><div class="line">t = -<span class="number">3.8954</span>, df = <span class="number">24.925</span>, p-value = <span class="number">0.0006506</span></div><div class="line">alternative hypothesis: true difference <span class="keyword">in</span> means is not equal to <span class="number">0</span></div><div class="line"><span class="number">95</span> percent confidence interval:</div><div class="line"> -<span class="number">0.03852569</span> -<span class="number">0.01187439</span></div><div class="line">sample estimates:</div><div class="line">mean <span class="keyword">in</span> group <span class="number">0</span> mean <span class="keyword">in</span> group <span class="number">1</span> </div><div class="line">     <span class="number">0.03851265</span>      <span class="number">0.06371269</span></div></pre></td></tr></table></figure>
+<h3 id="（2）非独立样本的T检验"><a href="#（2）非独立样本的T检验" class="headerlink" title="（2）非独立样本的T检验"></a>（2）非独立样本的T检验</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#非独立样本T检验</span></div><div class="line">&gt; <span class="comment">#t.test(y1, y2, paired=TRUE)</span></div><div class="line">&gt; </div><div class="line">&gt; with(UScrime, t.test(U1,U2, paired = <span class="literal">TRUE</span>))</div><div class="line"></div><div class="line">	Paired t-test</div><div class="line"></div><div class="line">data:  U1 and U2</div><div class="line">t = <span class="number">32.407</span>, df = <span class="number">46</span>, p-value &lt; <span class="number">2.2e-16</span></div><div class="line">alternative hypothesis: true difference <span class="keyword">in</span> means is not equal to <span class="number">0</span></div><div class="line"><span class="number">95</span> percent confidence interval:</div><div class="line"> <span class="number">57.67003</span> <span class="number">65.30870</span></div><div class="line">sample estimates:</div><div class="line">mean of the differences </div><div class="line">               <span class="number">61.48936</span> </div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#多组使用方差分析，参见第七章</span></div></pre></td></tr></table></figure>
+<h2 id="5、组间差异的非参数检验"><a href="#5、组间差异的非参数检验" class="headerlink" title="5、组间差异的非参数检验"></a>5、组间差异的非参数检验</h2><h3 id="（1）两组的情况"><a href="#（1）两组的情况" class="headerlink" title="（1）两组的情况"></a>（1）两组的情况</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#组间差异的非参数检验</span></div><div class="line">&gt; <span class="comment">#数据无法满足t检验或ANOVA的参数假设，可以转而使用非参数方法。即结果变量</span></div><div class="line">&gt; <span class="comment">#在本质上就严重偏倚或呈现有序关系，</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#两组的比较Wilcoxon秩和检验</span></div><div class="line">&gt; <span class="comment">#wilcox.test(y~x, data)</span></div><div class="line">&gt; <span class="comment">#或者 wilcox.test(y1,y2) data可选，类似t检验</span></div><div class="line">&gt; </div><div class="line">&gt; with(UScrime, by(Prob,So,median))</div><div class="line">So: <span class="number">0</span></div><div class="line">[<span class="number">1</span>] <span class="number">0.038201</span></div><div class="line">------------------------------------------------------------------------------- </div><div class="line">So: <span class="number">1</span></div><div class="line">[<span class="number">1</span>] <span class="number">0.055552</span></div><div class="line">&gt; </div><div class="line">&gt; </div><div class="line">&gt; wilcox.test(Prob~So, data=UScrime)</div><div class="line"></div><div class="line">	Wilcoxon rank sum test</div><div class="line"></div><div class="line">data:  Prob by So</div><div class="line">W = <span class="number">81</span>, p-value = <span class="number">8.488e-05</span></div><div class="line">alternative hypothesis: true location shift is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#p&lt;0.001拒绝0假设</span></div><div class="line">&gt; <span class="comment">#Wilcoxon符号秩检验是非独立样本t检验的一种非参数替代方法。它适用于两组成对数据和</span></div><div class="line">&gt; <span class="comment">#无法保证正态性假设的情境。</span></div><div class="line">&gt; </div><div class="line">&gt; <span class="comment">#非独立的情况</span></div><div class="line">&gt; with(UScrime,wilcox.test(U1, U2, paired=<span class="literal">TRUE</span>))</div><div class="line"></div><div class="line">	Wilcoxon signed rank test with continuity correction</div><div class="line"></div><div class="line">data:  U1 and U2</div><div class="line">V = <span class="number">1128</span>, p-value = <span class="number">2.464e-09</span></div><div class="line">alternative hypothesis: true location shift is not equal to <span class="number">0</span></div><div class="line"></div><div class="line">Warning message:</div><div class="line">In wilcox.test.default(U1, U2, paired = <span class="literal">TRUE</span>) :</div><div class="line">  cannot compute exact p-value with ties</div></pre></td></tr></table></figure>
+<h3 id="（2）多于两组的情况"><a href="#（2）多于两组的情况" class="headerlink" title="（2）多于两组的情况"></a>（2）多于两组的情况</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="comment">#多于两组的情况</span></div><div class="line">&gt; <span class="comment">#如果各组独立，则Kruskal—Wallis检验将是一种实用的方法。如果各组不独立（如重复测量设计或随机区</span></div><div class="line">&gt; <span class="comment">#组设计），那么Friedman检验会更合适。</span></div><div class="line">&gt; <span class="comment">#</span></div><div class="line">&gt; <span class="comment">#kruskal.test(y~A, data) y是一个数值型变量，A是一个拥有两个或更多水平的分组变量</span></div><div class="line">&gt; <span class="comment">#</span></div><div class="line">&gt; <span class="comment">#friedman.test(y~A|B, data) y是数值变量，A是分组变量，B用于认定匹配观测的区组变量</span></div><div class="line">&gt; <span class="comment">#</span></div><div class="line">&gt; <span class="comment">#文盲率问题</span></div><div class="line">&gt; <span class="comment">#添加地区名称数据</span></div><div class="line">&gt; states&lt;- as.data.frame(cbind(state.region, state.x77))</div><div class="line">&gt; </div><div class="line">&gt; kruskal.test(Illiteracy~state.region,data=states)</div><div class="line"></div><div class="line">	Kruskal-Wallis rank sum test</div><div class="line"></div><div class="line">data:  Illiteracy by state.region</div><div class="line">Kruskal-Wallis chi-squared = <span class="number">22.672</span>, df = <span class="number">3</span>, p-value = <span class="number">4.726e-05</span></div><div class="line"></div><div class="line">&gt; <span class="comment">#结果表明各地区的文盲率不同(p&lt;0.001)</span></div></pre></td></tr></table></figure>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R基本统计分析/">R基本统计分析</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/06/chapter07-基本统计分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/06/chapter07-基本统计分析/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/06/chapter06-基本图形/" title="chapter06 基本图形" itemprop="url">chapter06 基本图形</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-06T05:58:07.000Z" itemprop="datePublished"> 发表于 2017-01-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="基本图形"><a href="#基本图形" class="headerlink" title="基本图形"></a>基本图形</h1><h2 id="1、条形图"><a href="#1、条形图" class="headerlink" title="1、条形图"></a>1、条形图</h2><p>安装包<code>install.packages(&quot;vcd&quot;)</code></p>
+<p>安装包包含测试数据<code>Arthritis</code>，以及用户荆棘图组件<code>spinogram</code></p>
+<h3 id="（1）简单的条形图"><a href="#（1）简单的条形图" class="headerlink" title="（1）简单的条形图"></a>（1）简单的条形图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(<span class="string">"vcd"</span>)</div><div class="line">counts=table(Arthritis$Improved)</div><div class="line"><span class="comment">#简单条形图</span></div><div class="line">barplot(counts,main=<span class="string">"Simple Bar"</span>,xlab=<span class="string">"Improvement"</span>,ylab=<span class="string">"Count"</span>)</div><div class="line"><span class="comment">#水平条形图</span></div><div class="line">barplot(counts,main=<span class="string">"Simple Bar"</span>,xlab=<span class="string">"Improvement"</span>,ylab=<span class="string">"Count"</span>,horiz = <span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image001.png" alt=""><br><img src="/2017/01/06/chapter06-基本图形/image002.png" alt=""></p>
+<p>如果要绘制的类别型变量是一个因子或有序型因子，就可以使用函数plot()快速创建一幅垂直条形图。</p>
+<h3 id="（2）堆砌条形图和分组条形图"><a href="#（2）堆砌条形图和分组条形图" class="headerlink" title="（2）堆砌条形图和分组条形图"></a>（2）堆砌条形图和分组条形图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">count&lt;-table(Arthritis$Improved, Arthritis$Treatment)</div><div class="line"><span class="comment">#堆砌柱状图</span></div><div class="line">barplot(count,main=<span class="string">"Stacked Bar Plot"</span>, xlab=<span class="string">"Treatment"</span>, ylab=<span class="string">"Frequency"</span>, col=c(<span class="string">"red"</span>,<span class="string">"yellow"</span>,<span class="string">"green"</span>))</div><div class="line"><span class="comment">#用于调整不合适的图例位置，xpd表示可以在图外绘制</span></div><div class="line">legend(x=<span class="number">2</span>,y=<span class="number">50</span>,rownames(count),pch=c(<span class="number">15</span>,<span class="number">15</span>,<span class="number">15</span>),col=c(<span class="string">"red"</span>,<span class="string">"yellow"</span>,<span class="string">"green"</span>),horiz = <span class="literal">FALSE</span>,xpd=<span class="literal">TRUE</span>);</div><div class="line"><span class="comment">#分组柱状图</span></div><div class="line">barplot(count,main=<span class="string">"Stacked Bar Plot"</span>, xlab=<span class="string">"Treatment"</span>, ylab=<span class="string">"Frequency"</span>, col=c(<span class="string">"red"</span>,<span class="string">"yellow"</span>,<span class="string">"green"</span>),legend=rownames(count), beside=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image003.png" alt=""><br><img src="/2017/01/06/chapter06-基本图形/image004.png" alt=""></p>
+<h3 id="（3）均值条形图"><a href="#（3）均值条形图" class="headerlink" title="（3）均值条形图"></a>（3）均值条形图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">states&lt;-data.frame(state.region,state.x77)</div><div class="line"></div><div class="line">means&lt;-aggregate(states$Illiteracy, by=list(state.region), FUN=mean)</div><div class="line">means&lt;-means[order(means$x),]</div><div class="line">bar&lt;-barplot(means$x,names.arg = means$Group.1)</div><div class="line"><span class="comment">#lines()可以加线，注意x=bar，不可以x= means$Group.1，原因是lines会使用不同的比例画线</span></div><div class="line"><span class="comment">#而bar则返回柱状图真正的x轴值</span></div><div class="line">lines(x=bar,y=means$x,type=<span class="string">"b"</span>,pch=<span class="number">22</span>,col=<span class="string">"red"</span>,lty=<span class="number">3</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image005.png" alt=""></p>
+<h3 id="（4）微调柱状图"><a href="#（4）微调柱状图" class="headerlink" title="（4）微调柱状图"></a>（4）微调柱状图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">par(mar=c(<span class="number">5</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">2</span>))</div><div class="line">par(las=<span class="number">2</span>)</div><div class="line">counts=table(Arthritis$Improved)</div><div class="line"><span class="comment"># cex.names = 0.8字体比例</span></div><div class="line">barplot(counts,main=<span class="string">"Treatment Outcome"</span>,horiz = <span class="literal">TRUE</span>,cex.names = <span class="number">0.8</span>,</div><div class="line">        names.arg = c(<span class="string">"No Improvement"</span>,<span class="string">"Some Improvement"</span>,<span class="string">"Marked Improvement"</span>))</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image006.png" alt=""></p>
+<h3 id="（5）棘状图"><a href="#（5）棘状图" class="headerlink" title="（5）棘状图"></a>（5）棘状图</h3><p>棘状图对堆砌条形图进行了重缩放，这样每个条形的高度均为1，每一段的高度即表示比例。棘状图可由vcd包中的函数spine()绘制</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#棘状图</span></div><div class="line"><span class="keyword">library</span>(vcd)</div><div class="line"><span class="keyword">attach</span>(Arthritis)</div><div class="line">counts&lt;-table(Treatment, Improved)</div><div class="line">spine(counts, main=<span class="string">"Spinogram Example"</span>)</div><div class="line"><span class="keyword">detach</span>(Arthritis)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image007.png" alt=""></p>
+<h2 id="2、饼图"><a href="#2、饼图" class="headerlink" title="2、饼图"></a>2、饼图</h2><h3 id="（1）饼图（表达信息能力弱，不推荐）"><a href="#（1）饼图（表达信息能力弱，不推荐）" class="headerlink" title="（1）饼图（表达信息能力弱，不推荐）"></a>（1）饼图（表达信息能力弱，不推荐）</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#饼图</span></div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line">slices &lt;- c(<span class="number">10</span>,<span class="number">12</span>,<span class="number">4</span>,<span class="number">16</span>,<span class="number">8</span>)</div><div class="line">lbls&lt;-c(<span class="string">"US"</span>,<span class="string">"UK"</span>,<span class="string">"Australia"</span>,<span class="string">"Germany"</span>,<span class="string">"France"</span>)</div><div class="line">pie(slices,labels = lbls,main=<span class="string">"Simple Pie Chart"</span>)</div><div class="line"></div><div class="line">pct&lt;-round(slices/sum(slices)*<span class="number">100</span>)</div><div class="line">lbls2&lt;-paste(lbls, <span class="string">" "</span>,pct,<span class="string">"%"</span>,sep=<span class="string">""</span>)</div><div class="line">pie(slices, labels = lbls2,col=rainbow(length(lbls2)),main=<span class="string">"Pie Chart with Percentages"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">library</span>(plotrix)</div><div class="line">pie3D(slices, labels=lbls, explode=<span class="number">0.1</span>, main=<span class="string">"3D Pie"</span>)</div><div class="line"></div><div class="line">mytable&lt;-table(state.region)</div><div class="line">lbls3&lt;-paste(names(mytable),<span class="string">"\n"</span>,mytable, sep=<span class="string">""</span>)</div><div class="line">pie(mytable, labels = lbls3,main=<span class="string">"Pie Chart from a Table"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image008.png" alt=""></p>
+<h3 id="（2）折叠扇图"><a href="#（2）折叠扇图" class="headerlink" title="（2）折叠扇图"></a>（2）折叠扇图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#折叠扇形</span></div><div class="line"><span class="keyword">library</span>(plotrix)</div><div class="line">slices &lt;- c(<span class="number">10</span>,<span class="number">12</span>,<span class="number">4</span>,<span class="number">16</span>,<span class="number">8</span>)</div><div class="line">lbls&lt;-c(<span class="string">"US"</span>,<span class="string">"UK"</span>,<span class="string">"Australia"</span>,<span class="string">"Germany"</span>,<span class="string">"France"</span>)</div><div class="line">fan.plot(slices,labels = lbls,main=<span class="string">"Simple Pie Chart"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image009.png" alt=""></p>
+<h2 id="3、直方图"><a href="#3、直方图" class="headerlink" title="3、直方图"></a>3、直方图</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#直方图</span></div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">2</span>))</div><div class="line"></div><div class="line">hist(mtcars$mpg)</div><div class="line"></div><div class="line">hist(mtcars$mpg,breaks=<span class="number">12</span>,col=<span class="string">"red"</span>,xlab=<span class="string">"Miles Per Gallon"</span>, main=<span class="string">"Colored histogram with 12 bins"</span>)</div><div class="line"></div><div class="line">hist(mtcars$mpg,</div><div class="line">     freq=<span class="literal">FALSE</span>,</div><div class="line">     breaks=<span class="number">12</span>,</div><div class="line">     col=<span class="string">"red"</span>,</div><div class="line">     xlab=<span class="string">"Miles Per Gallon"</span>,</div><div class="line">     main=<span class="string">"HIstogram, rug plot, density curve"</span>)</div><div class="line"><span class="comment">#打散数据并添加一维数据图 jitter函数使得每个数随机增减一个值</span></div><div class="line">rug(jitter(mtcars$mpg))</div><div class="line"></div><div class="line">lines(density(mtcars$mpg), col=<span class="string">"blue"</span>, lwd=<span class="number">2</span>)</div><div class="line"></div><div class="line">x&lt;-mtcars$mpg</div><div class="line">h&lt;-hist(x,breaks=<span class="number">12</span>,col=<span class="string">"red"</span>,xlab=<span class="string">"Miles Per Gallon"</span>, main=<span class="string">"Histogram with normal curve and box"</span>)</div><div class="line"><span class="comment">#叠加正太曲线</span></div><div class="line">xfit&lt;-seq(min(x),max(x),length=<span class="number">40</span>)</div><div class="line">yfit&lt;-dnorm(xfit, mean=mean(x), sd=sd(x))</div><div class="line"></div><div class="line"><span class="comment">#此处对于y的处理参考一个建议公式，使得形态较好</span></div><div class="line">yfit&lt;-yfit*diff(h$mids[<span class="number">1</span>:<span class="number">2</span>])*length(x)</div><div class="line"></div><div class="line">lines(xfit,yfit,col=<span class="string">"blue"</span>, lwd=<span class="number">2</span>)</div><div class="line">box()</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image010.png" alt=""></p>
+<h2 id="4、核密度图"><a href="#4、核密度图" class="headerlink" title="4、核密度图"></a>4、核密度图</h2><p>估计随机变量的概率密度函数。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#核密度图</span></div><div class="line">par(mfrow=c(<span class="number">2</span>,<span class="number">1</span>))</div><div class="line"></div><div class="line">d&lt;-density(mtcars$mpg)</div><div class="line"></div><div class="line">plot(d)</div><div class="line"></div><div class="line">d&lt;-density(mtcars$mpg)</div><div class="line">plot(d,main=<span class="string">"Kernel Density of Miles Per Gallon"</span>)</div><div class="line">polygon(d, col=<span class="string">"red"</span>, border = <span class="string">"blue"</span>)</div><div class="line">rug(mtcars$mpg, col=<span class="string">"brown"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image011.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#用于对比多个组间差异的核密度图 使用sm包</span></div><div class="line">par(lwd=<span class="number">2</span>)</div><div class="line"><span class="keyword">library</span>(sm)</div><div class="line"><span class="keyword">attach</span>(mtcars)</div><div class="line"></div><div class="line">cyl.f &lt;- factor(cyl, levels= c(<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>), </div><div class="line">                labels = c(<span class="string">"4 cylinder"</span>, <span class="string">"6 cylinder"</span>,</div><div class="line">                           <span class="string">"8 cylinder"</span>))</div><div class="line"><span class="comment">#绘制对比类型的核密度图需要因子变量</span></div><div class="line">sm.density.compare(mpg, cyl, xlab=<span class="string">"Miles Per Gallon"</span>)</div><div class="line">title(main=<span class="string">"MPG Distribution by Car Cylinders"</span>)</div><div class="line"></div><div class="line"><span class="comment">#颜色用于填充图例</span></div><div class="line">colfill&lt;-c(<span class="number">2</span>:(<span class="number">1</span>+length(levels(cyl.f))))</div><div class="line"><span class="comment">#第一个参数表示用交互的方式放置图例</span></div><div class="line">legend(locator(<span class="number">1</span>), levels(cyl.f), fill=colfill)</div><div class="line"></div><div class="line"><span class="keyword">detach</span>(mtcars)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image012.png" alt=""></p>
+<h2 id="5、箱线图"><a href="#5、箱线图" class="headerlink" title="5、箱线图"></a>5、箱线图</h2><p>箱线图（又称盒须图）通过绘制连续型变量的五数总括，即最小值、下四分位数（第25百分位数） 、中位数（第50百分位数）、上四分位数（第75百分位数）以及最大值，描述了连续型变量的分布。formula 参数例如：y ~ A*B则将为类别型变量A和B所有水平的两两组合生成数值型变量y的箱线图。</p>
+<p><code>boxplot(formula, data=dataframe)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#箱线图</span></div><div class="line">boxplot(mtcars$mpg, main=<span class="string">"Box plot"</span>, ylab=<span class="string">"Miles per Gallon"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image013.png" alt=""></p>
+<h3 id="（1）并列箱线图跨组比较"><a href="#（1）并列箱线图跨组比较" class="headerlink" title="（1）并列箱线图跨组比较"></a>（1）并列箱线图跨组比较</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#对比箱线图</span></div><div class="line">boxplot(mpg ~ cyl, data=mtcars, main=<span class="string">"Car Mileage Data"</span>, xlab=<span class="string">"Number of Cylinders"</span>, ylab=<span class="string">"Miles Per Gallon"</span>,varwidth=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image014.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#凹槽箱线图notch=TRUE,研究表明若两个箱的凹槽互不重叠，则表明它们的中位数有显著差异</span></div><div class="line">boxplot(notch=<span class="literal">TRUE</span>,</div><div class="line">        mpg ~ cyl, </div><div class="line">        data=mtcars,</div><div class="line">        col=<span class="string">"red"</span>,</div><div class="line">        main=<span class="string">"Car Mileage Data"</span>, </div><div class="line">        xlab=<span class="string">"Number of Cylinders"</span>, </div><div class="line">        ylab=<span class="string">"Miles Per Gallon"</span>,</div><div class="line">        varwidth=<span class="literal">TRUE</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image015.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#多交叉因子箱线图</span></div><div class="line">mtcars$cyl.f&lt;- factor(mtcars$cyl,levels = c(<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>),</div><div class="line">                      labels = c(<span class="string">"4"</span>,<span class="string">"6"</span>,<span class="string">"8"</span>))</div><div class="line"></div><div class="line">mtcars$am.f&lt;- factor(mtcars$am,levels = c(<span class="number">0</span>,<span class="number">1</span>),</div><div class="line">                      labels = c(<span class="string">"auto"</span>,<span class="string">"standard"</span>))</div><div class="line"></div><div class="line"></div><div class="line">boxplot(mpg~am.f*cyl.f,</div><div class="line">        data=mtcars,</div><div class="line">        varwidth=<span class="literal">TRUE</span>,</div><div class="line">        col=c(<span class="string">"gold"</span>,<span class="string">"darkgreen"</span>),</div><div class="line">        main=<span class="string">"MPG Distribution by Auto Type"</span>, </div><div class="line">        xlab=<span class="string">"Auto Type"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image016.png" alt=""></p>
+<h3 id="（2）小提琴图"><a href="#（2）小提琴图" class="headerlink" title="（2）小提琴图"></a>（2）小提琴图</h3><p><code>Vioplot(x1,x2,…,names=,col=)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(vioplot)</div><div class="line">x1&lt;-mtcars$mpg[mtcars$cyl==<span class="number">4</span>]</div><div class="line">x2&lt;-mtcars$mpg[mtcars$cyl==<span class="number">6</span>]</div><div class="line">x3&lt;-mtcars$mpg[mtcars$cyl==<span class="number">8</span>]</div><div class="line">vioplot(x1,x2,x3,names=c(<span class="string">"4 cyl"</span>,<span class="string">"6 cyl"</span>,<span class="string">"8 cyl"</span>),</div><div class="line">        col=<span class="string">"gold"</span>)</div><div class="line">title(<span class="string">"公里数与油耗的小提琴图"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image017.png" alt=""></p>
+<ul>
+<li>在图中，白点是中位数，黑色盒型的范围是下四分位点到上四分位点，细黑线表示须。外部形状即为核密度估计。</li>
+</ul>
+<h2 id="6、点图"><a href="#6、点图" class="headerlink" title="6、点图"></a>6、点图</h2><p><code>dotchart(x,labels=)</code></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#点图</span></div><div class="line">dotchart(mtcars$mpg,labels = row.names(mtcars), cex=<span class="number">.7</span>, main=<span class="string">"Gas Mileage for Car Models"</span>, xlab=<span class="string">"Miles Per Gallon"</span>)</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image018.png" alt=""></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">x&lt;- mtcars[order(mtcars$mpg),]</div><div class="line">x$cyl &lt;- factor(x$cyl)</div><div class="line">x$color[x$cyl==<span class="number">4</span>]&lt;-<span class="string">"red"</span></div><div class="line">x$color[x$cyl==<span class="number">6</span>]&lt;-<span class="string">"blue"</span></div><div class="line">x$color[x$cyl==<span class="number">8</span>]&lt;-<span class="string">"darkgreen"</span></div><div class="line"></div><div class="line">dotchart(x$mpg,labels = row.names(x),</div><div class="line">         cex=<span class="number">.7</span>,</div><div class="line">         groups=x$cyl,</div><div class="line">         gcolor = <span class="string">"black"</span>,</div><div class="line">         color=x$color,</div><div class="line">         pch=<span class="number">19</span>,</div><div class="line">         main=<span class="string">"每种车型的加仑公里数，通过气缸分组"</span>,</div><div class="line">         xlab=<span class="string">"每加仑的公里数"</span></div><div class="line">         )</div></pre></td></tr></table></figure>
+<p><img src="/2017/01/06/chapter06-基本图形/image019.png" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R语言/">R语言</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/R语言/">R语言</a><a href="/tags/R基本图形/">R基本图形</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/01/06/chapter06-基本图形/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/06/chapter06-基本图形/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/15/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+ </html>

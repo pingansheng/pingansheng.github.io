@@ -1,0 +1,866 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Understand JVM Part II | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="虚拟机执行系统Class文件结构与字节码Class文件结构（详细结构规则请Google） 魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE 常量池 访问标志 类索引、父类索引与接口索引集合 字段表集合 方法表集合 属性表集合字节码（列表请Google） 大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑 大多数对于boolean、">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understand JVM Part II">
+<meta property="og:url" content="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="虚拟机执行系统Class文件结构与字节码Class文件结构（详细结构规则请Google） 魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE 常量池 访问标志 类索引、父类索引与接口索引集合 字段表集合 方法表集合 属性表集合字节码（列表请Google） 大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑 大多数对于boolean、">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/双亲委派.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/Tomcat类加载器.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/vtable.png">
+<meta property="og:updated_time" content="2024-02-24T02:35:09.438Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Understand JVM Part II">
+<meta name="twitter:description" content="虚拟机执行系统Class文件结构与字节码Class文件结构（详细结构规则请Google） 魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE 常量池 访问标志 类索引、父类索引与接口索引集合 字段表集合 方法表集合 属性表集合字节码（列表请Google） 大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑 大多数对于boolean、">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/双亲委派.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/22/Understand-JVM-Part-II/" title="Understand JVM Part II" itemprop="url">Understand JVM Part II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-22T05:24:36.000Z" itemprop="datePublished"> 发表于 2017-06-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#虚拟机执行系统"><span class="toc-text">虚拟机执行系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Class文件结构与字节码"><span class="toc-text">Class文件结构与字节码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Class文件结构（详细结构规则请Google）"><span class="toc-text">Class文件结构（详细结构规则请Google）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字节码（列表请Google）"><span class="toc-text">字节码（列表请Google）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载"><span class="toc-text">类加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时机"><span class="toc-text">时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类加载过程"><span class="toc-text">类加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类加载器"><span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#双亲委派"><span class="toc-text">双亲委派</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例：Tomcat类加载结构"><span class="toc-text">案例：Tomcat类加载结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字节码执行引擎"><span class="toc-text">字节码执行引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时栈帧结构"><span class="toc-text">运行时栈帧结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#局部变量表"><span class="toc-text">局部变量表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#操作数栈"><span class="toc-text">操作数栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#动态连接"><span class="toc-text">动态连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方法返回地址"><span class="toc-text">方法返回地址</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法调用"><span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于栈的字节码执行引擎"><span class="toc-text">基于栈的字节码执行引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例：远程调用"><span class="toc-text">案例：远程调用</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="虚拟机执行系统"><a href="#虚拟机执行系统" class="headerlink" title="虚拟机执行系统"></a>虚拟机执行系统</h1><h2 id="Class文件结构与字节码"><a href="#Class文件结构与字节码" class="headerlink" title="Class文件结构与字节码"></a>Class文件结构与字节码</h2><h3 id="Class文件结构（详细结构规则请Google）"><a href="#Class文件结构（详细结构规则请Google）" class="headerlink" title="Class文件结构（详细结构规则请Google）"></a>Class文件结构（详细结构规则请Google）</h3><ul>
+<li>魔数与类文件版本：文件的头4字节表示Class文件：0XCAFEBABE</li>
+<li>常量池</li>
+<li>访问标志</li>
+<li>类索引、父类索引与接口索引集合</li>
+<li>字段表集合</li>
+<li>方法表集合</li>
+<li>属性表集合<h3 id="字节码（列表请Google）"><a href="#字节码（列表请Google）" class="headerlink" title="字节码（列表请Google）"></a>字节码（列表请Google）</h3></li>
+<li>大部分与数据类型有关的字节码都包含了类型信息，如iload、fload, 但底层可能是同样逻辑</li>
+<li>大多数对于boolean、short、byte、char等类型的操作，实际使用int类型作为运算类型</li>
+<li>运算指令中，只有除0操作抛出ArithmeticException，其他操作不会出现异常</li>
+<li>窄化类型转换指令直接丢弃最低N个字节以外的东西，不会有异常</li>
+<li>指令类型主要有（加载存储、运算、类型转换、对象创建与访问、操作数栈、控制转移、方法调用与返回、异常处理、同步（管程））</li>
+</ul>
+<h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h3 id="时机"><a href="#时机" class="headerlink" title="时机"></a>时机</h3><ol>
+<li>遇到new getstatic putstatic invokestatic这4条指令，如果类没有初始化，则进行初始化</li>
+<li>使用reflect包对类方法反射调用，如果没有初始化则初始化</li>
+<li>初始化某类，若父类未初始化，则初始化父类</li>
+<li>jvm启动时，用户需要指定一个主类（main方法），jvm首先初始化这个类</li>
+<li>使用JDM1.7的动态语言支持，MethodHandler实例的相关使用时，方法句柄对应类未初始化时</li>
+</ol>
+<ul>
+<li>以上5中情况称为对类的主动引用，被动引用时不触发初始化类（创建数组，引用别的类的静态常量，通过子类引用父类的静态变量）</li>
+<li>接口的初始化中，不要求父接口初始化，只有需要使用时才进行初始化父接口</li>
+</ul>
+<h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><ul>
+<li>类的生命周期：加载-&gt;验证-&gt;准备-&gt;解析-&gt;初始化-&gt;使用-&gt;卸载</li>
+<li>加载：类的二进制字节流保存在方法区中，并生成一个Class对象作为方法区这个类数据的入口，对于HotSpot虚拟机来说Class对象存放在方法区中而不是堆中（如果是数组类型，则递归加载去掉一个维度的组件类型，如果组件类型为引用类型，则数组在加载这个组件的类加载器的类空间名称上被标识）</li>
+<li>验证：文件格式、元数据、字节码、符号引用</li>
+<li>准备：设置类变量（非实例变量）初始值，方法区中进行，如果不是final static, 则首先按照类型赋值0值，初始化用户指定值包装在类构造器<code>&lt;clinit&gt;</code>方法中，在初始化阶段执行，final static则直接赋值为用户指定值</li>
+<li>解析：常量池中的符号引用替换为直接引用（类或接口、字段、类方法、接口方法）</li>
+<li>初始化：执行类构造器<code>&lt;clinit&gt;()</code>方法,<ul>
+<li><code>&lt;clinit&gt;()</code>由类变量的赋值动作和static语句块合并产生，static语句块不可以赋值定义在其后的变量</li>
+<li>jvm保证父类的<code>&lt;clinit&gt;()</code>方法先执行，static语句块也是父类的先执行</li>
+<li><code>&lt;clinit&gt;()</code>方法不是必须的，如果既没有类变量的赋值也没有static语句块</li>
+<li>接口也会有该方法，但执行时不需要先执行父接口（使用时才执行）中的该方法，接口的实现类初始化不会执行接口的该方法</li>
+<li>jvm保证执行该方法多线程安全，如果耗时，则造成阻塞</li>
+</ul>
+</li>
+</ul>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><ul>
+<li>类加载器用于获取某个类的二进制字节流</li>
+<li>每一个类加载器，都有一个类名称空间，判断两个类是否相等，需要在两个类都为同一个类加载器加载的情况下才有意义，否则必定不等  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUserClassLoder</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        ClassLoader MyClassLoader = <span class="keyword">new</span> ClassLoader() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</div><div class="line"></div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    String fileName = name.substring(name.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>) + <span class="string">".class"</span>;</div><div class="line">                    InputStream is = getClass().getResourceAsStream(fileName);</div><div class="line">                    <span class="keyword">if</span> (is == <span class="keyword">null</span>) &#123;</div><div class="line">                        <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(name);</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[is.available()];</div><div class="line">                    is.read(b);</div><div class="line">                    <span class="keyword">return</span> defineClass(name, b, <span class="number">0</span>, b.length);</div><div class="line"></div><div class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        Object a = MyClassLoader.loadClass(<span class="string">"jvm.classloader.TestUserClassLoder"</span>).newInstance();</div><div class="line">        Object b = <span class="keyword">new</span> TestUserClassLoder();</div><div class="line">        System.out.println(a <span class="keyword">instanceof</span> TestUserClassLoder);<span class="comment">//false 不是同一个类加载器实例加载 必然不相等 包括instance</span></div><div class="line">        System.out.println(b <span class="keyword">instanceof</span> TestUserClassLoder);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h3><ul>
+<li><p>对于JVM来说，只存在两种不同的类加载器：一种是启动类加载器（jvm一部分，c++实现，用户获取不到），另一种由Java实现，独立于JVM</p>
+</li>
+<li><p>从开发角度，主要有三种类加载器：</p>
+<ol>
+<li>启动类加载器：加载JAVA_HOME/lib目录下面的复合条件的类（jar包）</li>
+<li>扩展类加载器：加载JAVA_HOME/lib/ext目录下面的所有类库</li>
+<li>应用程序类加载器：用于加载用户类路径上的类库，程序中默认的类加载器</li>
+</ol>
+</li>
+<li><p>类加载器之间通过双亲委派规则进行配合，如图</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/双亲委派.png" alt=""></p>
+</li>
+<li><p>双亲委派模型中：</p>
+<ol>
+<li>除了顶层启动类加载器，其他类加载器都应当有自己的父类加载器(一般通过组合实现)</li>
+<li>类加载器接收到类加载请求，首先将请求委派给父类加载器完成，只有父类加载器反馈无法加载才尝试自己加载</li>
+<li>Java类随着类加载器具备了优先级的层次关系（Object类存在于rt.jar中，用户定义的Object即使全类名一致也不会加载，因为启动类加载器已经加载了该类，所有任何环境中Object类都是同一个）</li>
+</ol>
+</li>
+<li><p>双亲委派模型的破坏，JVM团队为了解决某些问题引入了线程上下文加载器，破坏了双亲委派请求链路，直接使用下层类加载器加载目标类（如Spring框架可以放在共享的jar目录中，则Spring类的加载由共享类加载器加载，而此时Spring需要管理用户的类，加载Spring类的共享类加载器无法加载用户的类，此时Spring则使用线程上下文加载器，即谁调用Spring去管理Bean，谁就要提供给Spring类加载器）</p>
+</li>
+</ul>
+<h3 id="案例：Tomcat类加载结构"><a href="#案例：Tomcat类加载结构" class="headerlink" title="案例：Tomcat类加载结构"></a>案例：Tomcat类加载结构</h3><ul>
+<li><p>要解决的问题</p>
+<ol>
+<li>部署在同一个服务器上的多个应用Java类库实现相互隔离</li>
+<li>部署在同一个服务器上的应用间Java类库可以共享（例如公共的类库）</li>
+<li>服务器需要保证自身的安全不受应用影响，服务器所使用的类库与应用使用的类库应该隔离</li>
+<li>JSP服务器需要支持HotSwap(JSP文件修改，JSP对应的生成类需要热替换) </li>
+</ol>
+</li>
+<li><p>Tomcat的类文件目录结构</p>
+<ul>
+<li><code>/common/*</code>：放在这个下面的类库，可以被Tomcat和多有的Web应用程序共同使用。</li>
+<li><code>/server/*</code>：类库可以被Tomcat使用，对所有的Web应用程序都不可见。</li>
+<li><code>/shared/*</code>：类库可被所有web应用程序共同使用，但对Tomcat自己不可见</li>
+<li><code>/WEB-INF/*</code>：类库仅仅可以被此Web应用程序使用，对Tomcat和其他web程序都不可见。</li>
+</ul>
+</li>
+<li><p>Tomcat设计的类加载器结构，不同的类加载器加载不同的部分，实现了隔离</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/Tomcat类加载器.png" alt=""></p>
+</li>
+<li><p>JasperLoader的加载范围仅仅是这个 JSP 文件所编译出来的那一个 Class， 它出现的目的就是为了被丢弃：当服务器检测到 JSP 文件被修改时，会替换掉目前的 JasperLoader 的实例，并通过再建立一个新的 Jsp 类加载器来实现 JSP 文件的 HotSwap 功能。</p>
+</li>
+<li><p>对于 Tomcat 的 6.x 版本，只有指定了 tomcat/conf/catalina.properties配置文件的 server.loader 和 share.loader 项后才会真正建立 CatalinaClassLoader 和 SharedClassLoader 的实例，否则会用到这两个类加载器的地方都会用 CommonClassLoader 的实例代替，而默认没有设置，所以 Tomcat 6.x 顺理成章地把/common、/server 和/shared 三个目录默认合并到一起变成一个/lib 目录。这个目录里的类库相当于以前/common目录中类库的作用。这是Tomcat设计团队为了简化部署所做的一项改进。</p>
+</li>
+</ul>
+<h2 id="字节码执行引擎"><a href="#字节码执行引擎" class="headerlink" title="字节码执行引擎"></a>字节码执行引擎</h2><h3 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h3><ul>
+<li>栈帧存储了方法的局部变量表、操作数栈、动态连接和方法返回地址等信息。</li>
+<li>每一个方法从调用开始至执行完成的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</li>
+<li>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</li>
+<li>对于执行引擎来说，在活动线程中，只有位于栈顶的栈帧才是有效的，称为当前栈帧。</li>
+</ul>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><ul>
+<li>存放方法参数和方法内部的局部变量</li>
+<li>局部变量表容量以变量槽为最小单位（Slot），每个Slot可以存放32位以内的数据，64存放在两个Slot中（long double）</li>
+<li>编译程序时，需要使用多少局部变量表已经确定，不受代码运行期间影响</li>
+<li>方法执行时，使用局部变量表完成传参，如果是实例方法，第0位Slot存放对象的实例引用（this指针），其他参数从1开始传入，之后是内部的局部变量</li>
+<li><p>Slot会复用，会对垃圾回收产生影响，但编译成JIT代码后枚举GC Roots行为会与解释执行有不同，不会有问题</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">byte</span>[] bytes=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//此处不一定回收内存，回收bytes本质是要看Slot中是否存在对bytes数据对象的引用，GC Roots包含局部变量表</span></div><div class="line">        <span class="comment">//此时占用的Slot没有被其他变量使用，栈帧中的存放bytes的Slot中仍然存在对数据的引用</span></div><div class="line">        <span class="comment">// int i=0; 此处加本行则会回收，i会复用bytes的Slot</span></div><div class="line">        System.gc();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>局部变量初始化才可以使用，不存在准备阶段（赋初值，参考类变量）</p>
+</li>
+</ul>
+<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><ul>
+<li>编译程序时，需要使用深的操作数栈已经确定，不受代码运行期间影响</li>
+<li>操作数栈的数据类型必须与字节码指令序列严格匹配，编译器保证</li>
+<li>Java虚拟机的解释执行引擎称为基于栈的执行引擎，栈即指操作数栈</li>
+<li>一般的虚拟机会对操作数栈进行优化，让下面栈帧的部分操作数栈与上面栈帧的部分局部变量表重叠，省去了额外的参数复制</li>
+</ul>
+<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><ul>
+<li>指向运行时常量池中该栈帧方法的引用，用户支持调用过程中的动态连接（Dynamic Linking）</li>
+</ul>
+<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><ul>
+<li>保存方法被调用的位置</li>
+<li>方法可以正常返回或异常返回，异常返回没有返回值</li>
+<li>方法退出操作大致：恢复上层方法的局部变量表和操作数栈 -&gt; 返回值压入调用者操作数栈 -&gt; PC计数器指向下一条地址</li>
+</ul>
+<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><ul>
+<li>确定被调用方法的版本过程而不是执行过程</li>
+<li>类加载阶段的解析阶段，将一部分方法转换为直接引用，这些方法在执行前可确定版本，且运行期不可变（见下）</li>
+<li><p>Java关于方法调用的字节码：</p>
+<ol>
+<li>invokestatic:调用静态方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokespecial:调用实例构造器方法，私有方法和父类方法 <strong>（执行前可确定版本）</strong></li>
+<li>invokevirtual:调用虚方法 <strong>（final方法也是该字节码调，但是其不是虚方法）</strong></li>
+<li>invokeinterface:调用接口方法，会在运行时再确定一个实现此接口的对象。</li>
+<li>invokedynamic:先在运行时动态解析出调用点限定符所引用的方法，然后再执行该方法，在此之前的4条调用指令，分派逻辑是固化在Java虚拟机内部的，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。</li>
+</ol>
+</li>
+<li><p>方法版本的确定-分派：</p>
+<ul>
+<li>静态分派：根据依赖静态类型选择方法版本（方法重载）</li>
+<li>动态分派：运行期根据实际类型确定方法执行版本</li>
+</ul>
+</li>
+<li>Java: 静态多分派（根据静态类型与参数列表选择方法，编译期确定），动态单分派（此时只需要确定具体对象类型的方法版本，不同参数列表导致的方法版本确定已经在编译期完成）</li>
+<li><p>动态分派实现方式：虚方法表，保存各个方法的实际入口，没有重写父类方法就指向父类实现入口（还有其他方法，如内联缓存Inline Cache、基于继承关系分析CHA的守护内联Guard Inlining等非稳定手段）</p>
+<p>  <img src="/2017/06/22/Understand-JVM-Part-II/vtable.png" alt=""></p>
+</li>
+<li><p>Java7之后提供了MethodHandle机制实现动态方法调用</p>
+</li>
+</ul>
+<h3 id="基于栈的字节码执行引擎"><a href="#基于栈的字节码执行引擎" class="headerlink" title="基于栈的字节码执行引擎"></a>基于栈的字节码执行引擎</h3><ul>
+<li>Java 编译器输出的指令流，基本上是一种基于栈的指令集架构，大部分都是零地址指令。</li>
+<li>基于栈的指令集主要的优点就是可移植，寄存器由硬件直接提供，程序直接依赖这些硬件寄存器则不可避免地要受到硬件的约束。</li>
+<li>栈架构指令集的主要缺点是执行速度相对来说会稍慢一些。</li>
+</ul>
+<h3 id="案例：远程调用"><a href="#案例：远程调用" class="headerlink" title="案例：远程调用"></a>案例：远程调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassExecutor</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(MyClassLoader.class.getClassLoader());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> Class <span class="title">loadBytes</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> defineClass(<span class="keyword">null</span>, bytes, <span class="number">0</span>, bytes.length);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 执行外部传过来的代表一个Java类的Byte数组&lt;br&gt;</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> classByte</div><div class="line">     *         代表一个Java类的Byte数组</div><div class="line">     * <span class="doctag">@param</span> methodName</div><div class="line">     *          方法名称</div><div class="line">     * <span class="doctag">@return</span> 执行结果</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">execute</span><span class="params">(<span class="keyword">byte</span>[] classByte, String methodName)</span> </span>&#123;</div><div class="line">        Class clazz = <span class="keyword">new</span> MyClassLoader().loadBytes(classByte);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">           Object obj=clazz.newInstance();</div><div class="line">            Method method = clazz.getMethod(methodName);</div><div class="line">            <span class="keyword">return</span> method.invoke(obj);</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            <span class="keyword">return</span> <span class="string">"Err"</span> + e.getMessage();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/" data-title="Understand JVM Part II | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/28/Understand-JVM-Part-III/" title="Understand JVM Part III">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Understand JVM Part III</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/14/Understand-JVM-Part-I/"  title="Understand JVM Part I">
+ <strong>下一篇：</strong><br/> 
+ <span>Understand JVM Part I
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/06/22/Understand-JVM-Part-II/" data-title="Understand JVM Part II" data-url="https://pingansheng.github.io/2017/06/22/Understand-JVM-Part-II/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#虚拟机执行系统"><span class="toc-text">虚拟机执行系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Class文件结构与字节码"><span class="toc-text">Class文件结构与字节码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Class文件结构（详细结构规则请Google）"><span class="toc-text">Class文件结构（详细结构规则请Google）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字节码（列表请Google）"><span class="toc-text">字节码（列表请Google）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载"><span class="toc-text">类加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时机"><span class="toc-text">时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类加载过程"><span class="toc-text">类加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类加载器"><span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#双亲委派"><span class="toc-text">双亲委派</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例：Tomcat类加载结构"><span class="toc-text">案例：Tomcat类加载结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字节码执行引擎"><span class="toc-text">字节码执行引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时栈帧结构"><span class="toc-text">运行时栈帧结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#局部变量表"><span class="toc-text">局部变量表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#操作数栈"><span class="toc-text">操作数栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#动态连接"><span class="toc-text">动态连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方法返回地址"><span class="toc-text">方法返回地址</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法调用"><span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于栈的字节码执行引擎"><span class="toc-text">基于栈的字节码执行引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例：远程调用"><span class="toc-text">案例：远程调用</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

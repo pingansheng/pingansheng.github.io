@@ -1,0 +1,815 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Understand JVM Part IV | Peter I/O</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="PeterPing">
+    
+
+    
+    <meta name="description" content="内存模型与并发1 内存模型1.1 硬件层面的缓存一致性 CPU核心、高速缓存与主内存之间通过缓存一致性协议保持数据的版本问题1.2 Java内存模型1.2.1 Java内存模型概述 每个线程拥有自己的工作内存，不同线程间的工作内存不可见，线程所有操作都操作工作内存 工作内存与主内存之间的数据同步通过定义的一些原子操作实现（lock、unlock、read、load、use、assign（赋值）、s">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understand JVM Part IV">
+<meta property="og:url" content="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/index.html">
+<meta property="og:site_name" content="Peter I&#x2F;O">
+<meta property="og:description" content="内存模型与并发1 内存模型1.1 硬件层面的缓存一致性 CPU核心、高速缓存与主内存之间通过缓存一致性协议保持数据的版本问题1.2 Java内存模型1.2.1 Java内存模型概述 每个线程拥有自己的工作内存，不同线程间的工作内存不可见，线程所有操作都操作工作内存 工作内存与主内存之间的数据同步通过定义的一些原子操作实现（lock、unlock、read、load、use、assign（赋值）、s">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/1v1.png">
+<meta property="og:image" content="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/userThread.jpg">
+<meta property="og:image" content="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/multThread.jpg">
+<meta property="og:updated_time" content="2024-02-24T02:35:09.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Understand JVM Part IV">
+<meta name="twitter:description" content="内存模型与并发1 内存模型1.1 硬件层面的缓存一致性 CPU核心、高速缓存与主内存之间通过缓存一致性协议保持数据的版本问题1.2 Java内存模型1.2.1 Java内存模型概述 每个线程拥有自己的工作内存，不同线程间的工作内存不可见，线程所有操作都操作工作内存 工作内存与主内存之间的数据同步通过定义的一些原子操作实现（lock、unlock、read、load、use、assign（赋值）、s">
+<meta name="twitter:image" content="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/1v1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Peter I/O" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/peter.png" alt="Peter I/O" title="Peter I/O"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Peter I/O">Peter I/O</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/tags">Tag</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:pingansheng.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/03/Understand-JVM-Part-IV/" title="Understand JVM Part IV" itemprop="url">Understand JVM Part IV</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="PeterPing" target="_blank" itemprop="author">PeterPing</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-03T08:00:30.000Z" itemprop="datePublished"> 发表于 2017-07-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#内存模型与并发"><span class="toc-text">内存模型与并发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-内存模型"><span class="toc-text">1 内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-硬件层面的缓存一致性"><span class="toc-text">1.1 硬件层面的缓存一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Java内存模型"><span class="toc-text">1.2 Java内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-Java内存模型概述"><span class="toc-text">1.2.1 Java内存模型概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-volatile变量"><span class="toc-text">1.2.2 volatile变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-long与double"><span class="toc-text">1.2.3 long与double</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-4-原子性、可见性与有序性"><span class="toc-text">1.2.4 原子性、可见性与有序性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-5-先行发生原则"><span class="toc-text">1.2.5 先行发生原则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Java与线程"><span class="toc-text">1.3 Java与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-线程的实现"><span class="toc-text">1.3.1 线程的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-线程调度"><span class="toc-text">1.3.2 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-状态转换"><span class="toc-text">1.3.3 状态转换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-线程安全与锁优化"><span class="toc-text">2 线程安全与锁优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-线程安全"><span class="toc-text">2.1 线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Java的线程安全"><span class="toc-text">2.1.1 Java的线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Java的线程安全的实现方法"><span class="toc-text">2.1.2 Java的线程安全的实现方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-锁优化"><span class="toc-text">2.2 锁优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-自旋锁与自适应锁"><span class="toc-text">2.2.1 自旋锁与自适应锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-锁消除"><span class="toc-text">2.2.2 锁消除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-锁粗化"><span class="toc-text">2.2.3 锁粗化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-轻量级锁"><span class="toc-text">2.2.4 轻量级锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-5-偏向锁"><span class="toc-text">2.2.5 偏向锁</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="内存模型与并发"><a href="#内存模型与并发" class="headerlink" title="内存模型与并发"></a>内存模型与并发</h1><h2 id="1-内存模型"><a href="#1-内存模型" class="headerlink" title="1 内存模型"></a>1 内存模型</h2><h3 id="1-1-硬件层面的缓存一致性"><a href="#1-1-硬件层面的缓存一致性" class="headerlink" title="1.1 硬件层面的缓存一致性"></a>1.1 硬件层面的缓存一致性</h3><ul>
+<li>CPU核心、高速缓存与主内存之间通过缓存一致性协议保持数据的版本问题<h3 id="1-2-Java内存模型"><a href="#1-2-Java内存模型" class="headerlink" title="1.2 Java内存模型"></a>1.2 Java内存模型</h3><h4 id="1-2-1-Java内存模型概述"><a href="#1-2-1-Java内存模型概述" class="headerlink" title="1.2.1 Java内存模型概述"></a>1.2.1 Java内存模型概述</h4></li>
+<li>每个线程拥有自己的工作内存，不同线程间的工作内存不可见，线程所有操作都操作工作内存</li>
+<li>工作内存与主内存之间的数据同步通过定义的一些原子操作实现（lock、unlock、read、load、use、assign（赋值）、store、write）（1.5之后不再使用这种方式描述内存模型，使用先行发生原则）<h4 id="1-2-2-volatile变量"><a href="#1-2-2-volatile变量" class="headerlink" title="1.2.2 volatile变量"></a>1.2.2 volatile变量</h4></li>
+<li>volatile只保证可见性，并非线程安全，多线程仍然会出现不安全的</li>
+<li>运算结果不依赖当前volatile变量或不需要与其他变量共同参与不变约束时，推荐使用volatile</li>
+<li>volatile禁止指令重排序，线程内表现为串行<h4 id="1-2-3-long与double"><a href="#1-2-3-long与double" class="headerlink" title="1.2.3 long与double"></a>1.2.3 long与double</h4></li>
+<li>Java内存模型不保证64位数据类型的load、store、read、write 4个操作的原子性，long与double的非原子性协定，但现在的虚拟机已经实现原子性<h4 id="1-2-4-原子性、可见性与有序性"><a href="#1-2-4-原子性、可见性与有序性" class="headerlink" title="1.2.4 原子性、可见性与有序性"></a>1.2.4 原子性、可见性与有序性</h4></li>
+<li>原子性：字节码monitorenter与monitorexit实现（管程）</li>
+<li>可见性：新值同步主存，读取从主存刷新方式实现，另外，volatile保证新值立即同步主存，读取时立即从内存刷新，synchronized块中，对一个变量执行unlock之前必须刷回主存，final保证一单初始化完成，其他线程立即可见</li>
+<li>有序性：线程内观察，所有操作有序，观察其他线程，所有操作无序（线程内表现为串行语义；指令重排序与工作内存与主存的差异）</li>
+</ul>
+<h4 id="1-2-5-先行发生原则"><a href="#1-2-5-先行发生原则" class="headerlink" title="1.2.5 先行发生原则"></a>1.2.5 先行发生原则</h4><ul>
+<li>Java内存模型中存在天然的先后操作顺序，无需同步措施，如果两个操作不属于这些规则，则不保证顺序性</li>
+<li>先行发生原则：<ul>
+<li>程序次序：     最终按照代码顺序执行</li>
+<li>管程锁定：     unlock操作先于同一个锁的后一个lock操作（时间的先后）</li>
+<li>volatile变量：对一个volatile变量的写先于后面的读（时间的先后）</li>
+<li>线程启动：     Thread的start先于线程的每一个动作</li>
+<li>线程终止：     线程中的左右操作都先于对该线程的终止检测</li>
+<li>线程中断：     对线程interrupt()方法的调用先于被中断线程的代码检测到中断事件的发生</li>
+<li>对象终结：     一个对象的初始化完成先于finalize()方法</li>
+<li>传递性：      A先于B，B先于C，A先于C</li>
+</ul>
+</li>
+<li>一个操作<code>时间上的先发生</code>不代表该操作<code>先行发生</code></li>
+</ul>
+<h3 id="1-3-Java与线程"><a href="#1-3-Java与线程" class="headerlink" title="1.3 Java与线程"></a>1.3 Java与线程</h3><h4 id="1-3-1-线程的实现"><a href="#1-3-1-线程的实现" class="headerlink" title="1.3.1 线程的实现"></a>1.3.1 线程的实现</h4><ul>
+<li>使用内核线程实现：程序使用轻量级进程LWP（内核线程的高级接口）进行线程映射，每个轻量级进程对应一个内核线程，这种1:1的关系成为一对一的线程模型，线程的所有操作需要进行系统调用，需要用户态和内核态进行切换，轻量级进程需要消耗一定的内核资源，一个系统支持的轻量级进程数量是有限的</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/1v1.png" alt=""></p>
+<ul>
+<li>使用用户线程实现：系统内核不能感知用户线程的存在，其建立、同步、销毁和调度全在用户态完成，不需要内核的帮助，这种进程与用户线程的1:N的关系成为一对多的线程模型，难以实现，逐步放弃</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/userThread.jpg" alt=""></p>
+<ul>
+<li>使用用户线程+LWP：以上两种结合推理</li>
+</ul>
+<p><img src="/2017/07/03/Understand-JVM-Part-IV/multThread.jpg" alt=""></p>
+<ul>
+<li>Java实现：Windows与Linux使用一对一线程模型实现，Windows与Linux提供的线程模型就是一对一的</li>
+</ul>
+<h4 id="1-3-2-线程调度"><a href="#1-3-2-线程调度" class="headerlink" title="1.3.2 线程调度"></a>1.3.2 线程调度</h4><ul>
+<li>协同式调度（协程）：线程主动通知系统切换线程，如Lua的协程，缺点执行时间不可控制，某个线程可能一直不通知</li>
+<li>抢占式调度：每个线程由系统来分配执行时间，Java采用，Java提供了10中线程的优先级来代表次序，但是Java的优先级不一定靠谱，有的OS提供的线程优先级不一致，如windows提供7种，无法与之一一对应，此外优先级可能被OS的各种优化与功能改变</li>
+</ul>
+<h4 id="1-3-3-状态转换"><a href="#1-3-3-状态转换" class="headerlink" title="1.3.3 状态转换"></a>1.3.3 状态转换</h4><p><a href="http://peterping.top/2016/11/01/The-Art-of-Java-Concurrency-Programming-I/#4-1线程" target="_blank" rel="noopener">参见</a></p>
+<h2 id="2-线程安全与锁优化"><a href="#2-线程安全与锁优化" class="headerlink" title="2 线程安全与锁优化"></a>2 线程安全与锁优化</h2><h3 id="2-1-线程安全"><a href="#2-1-线程安全" class="headerlink" title="2.1 线程安全"></a>2.1 线程安全</h3><ul>
+<li>多线程访问一个对象，不用考虑线程的调度与交替运行，也不需要进行额外的同步，调用这个对象的行为产生正确的结果<h4 id="2-1-1-Java的线程安全"><a href="#2-1-1-Java的线程安全" class="headerlink" title="2.1.1 Java的线程安全"></a>2.1.1 Java的线程安全</h4></li>
+<li>Java的安全性：<ul>
+<li>不可变</li>
+<li>绝对线程安全</li>
+<li>相对线程安全（单独的操作是线程安全的，但是对于特定的顺序连续调用，需要额外的同步手段，如Vector的读取与删除同时进行）</li>
+<li>线程兼容（对象不是线程安全，可以使用同步手段达到线程安全）</li>
+<li>线程对立（无法在多线程环境运行，Threadsuspend()、Thread.resume()可能引发死锁）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-1-2-Java的线程安全的实现方法"><a href="#2-1-2-Java的线程安全的实现方法" class="headerlink" title="2.1.2 Java的线程安全的实现方法"></a>2.1.2 Java的线程安全的实现方法</h4><ul>
+<li><p>互斥同步：<code>synchronized</code>关键字实现，字节码指令对应<code>monitorenter</code>与<code>monitorexit</code>,这两个字节码需要一个<code>reference</code>类型参数，如果Java代码未指定，则为对象实例或Class对象，进入该指令时，首先要获取对象的锁，如果当前线程已经获取则将计数器+1，线程可重入，不会锁死自己，由于该语句会导致线程状态切换，线程需要进入核心态，消耗较大</p>
+<ul>
+<li>也可以使用<code>ReentrantLock</code>，性能更好, 但1.6之后<code>synchronized</code>关键字的吞吐量已经大幅提高，推荐使用原生<code>synchronized</code>关键字（1.8 ConcurrentHashMap源码已经使用<code>synchronized</code>来实现，Doug lea已经认可了<code>synchronized</code>的性能）</li>
+</ul>
+</li>
+<li><p>非阻塞同步：CAS指令，需要硬件指令集支持（比较和更新需要原子操作），需要三个参数，内存位置，预期值，新值，Java中使用Unsafe类提供该操作</p>
+<ul>
+<li>CAS指令会有ABA问题，可以使用<code>AtomicStampedReference</code>来控制变量的版本，更推荐使用互斥同步解决，因为一般ABA不影响并发的正确性。</li>
+<li>该类只支持<code>Bootstrap ClassLoader</code>加载，用户程序默认无法使用，只可以通过反射：<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 一个简单的示例</div><div class="line"> * Date: 2017/6/13</div><div class="line"> * Time: 17:04</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasSample</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> casVar;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> CASVAR_OFFSET;</div><div class="line">    <span class="keyword">static</span> Unsafe unsafe;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Field field = Unsafe.class.getDeclaredField(<span class="string">"theUnsafe"</span>);</div><div class="line">            field.setAccessible(<span class="keyword">true</span>);</div><div class="line">            unsafe = (Unsafe) field.get(<span class="keyword">null</span>);</div><div class="line">            Class&lt;?&gt; k = CasSample.class;</div><div class="line"></div><div class="line">            <span class="comment">//取偏移量 实例变量使用objectFieldOffset，类静态变量使用staticFieldOffset</span></div><div class="line">            CASVAR_OFFSET = unsafe.objectFieldOffset(k.getField(<span class="string">"casVar"</span>));</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        CasSample casSample = <span class="keyword">new</span> CasSample();</div><div class="line">        casSample.casVar = <span class="number">1</span>;</div><div class="line">        casSample.CAS_Swap();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CAS_Swap</span><span class="params">()</span> </span>&#123;</div><div class="line">        unsafe.compareAndSwapInt(<span class="keyword">this</span>, CASVAR_OFFSET, <span class="number">1</span>, <span class="number">2</span>);</div><div class="line">        System.out.println(<span class="string">"cas"</span> + casVar);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-锁优化"><a href="#2-2-锁优化" class="headerlink" title="2.2 锁优化"></a>2.2 锁优化</h3><ul>
+<li>JVM层面的优化<h4 id="2-2-1-自旋锁与自适应锁"><a href="#2-2-1-自旋锁与自适应锁" class="headerlink" title="2.2.1 自旋锁与自适应锁"></a>2.2.1 自旋锁与自适应锁</h4></li>
+<li>自旋锁：互斥同步线程阻塞不先不进入内核态挂起，而是让线程执行一个自旋，期待循环之后别的线程就可以释放锁了，自旋占用CPU时间，不可无限制自旋，自旋次数默认10</li>
+<li>自适应锁：自旋的时间不固定了，由前一次在同一个锁上的自旋时间以及锁拥有着的状态决定，比如上次自旋成功获得了锁A，当前持有锁的线程正在运行，虚拟机判断本次自旋获取到锁的可能性很大，进而自旋100次</li>
+</ul>
+<h4 id="2-2-2-锁消除"><a href="#2-2-2-锁消除" class="headerlink" title="2.2.2 锁消除"></a>2.2.2 锁消除</h4><ul>
+<li>自动判断当前代码块内是否会出现共享数据竞争，如果没有竞争，则将该段的同步措施去除。</li>
+</ul>
+<h4 id="2-2-3-锁粗化"><a href="#2-2-3-锁粗化" class="headerlink" title="2.2.3 锁粗化"></a>2.2.3 锁粗化</h4><ul>
+<li>锁的使用通常要求锁的范围越小越好，但是若一系列的操作对同一个对象频繁的加锁解锁，比如出现在循环体内，那么这种加锁导致不必要的性能损耗，虚拟机探测到后会将同步措施放在整个操作序列的外部。</li>
+</ul>
+<h4 id="2-2-4-轻量级锁"><a href="#2-2-4-轻量级锁" class="headerlink" title="2.2.4 轻量级锁"></a>2.2.4 轻量级锁</h4><ul>
+<li><p>假设是对于绝大部分锁，整个同步周期内不存在竞争，根据对象头中的信息来表示对象的锁信息，<a href="http://peterping.top/2017/06/14/Understand-JVM-Part-I/#2、对象的内存布局" target="_blank" rel="noopener">参考</a></p>
+</li>
+<li><p>如果对象没有被锁定，即锁标志位为<code>01</code>，则JVM在栈帧中创建一个锁记录的空间（Lock Record）,存储当前对象的Mark Word备份，CAS更新对象的Mark Word为Lock Record的指针，若成功，则表示该线程获得了锁，且锁标志位变为<code>00</code>，此时对象处于轻量级锁定状态、</p>
+</li>
+<li><p>如果上述CAS失败，JVM检查该对象的Mark Word是否指向当前线程的栈帧，如果是则表示该线程已经获得锁，直接进入同步块执行，若失败，则锁膨胀为重量级锁，锁标志位变为<code>10</code>，Mark Word中存储重量级锁的指针（互斥量），后续等待线程进入阻塞状态</p>
+</li>
+<li><p>解锁依然使用CAS，若Mark Word依然指向线程的锁记录，则CAS替换回来那份拷贝，成功则完毕，失败则表示锁定期间有其他线程尝试获取改锁（此时Mark Word指向的是互斥量），释放锁同时唤醒被挂起的线程 </p>
+</li>
+</ul>
+<h4 id="2-2-5-偏向锁"><a href="#2-2-5-偏向锁" class="headerlink" title="2.2.5 偏向锁"></a>2.2.5 偏向锁</h4><ul>
+<li>据统计，在实际情况下，大部分的锁对象永远只被一个线程占用，轻量级锁在每次monitorenter和monitorexit的时候（非重入），都会进行一次cas操作，为了进一步减少cas操作，偏向锁（biased locking）诞生了。是否启用偏向锁由Mark Word中的一位表示，位于锁标记位前，可偏向为<code>1</code></li>
+<li>锁对象第一次被线程获取，CAS将线程ID设置在Mark Word中，成功则该线程进入同步块时，不再进行任何同步操作</li>
+<li>另外一个线程获取锁时：<ol>
+<li>看一眼持有锁的线程是否还活着，如果已经死了，那将对象设置为无锁状态就可以了</li>
+<li>如果这个线程还活着，那需要遍历持有这个锁的线程的栈帧中的所有lock record，如果所有lock record都不指向锁对象，那么这个线程实际上不持有这个对象锁。同1，将对象设置为无锁状态即可</li>
+<li>如果这个线程正在占用这个锁对象，那么需要修改线程中的锁记录与对象头，将它们都修改为轻量级锁状态，然后正常走轻量级锁的流程即可，是否偏向锁标记位为<code>0</code></li>
+</ol>
+</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JVM/">JVM</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/" data-title="Understand JVM Part IV | Peter I/O" data-tsina="2128508742" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/11/21/chapter12-重抽样与自助法/" title="chapter12-重抽样与自助法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  chapter12-重抽样与自助法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/28/Understand-JVM-Part-III/"  title="Understand JVM Part III">
+ <strong>下一篇：</strong><br/> 
+ <span>Understand JVM Part III
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2017/07/03/Understand-JVM-Part-IV/" data-title="Understand JVM Part IV" data-url="https://pingansheng.github.io/2017/07/03/Understand-JVM-Part-IV/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#内存模型与并发"><span class="toc-text">内存模型与并发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-内存模型"><span class="toc-text">1 内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-硬件层面的缓存一致性"><span class="toc-text">1.1 硬件层面的缓存一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Java内存模型"><span class="toc-text">1.2 Java内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-Java内存模型概述"><span class="toc-text">1.2.1 Java内存模型概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-volatile变量"><span class="toc-text">1.2.2 volatile变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-long与double"><span class="toc-text">1.2.3 long与double</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-4-原子性、可见性与有序性"><span class="toc-text">1.2.4 原子性、可见性与有序性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-5-先行发生原则"><span class="toc-text">1.2.5 先行发生原则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Java与线程"><span class="toc-text">1.3 Java与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-线程的实现"><span class="toc-text">1.3.1 线程的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-线程调度"><span class="toc-text">1.3.2 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-状态转换"><span class="toc-text">1.3.3 状态转换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-线程安全与锁优化"><span class="toc-text">2 线程安全与锁优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-线程安全"><span class="toc-text">2.1 线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Java的线程安全"><span class="toc-text">2.1.1 Java的线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Java的线程安全的实现方法"><span class="toc-text">2.1.2 Java的线程安全的实现方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-锁优化"><span class="toc-text">2.2 锁优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-自旋锁与自适应锁"><span class="toc-text">2.2.1 自旋锁与自适应锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-锁消除"><span class="toc-text">2.2.2 锁消除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-锁粗化"><span class="toc-text">2.2.3 锁粗化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-轻量级锁"><span class="toc-text">2.2.4 轻量级锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-5-偏向锁"><span class="toc-text">2.2.5 偏向锁</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/DB/" title="DB">DB<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发与线程安全/" title="Java并发与线程安全">Java并发与线程安全<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Languages/" title="Languages">Languages<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dailyShot/" title="dailyShot">dailyShot<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/python/" title="python">python<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/代码碎片/" title="代码碎片">代码碎片<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/公用基础/" title="公用基础">公用基础<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/分布式设计/" title="分布式设计">分布式设计<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/前端/实用组件/" title="实用组件">实用组件<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/杂项/" title="杂项">杂项<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/版本管理/" title="版本管理">版本管理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>24</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/R语言/" title="R语言">R语言<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/行为模式/" title="行为模式">行为模式<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/结构型模式/" title="结构型模式">结构型模式<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/线程安全/" title="线程安全">线程安全<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/高并发/" title="高并发">高并发<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/python/" title="python">python<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/并发编程艺术/" title="并发编程艺术">并发编程艺术<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/创建型模式/" title="创建型模式">创建型模式<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JVM/" title="JVM">JVM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DB/" title="DB">DB<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/回归/" title="回归">回归<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL性能优化/" title="MySQL性能优化">MySQL性能优化<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/广义线性模型/" title="广义线性模型">广义线性模型<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/装饰模式/" title="装饰模式">装饰模式<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ConcurrentLinkedQueue/" style="font-size: 10px;">ConcurrentLinkedQueue</a> <a href="/tags/DB/" style="font-size: 13.33px;">DB</a> <a href="/tags/Effective-Java/" style="font-size: 12.22px;">Effective Java</a> <a href="/tags/GIT/" style="font-size: 10px;">GIT</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/InnoDB加锁/" style="font-size: 10px;">InnoDB加锁</a> <a href="/tags/JS/" style="font-size: 10px;">JS</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/Lua/" style="font-size: 10px;">Lua</a> <a href="/tags/MySQL性能优化/" style="font-size: 11.11px;">MySQL性能优化</a> <a href="/tags/R图形初步/" style="font-size: 10px;">R图形初步</a> <a href="/tags/R基本图形/" style="font-size: 10px;">R基本图形</a> <a href="/tags/R基本数据管理/" style="font-size: 10px;">R基本数据管理</a> <a href="/tags/R基本统计分析/" style="font-size: 10px;">R基本统计分析</a> <a href="/tags/R数据集/" style="font-size: 10px;">R数据集</a> <a href="/tags/R语言/" style="font-size: 18.89px;">R语言</a> <a href="/tags/R高级数据管理/" style="font-size: 10px;">R高级数据管理</a> <a href="/tags/SVN/" style="font-size: 10px;">SVN</a> <a href="/tags/Skip-List/" style="font-size: 10px;">Skip List</a> <a href="/tags/Spring/" style="font-size: 11.11px;">Spring</a> <a href="/tags/TAG/" style="font-size: 10px;">TAG</a> <a href="/tags/dead-lock/" style="font-size: 10px;">dead lock</a> <a href="/tags/insert-ignore/" style="font-size: 10px;">insert ignore</a> <a href="/tags/jquery-DataTable/" style="font-size: 10px;">jquery DataTable</a> <a href="/tags/maven/" style="font-size: 10px;">maven</a> <a href="/tags/python/" style="font-size: 14.44px;">python</a> <a href="/tags/tmux/" style="font-size: 10px;">tmux</a> <a href="/tags/一行代码/" style="font-size: 10px;">一行代码</a> <a href="/tags/中介者模式/" style="font-size: 10px;">中介者模式</a> <a href="/tags/中级绘图/" style="font-size: 10px;">中级绘图</a> <a href="/tags/乱码/" style="font-size: 10px;">乱码</a> <a href="/tags/事务/" style="font-size: 10px;">事务</a> <a href="/tags/享元模式/" style="font-size: 10px;">享元模式</a> <a href="/tags/代理模式/" style="font-size: 10px;">代理模式</a> <a href="/tags/代码坏味道处理/" style="font-size: 10px;">代码坏味道处理</a> <a href="/tags/关闭窗口提示/" style="font-size: 10px;">关闭窗口提示</a> <a href="/tags/分布式锁策略/" style="font-size: 10px;">分布式锁策略</a> <a href="/tags/创建型模式/" style="font-size: 14.44px;">创建型模式</a> <a href="/tags/初窥/" style="font-size: 10px;">初窥</a> <a href="/tags/功效分析/" style="font-size: 10px;">功效分析</a> <a href="/tags/单例模式/" style="font-size: 10px;">单例模式</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/命令模式/" style="font-size: 10px;">命令模式</a> <a href="/tags/回归/" style="font-size: 11.11px;">回归</a> <a href="/tags/备忘录模式/" style="font-size: 10px;">备忘录模式</a> <a href="/tags/外观模式/" style="font-size: 10px;">外观模式</a> <a href="/tags/实践之路/" style="font-size: 10px;">实践之路</a> <a href="/tags/工厂方法模式/" style="font-size: 10px;">工厂方法模式</a> <a href="/tags/并发编程实践/" style="font-size: 10px;">并发编程实践</a> <a href="/tags/并发编程艺术/" style="font-size: 14.44px;">并发编程艺术</a> <a href="/tags/广义线性模型/" style="font-size: 11.11px;">广义线性模型</a> <a href="/tags/恢复文件/" style="font-size: 10px;">恢复文件</a> <a href="/tags/抽象工厂模式/" style="font-size: 10px;">抽象工厂模式</a> <a href="/tags/方差分析/" style="font-size: 10px;">方差分析</a> <a href="/tags/有效的处理缺失值/" style="font-size: 10px;">有效的处理缺失值</a> <a href="/tags/机器学习/" style="font-size: 10px;">机器学习</a> <a href="/tags/构造器模式/" style="font-size: 10px;">构造器模式</a> <a href="/tags/桥接模式/" style="font-size: 10px;">桥接模式</a> <a href="/tags/模板方法/" style="font-size: 10px;">模板方法</a> <a href="/tags/状态模式/" style="font-size: 10px;">状态模式</a> <a href="/tags/策略模式/" style="font-size: 10px;">策略模式</a> <a href="/tags/红黑树/" style="font-size: 10px;">红黑树</a> <a href="/tags/线程安全/" style="font-size: 15.56px;">线程安全</a> <a href="/tags/组合模式/" style="font-size: 10px;">组合模式</a> <a href="/tags/结构型模式/" style="font-size: 16.67px;">结构型模式</a> <a href="/tags/编码解码/" style="font-size: 10px;">编码解码</a> <a href="/tags/获取管理员权限/" style="font-size: 10px;">获取管理员权限</a> <a href="/tags/行为模式/" style="font-size: 17.78px;">行为模式</a> <a href="/tags/表格内容超长/" style="font-size: 10px;">表格内容超长</a> <a href="/tags/装饰模式/" style="font-size: 10px;">装饰模式</a> <a href="/tags/观察者模式/" style="font-size: 10px;">观察者模式</a> <a href="/tags/解释器模式/" style="font-size: 10px;">解释器模式</a> <a href="/tags/设计模式/" style="font-size: 20px;">设计模式</a> <a href="/tags/访问者/" style="font-size: 10px;">访问者</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/责任链模式/" style="font-size: 10px;">责任链模式</a> <a href="/tags/迭代器模式/" style="font-size: 10px;">迭代器模式</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a> <a href="/tags/重抽样与自助法/" style="font-size: 10px;">重抽样与自助法</a> <a href="/tags/随机森林/" style="font-size: 10px;">随机森林</a> <a href="/tags/面向对象设计/" style="font-size: 10px;">面向对象设计</a> <a href="/tags/面向对象设计基础原则/" style="font-size: 10px;">面向对象设计基础原则</a> <a href="/tags/高并发/" style="font-size: 15.56px;">高并发</a> <a href="/tags/高级图形/" style="font-size: 10px;">高级图形</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.liaoxuefeng.com/" target="_blank" title="廖雪峰的官方网站">廖雪峰的官方网站</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinnianshilongnian.iteye.com/" target="_blank" title="开涛&#39;s Blog">开涛&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://hellojava.info/" target="_blank" title="hellojava">hellojava</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=2128508742&verifier=7b807bb3&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Peter Ping. <br/>
+			This is a note book</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2128508742" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2024 
+		
+		<a href="/about" target="_blank" title="PeterPing">PeterPing</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"peterPing"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?ab1018cf4cf93de93a1c38b947350303";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>
