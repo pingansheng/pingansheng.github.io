@@ -83,7 +83,7 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2024/02/24/MySQL核心要点：三大日志/" title="MySql核心要点：三大日志" itemprop="url">MySql核心要点：三大日志</a>
+      <a href="/2024/02/24/MySQL核心要点-三大日志/" title="MySql核心要点：三大日志" itemprop="url">MySql核心要点：三大日志</a>
   </h1>
   <p class="article-author">By
        
@@ -238,7 +238,7 @@
 <blockquote>
 <p>主从复制是怎么实现？</p>
 </blockquote>
-<p><img src="/2024/02/24/MySQL核心要点：三大日志/主从复制过程.jpg" alt="主从复制过程"></p>
+<p><img src="/2024/02/24/MySQL核心要点-三大日志/主从复制过程.jpg" alt="主从复制过程"></p>
 <p>MySQL 的主从复制依赖于 binlog ，也就是记录 MySQL 上的所有变化并以二进制形式保存在磁盘上。复制的过程就是将 binlog 中的数据从主库传输到从库上。</p>
 <p>这个过程一般是异步的，也就是主库上执行事务操作的线程不会等待复制 binlog 的线程同步完成。</p>
 <blockquote>
@@ -251,7 +251,7 @@
 <p>什么时候 binlog cache 会写到 binlog 文件？</p>
 </blockquote>
 <p>在事务提交的时候，执行器把 binlog cache 里的完整事务写入到 binlog 文件中，并清空 binlog cache。如下图：</p>
-<p><img src="/2024/02/24/MySQL核心要点：三大日志/binlogcache.jpg" alt="binlogcache"></p>
+<p><img src="/2024/02/24/MySQL核心要点-三大日志/binlogcache.jpg" alt="binlogcache"></p>
 <p>虽然每个线程有自己 binlog cache，但是最终都写到同一个 binlog 文件：</p>
 <ul>
 <li>图中的 write，指的就是指把日志写入到 binlog 文件，但是并没有把数据持久化到磁盘，因为数据还缓存在文件系统的 page cache 里，write 的写入速度还是比较快的，因为不涉及磁盘 I/O。</li>
@@ -352,7 +352,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2024/02/24/MySQL核心要点：三大日志/#comments" class="ds-thread-count comments-count-link" data-thread-key="2024/02/24/MySQL核心要点：三大日志/" data-count-type="comments">&nbsp;</a>
+		<a href="/2024/02/24/MySQL核心要点-三大日志/#comments" class="ds-thread-count comments-count-link" data-thread-key="2024/02/24/MySQL核心要点-三大日志/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -821,15 +821,15 @@
 			
 		
 			
-				<li><a href="/tags/模板方法/" title="模板方法">模板方法<sup>1</sup></a></li>
+				<li><a href="/tags/访问者/" title="访问者">访问者<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ConcurrentLinkedQueue/" title="ConcurrentLinkedQueue">ConcurrentLinkedQueue<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/适配器模式/" title="适配器模式">适配器模式<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/单例模式/" title="单例模式">单例模式<sup>1</sup></a></li>
 			
 		
 			

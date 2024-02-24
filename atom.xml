@@ -17,8 +17,8 @@
   
   <entry>
     <title>MySql核心要点：三大日志</title>
-    <link href="https://pingansheng.github.io/2024/02/24/MySQL%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9%EF%BC%9A%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/"/>
-    <id>https://pingansheng.github.io/2024/02/24/MySQL核心要点：三大日志/</id>
+    <link href="https://pingansheng.github.io/2024/02/24/MySQL%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9-%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/"/>
+    <id>https://pingansheng.github.io/2024/02/24/MySQL核心要点-三大日志/</id>
     <published>2024-02-24T02:48:49.000Z</published>
     <updated>2024-02-24T14:01:14.472Z</updated>
     
@@ -164,7 +164,7 @@
 <blockquote>
 <p>主从复制是怎么实现？</p>
 </blockquote>
-<p><img src="/2024/02/24/MySQL核心要点：三大日志/主从复制过程.jpg" alt="主从复制过程"></p>
+<p><img src="/2024/02/24/MySQL核心要点-三大日志/主从复制过程.jpg" alt="主从复制过程"></p>
 <p>MySQL 的主从复制依赖于 binlog ，也就是记录 MySQL 上的所有变化并以二进制形式保存在磁盘上。复制的过程就是将 binlog 中的数据从主库传输到从库上。</p>
 <p>这个过程一般是异步的，也就是主库上执行事务操作的线程不会等待复制 binlog 的线程同步完成。</p>
 <blockquote>
@@ -177,7 +177,7 @@
 <p>什么时候 binlog cache 会写到 binlog 文件？</p>
 </blockquote>
 <p>在事务提交的时候，执行器把 binlog cache 里的完整事务写入到 binlog 文件中，并清空 binlog cache。如下图：</p>
-<p><img src="/2024/02/24/MySQL核心要点：三大日志/binlogcache.jpg" alt="binlogcache"></p>
+<p><img src="/2024/02/24/MySQL核心要点-三大日志/binlogcache.jpg" alt="binlogcache"></p>
 <p>虽然每个线程有自己 binlog cache，但是最终都写到同一个 binlog 文件：</p>
 <ul>
 <li>图中的 write，指的就是指把日志写入到 binlog 文件，但是并没有把数据持久化到磁盘，因为数据还缓存在文件系统的 page cache 里，write 的写入速度还是比较快的，因为不涉及磁盘 I/O。</li>
